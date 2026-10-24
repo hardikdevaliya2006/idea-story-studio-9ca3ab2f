@@ -127,7 +127,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* WHAT WE CAN BUILD — clean split: statement + numbered list */}
+        {/* WHAT WE CAN BUILD — clean split: statement + icon rows */}
         <section className="relative grid gap-12 overflow-hidden rounded-[28px] border bg-card p-8 md:grid-cols-[1fr_1.3fr] md:gap-16 md:p-14">
           <div className="dots pointer-events-none absolute -bottom-16 -left-16 size-64 opacity-30" />
           <Reveal className="relative flex flex-col justify-between gap-10">
