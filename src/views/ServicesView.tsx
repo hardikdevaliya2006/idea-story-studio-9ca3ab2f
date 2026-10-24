@@ -1,7 +1,7 @@
 
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Mail, ArrowLeftRight } from "lucide-react";
+import { Mail, ArrowLeftRight, Workflow, Bot, FileText, BarChart3, Layers } from "lucide-react";
 import sailboatImage from "@/assets/sailboat-emblem.png";
 import {
   SiteHeader, SiteFooter, useTheme,
