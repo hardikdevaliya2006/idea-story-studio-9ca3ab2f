@@ -10,9 +10,6 @@ import {
 import { SERVICES } from "@/data/services";
 import { CapabilityScene, ServiceScene } from "@/components/ServicesVisuals";
 import { ServiceProcess } from "@/components/ServiceProcess";
-import {
-  ArrowUpRight,
-} from "lucide-react";
 
 const sailboatAsset = sailboatImage;
 
