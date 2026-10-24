@@ -20,15 +20,15 @@ const capabilities: { title: string; detail: string }[] = [
   { title: "AI Enablement", detail: "Agents, assistants and documents." },
 ];
 
-/* ---------- what we can build: six short chips ---------- */
+/* ---------- what we can build: six icon rows ---------- */
 
 const buildList = [
-  "Workflow automation",
-  "Custom AI agents",
-  "CRM integrations",
-  "Document intelligence",
-  "Automated reporting",
-  "Cross-platform processes",
+  { icon: Workflow, label: "Workflow automation", hint: "Rules, approvals and handoffs" },
+  { icon: Bot, label: "Custom AI agents", hint: "Assistants built around your tasks" },
+  { icon: ArrowLeftRight, label: "CRM integrations", hint: "Your tools talking to each other" },
+  { icon: FileText, label: "Document intelligence", hint: "Read, extract and organize" },
+  { icon: BarChart3, label: "Automated reporting", hint: "Numbers without the busywork" },
+  { icon: Layers, label: "Cross-platform processes", hint: "One flow across every tool" },
 ];
 
 /* ---------- bento: staggered 3-column grid, tall cards carry a description ---------- */
