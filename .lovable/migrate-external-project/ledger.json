@@ -1,0 +1,13 @@
+{
+  "source": "github",
+  "repo": "hardikdevaliya2006/idea-story-studio-23bee827",
+  "capabilities": [
+    {"capability": "code", "source": "tanstack-start frontend", "outcome": "migrated", "status": "verified", "next_action": null},
+    {"capability": "schema", "source": "none detected", "outcome": "absent", "status": "n/a", "next_action": null},
+    {"capability": "records", "source": "none detected", "outcome": "absent", "status": "n/a", "next_action": null},
+    {"capability": "auth", "source": "none detected", "outcome": "absent", "status": "n/a", "next_action": null},
+    {"capability": "external_providers", "source": "none detected (lordicon is bundled, no keys)", "outcome": "absent", "status": "n/a", "next_action": null},
+    {"capability": "secrets", "source": "no env vars or env files", "outcome": "absent", "status": "n/a", "next_action": null}
+  ],
+  "verification": "vite build OK; vitest 5/5 passed; routes /, /services, /about, /contact, /industries, /book-a-discovery-call all return 200 with no console errors; home and services screenshots confirmed"
+}
