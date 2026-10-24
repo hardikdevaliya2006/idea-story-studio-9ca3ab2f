@@ -464,8 +464,8 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
 .build-item::after { inset: -1px; padding: 1px; background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 70%, transparent), color-mix(in oklab, var(--border) 60%, transparent) 50%, var(--accent)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
 .build-item:hover::before, .build-item:hover::after, .build-item:focus-within::before, .build-item:focus-within::after { opacity: 1; }
 
-/* The number disc: flat tint at rest, the button's glossy surface on hover. */
-.build-num {
+/* The icon tile: flat tint at rest, the button's glossy surface on hover. */
+.build-icon {
   position: relative;
   isolation: isolate;
   display: grid;
@@ -473,22 +473,18 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .04em;
-  font-variant-numeric: tabular-nums;
+  border-radius: 14px;
   color: var(--primary);
   background: color-mix(in oklab, var(--primary) 9%, var(--card));
   border: 1px solid color-mix(in oklab, var(--primary) 22%, var(--border));
   transition: color .4s ease, border-color .4s ease;
 }
-.build-num::before, .build-num::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: 0; pointer-events: none; transition: opacity .4s ease; }
-.build-num::before { background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 72%, white) 0%, var(--primary) 55%, color-mix(in oklab, var(--primary) 88%, black) 100%); }
-.build-num::after { border: 1px solid color-mix(in oklab, white 45%, transparent); border-bottom-color: color-mix(in oklab, black 14%, transparent); }
-.build-item:hover .build-num, .build-item:focus-within .build-num { color: var(--primary-foreground); border-color: color-mix(in oklab, var(--primary) 62%, black); }
-.build-item:hover .build-num::before, .build-item:hover .build-num::after, .build-item:focus-within .build-num::before, .build-item:focus-within .build-num::after { opacity: 1; }
+.build-icon svg { position: relative; z-index: 2; }
+.build-icon::before, .build-icon::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: 0; pointer-events: none; transition: opacity .4s ease; }
+.build-icon::before { background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 72%, white) 0%, var(--primary) 55%, color-mix(in oklab, var(--primary) 88%, black) 100%); }
+.build-icon::after { border: 1px solid color-mix(in oklab, white 45%, transparent); border-bottom-color: color-mix(in oklab, black 14%, transparent); }
+.build-item:hover .build-icon, .build-item:focus-within .build-icon { color: var(--primary-foreground); border-color: color-mix(in oklab, var(--primary) 62%, black); }
+.build-item:hover .build-icon::before, .build-item:hover .build-icon::after, .build-item:focus-within .build-icon::before, .build-item:focus-within .build-icon::after { opacity: 1; }
 
 /* Services bento: soft tiles, centered copy; on hover a soft diagonal gradient
    washes in from the top-left and bottom-right corners and the edge picks up the

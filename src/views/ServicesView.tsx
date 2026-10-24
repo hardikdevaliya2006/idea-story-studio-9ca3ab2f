@@ -1,7 +1,7 @@
 
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Mail, ArrowLeftRight } from "lucide-react";
+import { Mail, ArrowLeftRight, ArrowUpRight, Workflow, Bot, FileText, BarChart3, Layers } from "lucide-react";
 import sailboatImage from "@/assets/sailboat-emblem.png";
 import {
   SiteHeader, SiteFooter, useTheme,
@@ -10,9 +10,6 @@ import {
 import { SERVICES } from "@/data/services";
 import { CapabilityScene, ServiceScene } from "@/components/ServicesVisuals";
 import { ServiceProcess } from "@/components/ServiceProcess";
-import {
-  ArrowUpRight,
-} from "lucide-react";
 
 const sailboatAsset = sailboatImage;
 
@@ -23,15 +20,15 @@ const capabilities: { title: string; detail: string }[] = [
   { title: "AI Enablement", detail: "Agents, assistants and documents." },
 ];
 
-/* ---------- what we can build: six short chips ---------- */
+/* ---------- what we can build: six icon rows ---------- */
 
 const buildList = [
-  "Workflow automation",
-  "Custom AI agents",
-  "CRM integrations",
-  "Document intelligence",
-  "Automated reporting",
-  "Cross-platform processes",
+  { icon: Workflow, label: "Workflow automation", hint: "Rules, approvals and handoffs" },
+  { icon: Bot, label: "Custom AI agents", hint: "Assistants built around your tasks" },
+  { icon: ArrowLeftRight, label: "CRM integrations", hint: "Your tools talking to each other" },
+  { icon: FileText, label: "Document intelligence", hint: "Read, extract and organize" },
+  { icon: BarChart3, label: "Automated reporting", hint: "Numbers without the busywork" },
+  { icon: Layers, label: "Cross-platform processes", hint: "One flow across every tool" },
 ];
 
 /* ---------- bento: staggered 3-column grid, tall cards carry a description ---------- */
@@ -130,7 +127,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* WHAT WE CAN BUILD — clean split: statement + numbered list */}
+        {/* WHAT WE CAN BUILD — clean split: statement + icon rows */}
         <section className="relative grid gap-12 overflow-hidden rounded-[28px] border bg-card p-8 md:grid-cols-[1fr_1.3fr] md:gap-16 md:p-14">
           <div className="dots pointer-events-none absolute -bottom-16 -left-16 size-64 opacity-30" />
           <Reveal className="relative flex flex-col justify-between gap-10">
@@ -152,10 +149,15 @@ export default function ServicesPage() {
           </Reveal>
             <ul className="relative grid content-center gap-3 sm:grid-cols-2">
               {buildList.map((b, i) => (
-                <Reveal key={b} delay={i * 70} className="h-full">
+                <Reveal key={b.label} delay={i * 70} className="h-full">
                   <li className="build-item">
-                    <span className="build-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="text-[15px] font-medium leading-snug">{b}</span>
+                    <span className="build-icon" aria-hidden="true">
+                      <b.icon className="size-5" strokeWidth={2} />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[15px] font-medium leading-snug">{b.label}</span>
+                      <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">{b.hint}</span>
+                    </span>
                   </li>
                 </Reveal>
               ))}
