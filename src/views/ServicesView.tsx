@@ -149,10 +149,15 @@ export default function ServicesPage() {
           </Reveal>
             <ul className="relative grid content-center gap-3 sm:grid-cols-2">
               {buildList.map((b, i) => (
-                <Reveal key={b} delay={i * 70} className="h-full">
+                <Reveal key={b.label} delay={i * 70} className="h-full">
                   <li className="build-item">
-                    <span className="build-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="text-[15px] font-medium leading-snug">{b}</span>
+                    <span className="build-icon" aria-hidden="true">
+                      <b.icon className="size-5" strokeWidth={2} />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[15px] font-medium leading-snug">{b.label}</span>
+                      <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">{b.hint}</span>
+                    </span>
                   </li>
                 </Reveal>
               ))}
