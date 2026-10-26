@@ -136,8 +136,12 @@ html.light .site-footer {
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -146,17 +150,26 @@ html.light .site-footer {
   }
 }
 
-@utility font-display { font-family: var(--font-display); }
-@utility shadow-soft { box-shadow: var(--shadow-soft); }
+@utility font-display {
+  font-family: var(--font-display);
+}
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
 
 /* Hero: a soft green wash that fades away before the section edge. */
-@utility hero-soft { background: radial-gradient(ellipse 85% 65% at 50% 42%, var(--hero-wash), transparent 75%); }
-
+@utility hero-soft {
+  background: radial-gradient(ellipse 85% 65% at 50% 42%, var(--hero-wash), transparent 75%);
+}
 
 /* wireframe placeholder with soft hatch */
 @utility wire {
   background-color: var(--muted);
-  background-image: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in oklab, var(--border) 70%, transparent) 10px 11px);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 10px,
+    color-mix(in oklab, var(--border) 70%, transparent) 10px 11px
+  );
   border: 1px dashed var(--border);
 }
 
@@ -164,8 +177,15 @@ html.light .site-footer {
   opacity: 0;
   transform: translateY(40px);
   filter: blur(6px);
-  transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1), filter 1s;
-  &.in { opacity: 1; transform: none; filter: none; }
+  transition:
+    opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 1s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 1s;
+  &.in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 @utility line-mask {
@@ -174,7 +194,7 @@ html.light .site-footer {
   & > span {
     display: inline-block;
     transform: translateY(110%);
-    animation: rise 1.1s cubic-bezier(.2,.8,.2,1) forwards;
+    animation: rise 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 }
 
@@ -184,38 +204,109 @@ html.light .site-footer {
   animation: marquee 30s linear infinite;
 }
 
-@utility float-soft { animation: floaty 6s ease-in-out infinite; }
-@utility spin-slow { animation: spin 18s linear infinite; }
+@utility float-soft {
+  animation: floaty 6s ease-in-out infinite;
+}
+@utility spin-slow {
+  animation: spin 18s linear infinite;
+}
 
-@utility hero-bg { background: radial-gradient(ellipse at 50% 60%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%); }
+@utility hero-bg {
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    color-mix(in oklab, var(--primary) 18%, transparent),
+    transparent 60%
+  );
+}
 @utility hero-grid {
-  background-image: linear-gradient(to right, color-mix(in oklab, var(--border) 60%, transparent) 1px, transparent 1px);
+  background-image: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--border) 60%, transparent) 1px,
+    transparent 1px
+  );
   background-size: 25% 100%;
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
 }
 @utility dots {
-  background-image: radial-gradient(color-mix(in oklab, oklch(0.72 0.12 190) 60%, transparent) 1px, transparent 1.5px);
+  --dots-color: oklch(0.35 0.02 190);
+  background-image: radial-gradient(
+    var(--dots-color) 1px,
+    transparent 1.5px
+  );
   background-size: 22px 22px;
   mask-image: radial-gradient(circle, black, transparent 70%);
   animation: floaty 8s ease-in-out infinite;
+  opacity: 0.18;
+}
+.dark .dots {
+  --dots-color: oklch(0.72 0.12 190);
 }
 /* Creative grainy texture: fine fractal noise, tiled, blended over the base color. */
 @utility texture-grain {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
-@utility glow-pulse { animation: glow 6s ease-in-out infinite; }
-@utility word-swap { animation: swap .6s cubic-bezier(.2,.8,.2,1); }
-@keyframes glow { 50% { opacity: .55; transform: translate(-50%,-50%) scale(1.15); } }
-@utility letter-swap { animation: letterIn .7s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes letterIn { from { opacity: 0; transform: translateY(60%) rotateX(-60deg); filter: blur(6px); } }
-@keyframes swap { from { opacity: 0; transform: translateY(40%); filter: blur(8px); } }
-@keyframes rise { to { transform: translateY(0); } }
-@keyframes marquee { to { transform: translateX(-50%); } }
-@keyframes floaty { 50% { transform: translateY(-14px) rotate(-2deg); } }
-@keyframes spin { to { transform: rotate(360deg); } }
-.dot-soft { animation: dot-twinkle ease-in-out infinite; }
-@keyframes dot-twinkle { 0%, 100% { opacity: .1; } 50% { opacity: .8; } }
+@utility glow-pulse {
+  animation: glow 6s ease-in-out infinite;
+}
+@utility word-swap {
+  animation: swap 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes glow {
+  50% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+@utility letter-swap {
+  animation: letterIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes letterIn {
+  from {
+    opacity: 0;
+    transform: translateY(60%) rotateX(-60deg);
+    filter: blur(6px);
+  }
+}
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
+    filter: blur(8px);
+  }
+}
+@keyframes rise {
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes floaty {
+  50% {
+    transform: translateY(-14px) rotate(-2deg);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.dot-soft {
+  animation: dot-twinkle ease-in-out infinite;
+}
+@keyframes dot-twinkle {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
 
 /* Footer wordmark: the IDEABOAT logo lettering rendered as a hollow outline
    with a cursor-following linear glow clipped to the letter fills. */
@@ -231,7 +322,7 @@ html.light .site-footer {
   user-select: none;
   /* --glow-x is registered above so the lit band eases toward the pointer
      instead of snapping from letter to letter. */
-  transition: --glow-x 240ms cubic-bezier(.22, .61, .36, 1);
+  transition: --glow-x 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 .footer-wordmark-outline {
   grid-area: 1 / 1;
@@ -240,7 +331,9 @@ html.light .site-footer {
   filter: url(#footer-wordmark-stroke);
   pointer-events: none;
 }
-.footer-wordmark-flood { flood-color: color-mix(in oklab, var(--foreground) 26%, transparent); }
+.footer-wordmark-flood {
+  flood-color: color-mix(in oklab, var(--foreground) 26%, transparent);
+}
 .footer-wordmark-layer {
   grid-area: 1 / 1;
   width: 100%;
@@ -255,7 +348,8 @@ html.light .site-footer {
    gentle curve, so roughly three letters light up and the light eases out on
    both sides instead of ending in a hard edge. */
 .footer-wordmark-glow {
-  background-image: linear-gradient(90deg,
+  background-image: linear-gradient(
+    90deg,
     transparent calc(var(--glow-x) - 22%),
     color-mix(in oklab, var(--primary) 6%, transparent) calc(var(--glow-x) - 17%),
     color-mix(in oklab, var(--primary) 18%, transparent) calc(var(--glow-x) - 13%),
@@ -268,7 +362,8 @@ html.light .site-footer {
     color-mix(in oklab, var(--primary) 38%, transparent) calc(var(--glow-x) + 9%),
     color-mix(in oklab, var(--primary) 18%, transparent) calc(var(--glow-x) + 13%),
     color-mix(in oklab, var(--primary) 6%, transparent) calc(var(--glow-x) + 17%),
-    transparent calc(var(--glow-x) + 22%));
+    transparent calc(var(--glow-x) + 22%)
+  );
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
@@ -276,7 +371,8 @@ html.light .site-footer {
 /* Wider, fainter bloom so the lit band blends into the rest of the word
    rather than sitting on it as a separate strip. */
 .footer-wordmark-halo {
-  background-image: linear-gradient(90deg,
+  background-image: linear-gradient(
+    90deg,
     transparent calc(var(--glow-x) - 34%),
     color-mix(in oklab, var(--primary) 6%, transparent) calc(var(--glow-x) - 27%),
     color-mix(in oklab, var(--primary) 12%, transparent) calc(var(--glow-x) - 20%),
@@ -287,46 +383,83 @@ html.light .site-footer {
     color-mix(in oklab, var(--primary) 18%, transparent) calc(var(--glow-x) + 12%),
     color-mix(in oklab, var(--primary) 12%, transparent) calc(var(--glow-x) + 20%),
     color-mix(in oklab, var(--primary) 6%, transparent) calc(var(--glow-x) + 27%),
-    transparent calc(var(--glow-x) + 34%));
+    transparent calc(var(--glow-x) + 34%)
+  );
   opacity: 0;
   transition: opacity 0.9s ease;
   pointer-events: none;
 }
 @media (hover: hover) and (pointer: fine) {
   .footer-wordmark-art:hover .footer-wordmark-glow,
-  .footer-wordmark-art:hover .footer-wordmark-halo { opacity: 1; }
-  .footer-wordmark-art:not(:hover) .footer-wordmark-glow { transition-duration: 1.1s; }
+  .footer-wordmark-art:hover .footer-wordmark-halo {
+    opacity: 1;
+  }
+  .footer-wordmark-art:not(:hover) .footer-wordmark-glow {
+    transition-duration: 1.1s;
+  }
 }
 /* Touch devices can't follow a cursor, so keep a soft centred wash visible. */
 @media (hover: none) {
-  .footer-wordmark-glow { opacity: 0.45; }
-  .footer-wordmark-halo { opacity: 0.6; }
+  .footer-wordmark-glow {
+    opacity: 0.45;
+  }
+  .footer-wordmark-halo {
+    opacity: 0.6;
+  }
 }
-.service-preview-art { animation: service-art-in 350ms ease-out both; }
+.service-preview-art {
+  animation: service-art-in 350ms ease-out both;
+}
 @keyframes service-art-in {
-  from { opacity: 0; transform: translateY(8px) scale(.94); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; filter: none; }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 /* iOS-style liquid glass surface */
 @utility glass {
   position: relative;
-  background: linear-gradient(135deg, color-mix(in oklab, var(--foreground) 9%, transparent), color-mix(in oklab, var(--foreground) 2%, transparent));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--foreground) 9%, transparent),
+    color-mix(in oklab, var(--foreground) 2%, transparent)
+  );
   backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid color-mix(in oklab, var(--foreground) 14%, transparent);
 }
 @utility glass-text {
-  background: linear-gradient(180deg, var(--foreground) 30%, color-mix(in oklab, var(--foreground) 55%, transparent));
+  background: linear-gradient(
+    180deg,
+    var(--foreground) 30%,
+    color-mix(in oklab, var(--foreground) 55%, transparent)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transparent); border-color: color-mix(in oklab, var(--foreground) 10%, transparent); }
+html.light .nav-solid {
+  background: color-mix(in oklab, var(--card) 88%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
 
 .spotlight-card::before {
   content: "";
@@ -334,8 +467,14 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--primary) 70%, transparent), transparent 70%);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--primary) 70%, transparent),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
@@ -347,94 +486,440 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--primary) 8%, transparent), transparent 70%);
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--primary) 8%, transparent),
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
 }
 .spotlight-card:hover::before,
-.spotlight-card:hover::after { opacity: 1; }
+.spotlight-card:hover::after {
+  opacity: 1;
+}
 
 /* Hero graphics */
-.hero-spot { background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 40%), color-mix(in oklab, var(--primary) 16%, transparent), transparent 70%); transition: background .2s; }
-.hero-parallax { transform: translate(calc(-50% + var(--px, 0) * -30px), calc(-50% + var(--py, 0) * -30px)); transition: transform .6s cubic-bezier(.2,.7,.2,1); }
-.orbit-spin { animation: spin 40s linear infinite; }
-.orbit-spin-rev { animation: spin 60s linear infinite reverse; }
-.orbit-spin-slow { animation: spin 90s linear infinite; }
+.hero-spot {
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 40%),
+    color-mix(in oklab, var(--primary) 16%, transparent),
+    transparent 70%
+  );
+  transition: background 0.2s;
+}
+.hero-parallax {
+  transform: translate(calc(-50% + var(--px, 0) * -30px), calc(-50% + var(--py, 0) * -30px));
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.orbit-spin {
+  animation: spin 40s linear infinite;
+}
+.orbit-spin-rev {
+  animation: spin 60s linear infinite reverse;
+}
+.orbit-spin-slow {
+  animation: spin 90s linear infinite;
+}
 
 /* Services: crisp product scenes and a live four-stage process. */
 .scene-grid {
-  background-image: linear-gradient(to right, color-mix(in oklab, var(--border) 45%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--border) 45%, transparent) 1px, transparent 1px);
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--border) 45%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--border) 45%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 24px 24px;
   mask-image: radial-gradient(ellipse, black, transparent 75%);
 }
-.capability-scene-1, .service-scene-3, .service-scene-6 { background-color: color-mix(in oklab, var(--accent) 22%, var(--card)); }
-.scene-endpoint { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--primary); font-size: 10px; }
-.scene-connector { height: 1px; border-top: 1px dashed color-mix(in oklab, var(--primary) 40%, transparent); }
-.scene-task { transition: transform .4s ease; }
+.capability-scene-1,
+.service-scene-3,
+.service-scene-6 {
+  background-color: color-mix(in oklab, var(--accent) 22%, var(--card));
+}
+.scene-endpoint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  color: var(--primary);
+  font-size: 10px;
+}
+.scene-connector {
+  height: 1px;
+  border-top: 1px dashed color-mix(in oklab, var(--primary) 40%, transparent);
+}
+.scene-task {
+  transition: transform 0.4s ease;
+}
 /* Energy lines: a glow travels along each connector like power being transferred. */
-.flow-v { position: relative; width: 2px; overflow: hidden; border-radius: 2px; background: color-mix(in oklab, var(--primary) 18%, transparent); }
-.flow-v::after { content: ""; position: absolute; left: 0; right: 0; height: 60%; top: -60%; background: linear-gradient(transparent, var(--primary), transparent); animation: flow-down 1.5s linear infinite; animation-delay: inherit; }
-@keyframes flow-down { to { top: 100%; } }
-.flow-track { stroke: color-mix(in oklab, var(--primary) 25%, transparent); stroke-width: 1.5; stroke-dasharray: 3 4; }
-.flow-pulse { stroke: var(--primary); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 18 82; filter: drop-shadow(0 0 3px var(--primary)); animation: flow-pulse 1.8s linear infinite; }
-@keyframes flow-pulse { from { stroke-dashoffset: 18; } to { stroke-dashoffset: -100; } }
-@media (prefers-reduced-motion: reduce) { .flow-v::after, .flow-pulse { animation: none; } }
-.service-scene > :not(.scene-grid) { transition: transform .5s ease; }
-.process-lord-icon { display: block; width: 64px; height: 64px; }
-/* Scroll-driven process: pinned copy on the left, step cards light up one by one. */
-.process-stage { --step-frac: 0; }
-.process-copy, .process-copy-in { animation: process-copy .5s cubic-bezier(.2,.7,.2,1) both; }
-@keyframes process-copy { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-.process-counter > span:first-child { display: inline-block; animation: process-count .55s cubic-bezier(.2,.7,.2,1) both; }
-@keyframes process-count { from { opacity: 0; transform: translateY(45%); } to { opacity: 1; transform: none; } }
-.process-card { border: 1px solid var(--border); border-radius: 18px; background: color-mix(in oklab, var(--card) 75%, var(--background)); transition: border-color .45s ease, background-color .45s ease, box-shadow .45s ease, transform .45s ease; }
-.process-card:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--primary) 30%, var(--border)); background: color-mix(in oklab, var(--primary) 5%, var(--card)); }
-.process-card.is-active { border-color: color-mix(in oklab, var(--primary) 45%, transparent); background: color-mix(in oklab, var(--primary) 9%, var(--card)); box-shadow: 0 18px 44px -26px color-mix(in oklab, var(--primary) 60%, transparent); }
-.process-card > button { border-radius: inherit; background: none; }
-.process-card > button:focus-visible { outline: 2px solid color-mix(in oklab, var(--primary) 60%, transparent); outline-offset: 3px; }
-.process-dot { box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent); animation: process-pop .4s cubic-bezier(.2,.7,.2,1) both; }
-.process-check { animation: process-pop .35s cubic-bezier(.2,.7,.2,1) both; }
-@keyframes process-pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.process-seg { position: relative; flex: 1; height: 3px; border-radius: 999px; background: color-mix(in oklab, var(--border) 75%, transparent); overflow: hidden; }
-.process-seg > i { position: absolute; inset: 0; width: 0; border-radius: inherit; background: var(--primary); transition: width .4s ease; }
-.process-seg.is-done > i { width: 100%; }
-.process-seg.is-current > i { width: calc(var(--step-frac) * 100%); transition: width .15s linear; }
-.process-meter > span { transition: width .45s ease; }
-.process-meter > [data-current] { width: calc(var(--step-frac) * 100%) !important; transition: width .12s linear; }
+.flow-v {
+  position: relative;
+  width: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--primary) 18%, transparent);
+}
+.flow-v::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 60%;
+  top: -60%;
+  background: linear-gradient(transparent, var(--primary), transparent);
+  animation: flow-down 1.5s linear infinite;
+  animation-delay: inherit;
+}
+@keyframes flow-down {
+  to {
+    top: 100%;
+  }
+}
+.flow-track {
+  stroke: color-mix(in oklab, var(--primary) 25%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+}
+.flow-pulse {
+  stroke: var(--primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 18 82;
+  filter: drop-shadow(0 0 3px var(--primary));
+  animation: flow-pulse 1.8s linear infinite;
+}
+@keyframes flow-pulse {
+  from {
+    stroke-dashoffset: 18;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .process-copy, .process-copy-in, .process-counter > span:first-child, .process-dot, .process-check { animation: none; }
-  .process-card, .process-card:hover { transform: none; transition: none; }
+  .flow-v::after,
+  .flow-pulse {
+    animation: none;
+  }
+}
+.service-scene > :not(.scene-grid) {
+  transition: transform 0.5s ease;
+}
+.process-lord-icon {
+  display: block;
+  width: 64px;
+  height: 64px;
+}
+/* Scroll-driven process: pinned copy on the left, step cards light up one by one. */
+.process-stage {
+  --step-frac: 0;
+}
+.process-copy,
+.process-copy-in {
+  animation: process-copy 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes process-copy {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.process-counter > span:first-child {
+  display: inline-block;
+  animation: process-count 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes process-count {
+  from {
+    opacity: 0;
+    transform: translateY(45%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.process-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--card) 75%, var(--background));
+  transition:
+    border-color 0.45s ease,
+    background-color 0.45s ease,
+    box-shadow 0.45s ease,
+    transform 0.45s ease;
+}
+/* Each step card carries its own feature vignette above the title. */
+.process-card-stage {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+.process-card.is-active .process-card-stage {
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 42%, transparent);
+}
+.process-title {
+  transition: color 0.35s ease;
+}
+.process-card.is-active .process-title {
+  color: var(--primary);
+}
+.process-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--primary) 30%, var(--border));
+  background: color-mix(in oklab, var(--primary) 5%, var(--card));
+}
+.process-card.is-active {
+  border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+  background: color-mix(in oklab, var(--primary) 9%, var(--card));
+  box-shadow: 0 18px 44px -26px color-mix(in oklab, var(--primary) 60%, transparent);
+}
+.process-card > button {
+  border-radius: inherit;
+  background: none;
+}
+.process-card > button:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--primary) 60%, transparent);
+  outline-offset: 3px;
+}
+.process-dot {
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent);
+  animation: process-pop 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.process-check {
+  animation: process-pop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes process-pop {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.process-seg {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--border) 75%, transparent);
+  overflow: hidden;
+}
+.process-seg > i {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+.process-seg.is-done > i {
+  width: 100%;
+}
+.process-seg.is-current > i {
+  width: calc(var(--step-frac) * 100%);
+  transition: width 0.15s linear;
+}
+.process-meter > span {
+  transition: width 0.45s ease;
+}
+.process-meter > [data-current] {
+  width: calc(var(--step-frac) * 100%) !important;
+  transition: width 0.12s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .process-copy,
+  .process-copy-in,
+  .process-counter > span:first-child,
+  .process-dot,
+  .process-check {
+    animation: none;
+  }
+  .process-card,
+  .process-card:hover {
+    transform: none;
+    transition: none;
+  }
 }
 
 /* Capability cards: hub + pills, live. */
-.cap-stage { position: relative; width: 100%; max-width: 320px; aspect-ratio: 4 / 3; }
-.cap-hub { position: absolute; display: grid; place-items: center; width: 60px; height: 60px; translate: -50% -50%; border-radius: 16px; z-index: 2; }
-@keyframes cap-hub { 50% { box-shadow: inset 0 0 0 1px color-mix(in oklab, white 35%, transparent), inset 0 1px 0 color-mix(in oklab, white 55%, transparent), inset 0 -2px 3px color-mix(in oklab, black 15%, transparent), 0 10px 32px -6px color-mix(in oklab, var(--primary) 85%, transparent), 0 2px 4px -1px color-mix(in oklab, black 20%, transparent); } }
-.cap-pill { position: absolute; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; border: 1px solid var(--border); border-radius: 10px; background: color-mix(in oklab, var(--card) 85%, var(--secondary)); padding: 6px 10px; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--foreground); box-shadow: 0 1px 0 color-mix(in oklab, var(--border) 60%, transparent); animation: cap-float 3.6s ease-in-out infinite; z-index: 1; }
-.cap-pill.is-center { translate: -50% -50%; }
-.cap-pill.is-left { translate: 0 -50%; }
-.cap-pill svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--primary); }
-.cap-branch { color: var(--primary); border-color: color-mix(in oklab, var(--primary) 30%, transparent); background: color-mix(in oklab, var(--primary) 12%, var(--card)); font-family: var(--font-sans); font-size: 12px; text-transform: none; letter-spacing: 0; font-weight: 400; animation: cap-float 4s ease-in-out infinite; will-change: transform; }
-.cap-branch::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid color-mix(in oklab, var(--primary) 55%, transparent); background: color-mix(in oklab, var(--primary) 7%, transparent); opacity: 0; pointer-events: none; animation: cap-glow 4s ease-in-out infinite; animation-delay: inherit; will-change: opacity; }
-@keyframes cap-float { 50% { transform: translateY(-3px); } }
-@keyframes cap-glow { 0%, 45%, 100% { opacity: 0; } 72% { opacity: 1; } }
-.cap-tree .flow-pulse { stroke-width: 1.6; stroke-dasharray: 12 88; stroke-opacity: .85; animation-duration: 4s; animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
-.cap-orbit { position: absolute; left: 50%; top: 50%; width: 62%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; border: 1px dashed color-mix(in oklab, var(--primary) 30%, var(--border)); animation: spin 24s linear infinite; }
-.cap-orbit::after { content: ""; position: absolute; top: -4px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary); }
-.cap-line { stroke: color-mix(in oklab, var(--primary) 45%, transparent); stroke-width: 1.2; }
-@media (prefers-reduced-motion: reduce) { .cap-hub, .cap-pill, .cap-orbit, .cap-branch::after { animation: none; } }
+.cap-stage {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 3;
+}
+.cap-hub {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  translate: -50% -50%;
+  border-radius: 16px;
+  z-index: 2;
+}
+@keyframes cap-hub {
+  50% {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, white 35%, transparent),
+      inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
+      inset 0 -2px 3px color-mix(in oklab, black 15%, transparent),
+      0 10px 32px -6px color-mix(in oklab, var(--primary) 85%, transparent),
+      0 2px 4px -1px color-mix(in oklab, black 20%, transparent);
+  }
+}
+.cap-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--card) 85%, var(--secondary));
+  padding: 6px 10px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--border) 60%, transparent);
+  animation: cap-float 3.6s ease-in-out infinite;
+  z-index: 1;
+}
+.cap-pill.is-center {
+  translate: -50% -50%;
+}
+.cap-pill.is-left {
+  translate: 0 -50%;
+}
+.cap-pill svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+.cap-branch {
+  color: var(--primary);
+  border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+  background: color-mix(in oklab, var(--primary) 12%, var(--card));
+  font-family: var(--font-sans);
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  animation: cap-float 4s ease-in-out infinite;
+  will-change: transform;
+}
+.cap-branch::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid color-mix(in oklab, var(--primary) 55%, transparent);
+  background: color-mix(in oklab, var(--primary) 7%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: cap-glow 4s ease-in-out infinite;
+  animation-delay: inherit;
+  will-change: opacity;
+}
+@keyframes cap-float {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+@keyframes cap-glow {
+  0%,
+  45%,
+  100% {
+    opacity: 0;
+  }
+  72% {
+    opacity: 1;
+  }
+}
+.cap-tree .flow-pulse {
+  stroke-width: 1.6;
+  stroke-dasharray: 12 88;
+  stroke-opacity: 0.85;
+  animation-duration: 4s;
+  animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+}
+.cap-orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 62%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in oklab, var(--primary) 30%, var(--border));
+  animation: spin 24s linear infinite;
+}
+.cap-line {
+  stroke: color-mix(in oklab, var(--primary) 45%, transparent);
+  stroke-width: 1.2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cap-hub,
+  .cap-pill,
+  .cap-orbit,
+  .cap-branch::after {
+    animation: none;
+  }
+}
 
 /* No shadows anywhere on the site (keep a visible focus outline instead). */
-*, *::before, *::after { box-shadow: none !important; text-shadow: none !important; }
-.flow-pulse, [class*="drop-shadow"] { filter: none !important; }
-:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
-.cap-static .cap-pill, .cap-static .cap-hub, .cap-static .cap-orbit { animation: none; }
-.cap-static .cap-orbit::after { display: none; }
-.cap-slow .flow-pulse { animation-duration: 3.6s; }
-.cap-slow .cap-pill { animation-duration: 6s; }
-.cap-slow .cap-orbit { animation-duration: 48s; }
-.cap-slow .cap-hub { animation-duration: 5s; }
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.flow-pulse,
+[class*="drop-shadow"] {
+  filter: none !important;
+}
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.cap-static .cap-pill,
+.cap-static .cap-hub,
+.cap-static .cap-orbit {
+  animation: none;
+}
+.cap-static .cap-orbit::after {
+  display: none;
+}
+.cap-slow .flow-pulse {
+  animation-duration: 3.6s;
+}
+.cap-slow .cap-pill {
+  animation-duration: 6s;
+}
+.cap-slow .cap-orbit {
+  animation-duration: 48s;
+}
+.cap-slow .cap-hub {
+  animation-duration: 5s;
+}
 
 /* The primary button's surface: gradient sheen, darker outline and an inner
    highlight ring. Shadows are banned site-wide, so depth comes from the
@@ -442,7 +927,12 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
 .surface-sheen {
   isolation: isolate;
   color: var(--primary-foreground);
-  background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 72%, white) 0%, var(--primary) 55%, color-mix(in oklab, var(--primary) 88%, black) 100%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 72%, white) 0%,
+    var(--primary) 55%,
+    color-mix(in oklab, var(--primary) 88%, black) 100%
+  );
   border: 1px solid color-mix(in oklab, var(--primary) 62%, black);
 }
 .surface-sheen::before {
@@ -455,7 +945,11 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   border: 1px solid color-mix(in oklab, white 45%, transparent);
   border-bottom-color: color-mix(in oklab, black 14%, transparent);
 }
-.surface-sheen svg { position: relative; z-index: 2; color: var(--primary-foreground); }
+.surface-sheen svg {
+  position: relative;
+  z-index: 2;
+  color: var(--primary-foreground);
+}
 
 /* Icon chip carrying the button surface. */
 .surface-icon {
@@ -479,12 +973,48 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--background);
-  padding: 16px 18px;
+  padding: 12px 14px;
 }
-.build-item::before, .build-item::after { content: ""; position: absolute; border-radius: inherit; opacity: 0; pointer-events: none; transition: opacity .45s ease; }
-.build-item::before { inset: 0; z-index: -1; background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 12%, var(--card)) 0%, var(--background) 55%, color-mix(in oklab, var(--accent) 40%, var(--background)) 100%); }
-.build-item::after { inset: -1px; padding: 1px; background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 70%, transparent), color-mix(in oklab, var(--border) 60%, transparent) 50%, var(--accent)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-.build-item:hover::before, .build-item:hover::after, .build-item:focus-within::before, .build-item:focus-within::after { opacity: 1; }
+.build-item::before,
+.build-item::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+.build-item::before {
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 12%, var(--card)) 0%,
+    var(--background) 55%,
+    color-mix(in oklab, var(--accent) 40%, var(--background)) 100%
+  );
+}
+.build-item::after {
+  inset: -1px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 70%, transparent),
+    color-mix(in oklab, var(--border) 60%, transparent) 50%,
+    var(--accent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.build-item:hover::before,
+.build-item:hover::after,
+.build-item:focus-within::before,
+.build-item:focus-within::after {
+  opacity: 1;
+}
 
 /* The icon tile: flat tint at rest, the button's glossy surface on hover. */
 .build-icon {
@@ -499,30 +1029,221 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   color: var(--primary);
   background: color-mix(in oklab, var(--primary) 9%, var(--card));
   border: 1px solid color-mix(in oklab, var(--primary) 22%, var(--border));
-  transition: color .4s ease, border-color .4s ease;
+  transition:
+    color 0.4s ease,
+    border-color 0.4s ease;
 }
-.build-icon svg { position: relative; z-index: 2; }
-.build-icon::before, .build-icon::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; opacity: 0; pointer-events: none; transition: opacity .4s ease; }
-.build-icon::before { background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 72%, white) 0%, var(--primary) 55%, color-mix(in oklab, var(--primary) 88%, black) 100%); }
-.build-icon::after { border: 1px solid color-mix(in oklab, white 45%, transparent); border-bottom-color: color-mix(in oklab, black 14%, transparent); }
-.build-item:hover .build-icon, .build-item:focus-within .build-icon { color: var(--primary-foreground); border-color: color-mix(in oklab, var(--primary) 62%, black); }
-.build-item:hover .build-icon::before, .build-item:hover .build-icon::after, .build-item:focus-within .build-icon::before, .build-item:focus-within .build-icon::after { opacity: 1; }
+.build-icon svg {
+  position: relative;
+  z-index: 2;
+}
+.build-icon::before,
+.build-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.build-icon::before {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 72%, white) 0%,
+    var(--primary) 55%,
+    color-mix(in oklab, var(--primary) 88%, black) 100%
+  );
+}
+.build-icon::after {
+  border: 1px solid color-mix(in oklab, white 45%, transparent);
+  border-bottom-color: color-mix(in oklab, black 14%, transparent);
+}
+.build-item:hover .build-icon,
+.build-item:focus-within .build-icon {
+  color: var(--primary-foreground);
+  border-color: color-mix(in oklab, var(--primary) 62%, black);
+}
+.build-item:hover .build-icon::before,
+.build-item:hover .build-icon::after,
+.build-item:focus-within .build-icon::before,
+.build-item:focus-within .build-icon::after {
+  opacity: 1;
+}
 
 /* Services bento: soft tiles, centered copy; on hover a soft diagonal gradient
    washes in from the top-left and bottom-right corners and the edge picks up the
    same gradient. Nothing moves or scales. */
-.bento-card { position: relative; isolation: isolate; display: flex; height: 100%; flex-direction: column; overflow: hidden; border: 1px solid var(--border); border-radius: 22px; background: color-mix(in oklab, var(--secondary) 55%, var(--card)); }
-.bento-card::before, .bento-card::after { content: ""; position: absolute; border-radius: inherit; opacity: 0; pointer-events: none; transition: opacity .45s ease; }
-.bento-card::before { inset: 0; z-index: -1; background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 16%, var(--card)) 0%, color-mix(in oklab, var(--card) 94%, var(--secondary)) 50%, color-mix(in oklab, var(--accent) 45%, var(--card)) 100%); }
-.bento-card::after { inset: -1px; padding: 1px; background: linear-gradient(135deg, color-mix(in oklab, var(--primary) 75%, transparent), color-mix(in oklab, var(--border) 60%, transparent) 50%, var(--accent)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-.group:hover .bento-card::before, .group:hover .bento-card::after, .group:focus-visible .bento-card::before, .group:focus-visible .bento-card::after { opacity: 1; }
-.bento-scene { flex: 1 1 auto; min-height: 11rem; background: transparent !important; }
+.bento-card {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: color-mix(in oklab, var(--secondary) 55%, var(--card));
+}
+.bento-card::before,
+.bento-card::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+.bento-card::before {
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 16%, var(--card)) 0%,
+    color-mix(in oklab, var(--card) 94%, var(--secondary)) 50%,
+    color-mix(in oklab, var(--accent) 45%, var(--card)) 100%
+  );
+}
+.bento-card::after {
+  inset: -1px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 75%, transparent),
+    color-mix(in oklab, var(--border) 60%, transparent) 50%,
+    var(--accent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.group:hover .bento-card::before,
+.group:hover .bento-card::after,
+.group:focus-visible .bento-card::before,
+.group:focus-visible .bento-card::after {
+  opacity: 1;
+}
+.bento-scene {
+  flex: 1 1 auto;
+  min-height: 11rem;
+  background: transparent !important;
+}
+/* Branding & Designing: open box of brand assets on a 427x301 artboard.
+   Tiles stay still; only a slow sheen crosses each one. */
+.brand-glow {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 62%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--primary) 24%, transparent),
+    transparent
+  );
+  filter: blur(8px);
+}
+.brand-box {
+  mask-image: linear-gradient(to bottom, #000 86%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent);
+}
+.brand-box-mouth {
+  fill: color-mix(in oklab, var(--background) 45%, var(--card));
+}
+.brand-box-front {
+  fill: color-mix(in oklab, var(--foreground) 4%, var(--card));
+}
+.brand-box-side {
+  fill: color-mix(in oklab, var(--primary) 14%, var(--card));
+}
+.brand-box-flap {
+  fill: color-mix(in oklab, var(--foreground) 7%, var(--card));
+}
+.brand-box-line {
+  stroke: color-mix(in oklab, var(--foreground) 20%, transparent);
+  stroke-width: 0.9;
+}
+.brand-chip {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 12.15%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--primary) 22%, var(--border));
+  border-radius: 28%;
+  background: color-mix(in oklab, var(--primary) 9%, var(--card));
+  color: var(--primary);
+}
+.brand-chip svg {
+  width: 55%;
+  height: 55%;
+}
+.brand-mark {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 12.95%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 22%;
+}
+.brand-mark svg {
+  width: 46%;
+  height: 46%;
+}
+.brand-shine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 50%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    color-mix(in oklab, var(--foreground) 14%, transparent),
+    transparent
+  );
+  animation: brand-shine 6s ease-in-out infinite;
+  pointer-events: none;
+}
+.brand-mark .brand-shine {
+  background: linear-gradient(
+    100deg,
+    transparent,
+    color-mix(in oklab, white 42%, transparent),
+    transparent
+  );
+}
+@keyframes brand-shine {
+  0%,
+  55% {
+    transform: translateX(0) skewX(-12deg);
+    opacity: 0;
+  }
+  62% {
+    opacity: 1;
+  }
+  82%,
+  100% {
+    transform: translateX(320%) skewX(-12deg);
+    opacity: 0;
+  }
+}
 .agent-dither-field {
   inset: 0;
   overflow: hidden;
   background: var(--agent-dither-back);
 }
-.agent-dither-field canvas { display: block; }
+.agent-dither-field canvas {
+  display: block;
+  opacity: 0.45;
+}
 /* Light pool behind the icon: the dot field feathers out before it starts. */
 .agent-halo {
   position: absolute;
@@ -532,31 +1253,786 @@ html.light .nav-solid { background: color-mix(in oklab, var(--card) 88%, transpa
   height: 9.5rem;
   translate: -50% -50%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in oklab, var(--card) 55%, transparent) 0%, color-mix(in oklab, var(--card) 26%, transparent) 60%, transparent 100%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--card) 55%, transparent) 0%,
+    color-mix(in oklab, var(--card) 26%, transparent) 60%,
+    transparent 100%
+  );
 }
 .boat-soft-ring {
   border: 1px solid color-mix(in oklab, var(--primary) 35%, var(--border));
   outline: 6px solid color-mix(in oklab, var(--border) 35%, transparent);
 }
-.service-scene-1 .agent-core { background: var(--agent-icon-back); color: var(--agent-icon-front); border: 0; animation: none; }
-.bento-arrow { position: absolute; right: 18px; top: 18px; z-index: 10; width: 18px; height: 18px; color: var(--primary); opacity: 0; transition: opacity .3s ease; }
-.group:hover .bento-arrow, .group:focus-visible .bento-arrow { opacity: 1; }
+/* Agent mascot: three.js canvas, see AgentFace3D. */
+.agent-face {
+  position: relative;
+  width: 9.5rem;
+  height: 9.5rem;
+}
+.agent-face canvas {
+  display: block;
+}
+.agent-face::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 64%;
+  height: 12px;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--agent-icon-back) 35%, transparent),
+    transparent
+  );
+  filter: blur(5px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+.bento-arrow {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  z-index: 10;
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.group:hover .bento-arrow,
+.group:focus-visible .bento-arrow {
+  opacity: 1;
+}
 
 /* Workflow arrows nudge forward; growth chart draws itself on a loop; social cards float. */
-.scene-arrow { animation: arrow-nudge 1.6s ease-in-out infinite; }
-@keyframes arrow-nudge { 50% { transform: translateX(3px); } }
-.chart-bar { transform-box: fill-box; transform-origin: bottom; animation: chart-bar 4s ease-out infinite both; }
-@keyframes chart-bar { 0% { transform: scaleY(0); } 25%, 85% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
-.chart-line { stroke-dasharray: 100; animation: chart-line 4s ease-in-out infinite both; }
-@keyframes chart-line { 0%, 10% { stroke-dashoffset: 100; } 50%, 85% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
-.chart-head, .chart-dot { animation: chart-pop 4s ease-out infinite both; }
-.chart-dot { animation-delay: -.4s; }
-@keyframes chart-pop { 0%, 45% { opacity: 0; } 55%, 85% { opacity: 1; } 100% { opacity: 0; } }
-.social-card { animation: social-float 4.5s ease-in-out infinite; }
-.social-card-b { animation-delay: -2.25s; }
-@keyframes social-float { 50% { translate: 0 -6px; } }
-@media (prefers-reduced-motion: reduce) { .scene-arrow, .chart-bar, .chart-line, .chart-head, .chart-dot, .social-card, .heading-swash path { animation: none; } }
+.scene-arrow {
+  animation: arrow-nudge 1.6s ease-in-out infinite;
+}
+@keyframes arrow-nudge {
+  50% {
+    transform: translateX(3px);
+  }
+}
+.chart-bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: chart-bar 1.2s ease-out forwards;
+}
+@keyframes chart-bar {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scaleY(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+.chart-line {
+  stroke-dasharray: 100;
+  animation: chart-line 1.4s ease-out forwards;
+}
+@keyframes chart-line {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  50% {
+    stroke-dashoffset: 100;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+.chart-head,
+.chart-dot {
+  animation: chart-pop 1s ease-out forwards;
+  opacity: 0;
+}
+.chart-dot {
+  animation-delay: 0.6s;
+}
+@keyframes chart-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.social-card {
+  animation: social-float 4.5s ease-in-out infinite;
+}
+.social-card-b {
+  animation-delay: -2.25s;
+}
+@keyframes social-float {
+  50% {
+    translate: 0 -6px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-arrow,
+  .chart-bar,
+  .chart-line,
+  .chart-head,
+  .chart-dot,
+  .social-card,
+  .heading-swash path {
+    animation: none;
+  }
+}
 
 /* "Our services" heading: hand-drawn underline draws itself, then rests. */
-.heading-swash path { stroke-dasharray: 100; animation: heading-swash 4.5s ease-in-out infinite both; }
-@keyframes heading-swash { 0% { stroke-dashoffset: 100; } 22%, 90% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+.heading-swash path {
+  stroke-dasharray: 100;
+  animation: heading-swash 4.5s ease-in-out infinite both;
+}
+@keyframes heading-swash {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  22%,
+  90% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+/* Approach steps ("How we turn ideas into impact"): four feature vignettes in
+   the spirit of todesktop.com's cards — a gridded stage, a glassy panel on it,
+   and one slow looped detail per step. */
+.impact-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  transition: border-color 0.35s ease;
+}
+.impact-card:hover,
+.impact-card:focus-within {
+  border-color: color-mix(in oklab, var(--primary) 38%, var(--border));
+}
+.impact-card-stage {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+.impact-rule {
+  height: 1px;
+  background: color-mix(in oklab, var(--foreground) 11%, transparent);
+  transition: background 0.4s ease;
+}
+.impact-card:hover .impact-rule,
+.impact-card:focus-within .impact-rule {
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    color-mix(in oklab, var(--primary) 15%, transparent)
+  );
+}
+.impact-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  container-type: inline-size;
+  background:
+    radial-gradient(
+      120% 90% at 50% 0%,
+      color-mix(in oklab, var(--primary) 12%, transparent),
+      transparent 72%
+    ),
+    color-mix(in oklab, var(--secondary) 65%, var(--card));
+}
+.impact-stage-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--foreground) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--foreground) 8%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(120% 100% at 50% 25%, #000 38%, transparent 92%);
+  mask-image: radial-gradient(120% 100% at 50% 25%, #000 38%, transparent 92%);
+}
+.impact-halo {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  width: 70%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--primary) 26%, transparent),
+    transparent
+  );
+  filter: blur(6px);
+}
+.impact-ring {
+  position: absolute;
+  right: 4%;
+  top: 4%;
+  width: 30%;
+  aspect-ratio: 1;
+  border: 1px dashed color-mix(in oklab, var(--foreground) 17%, transparent);
+  border-radius: 50%;
+  animation: impact-spin 42s linear infinite;
+}
+.impact-ring-wide {
+  right: -10%;
+  top: -8%;
+  width: 44%;
+}
+.impact-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--foreground) 14%, transparent);
+  border-radius: 10px;
+  background: var(--card);
+  backdrop-filter: blur(6px);
+}
+.impact-window-bar {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 1.2cqw;
+  padding: 2.6cqw 2.6cqw 1.9cqw;
+  border-bottom: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+.impact-window-bar span {
+  width: 1.6cqw;
+  height: 1.6cqw;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 24%, transparent);
+}
+.impact-skeleton {
+  position: absolute;
+  height: 1.6cqw;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 14%, transparent);
+}
+.impact-skeleton-in {
+  transform-origin: left;
+  transform: scaleX(1);
+  animation: impact-type 6s ease-in-out infinite both;
+}
+@keyframes impact-type {
+  0%,
+  6% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  22%,
+  82% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  94%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+.impact-sign {
+  position: absolute;
+  left: 8%;
+  bottom: 6%;
+  width: 84%;
+  height: 54%;
+  overflow: visible;
+}
+.impact-sign-path,
+.impact-sign-line {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: impact-draw 7s ease-in-out infinite both;
+}
+.impact-sign-path {
+  stroke: var(--primary);
+  stroke-width: 3;
+}
+.impact-sign-line {
+  stroke: color-mix(in oklab, var(--primary) 55%, transparent);
+  stroke-width: 1.6;
+  animation-delay: 0.9s;
+}
+@keyframes impact-draw {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  56%,
+  80% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+.impact-badge {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 15%;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in oklab, var(--primary) 55%, black);
+  border-radius: 30%;
+  color: var(--primary-foreground);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 84%, white),
+    var(--primary)
+  );
+  animation: impact-float 6.5s ease-in-out infinite;
+}
+.impact-badge svg {
+  width: 46%;
+  height: 46%;
+}
+.impact-badge::after {
+  content: "";
+  position: absolute;
+  inset: -26%;
+  border: 1px dashed color-mix(in oklab, var(--primary) 45%, transparent);
+  border-radius: 50%;
+  animation: impact-spin 24s linear infinite;
+}
+.impact-lens {
+  position: absolute;
+  width: 21%;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in oklab, var(--primary) 42%, transparent);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 34% 28%,
+      color-mix(in oklab, white 24%, transparent),
+      transparent 62%
+    ),
+    color-mix(in oklab, var(--primary) 16%, transparent);
+  animation: impact-drift 9s ease-in-out infinite;
+}
+.impact-tag {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4cqw;
+  padding: 1.4cqw 2.8cqw;
+  white-space: nowrap;
+  border: 1px solid color-mix(in oklab, var(--foreground) 13%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--card) 82%, transparent);
+  backdrop-filter: blur(6px);
+  font-size: 3.2cqw;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted-foreground);
+  animation: impact-float 7.5s ease-in-out infinite;
+}
+.impact-wire {
+  width: 88%;
+  height: 74%;
+  margin: auto;
+  overflow: visible;
+}
+.impact-wire-draw {
+  stroke: color-mix(in oklab, var(--primary) 72%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: impact-sketch 9s ease-in-out infinite both;
+}
+.impact-wire-link {
+  stroke: color-mix(in oklab, var(--foreground) 26%, transparent);
+  stroke-width: 1.3;
+  stroke-dasharray: 2 3;
+}
+@keyframes impact-sketch {
+  0%,
+  5% {
+    stroke-dashoffset: 100;
+    opacity: 0.35;
+  }
+  34%,
+  74% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  94%,
+  100% {
+    stroke-dashoffset: 100;
+    opacity: 0.35;
+  }
+}
+.impact-node {
+  position: absolute;
+  width: 2.3cqw;
+  height: 2.3cqw;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: impact-pulse 4s ease-in-out infinite;
+}
+.impact-tiles {
+  position: absolute;
+  right: 0;
+  bottom: 8%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+}
+.impact-tile {
+  display: grid;
+  place-items: center;
+  width: 19%;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in oklab, var(--foreground) 13%, transparent);
+  border-radius: 28%;
+  color: var(--primary);
+  background: var(--card);
+  animation: impact-lift 6s ease-in-out infinite;
+}
+.impact-tile svg {
+  width: 42%;
+  height: 42%;
+}
+.impact-legend {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 3cqw;
+  padding: 2.6cqw 3cqw 0;
+  font-size: 3.1cqw;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.impact-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1cqw;
+}
+.impact-dot {
+  width: 1.5cqw;
+  height: 1.5cqw;
+  border-radius: 50%;
+}
+.impact-dot-a {
+  background: color-mix(in oklab, var(--primary) 95%, transparent);
+}
+.impact-dot-b {
+  background: color-mix(in oklab, var(--primary) 55%, transparent);
+}
+.impact-dot-c {
+  background: color-mix(in oklab, var(--accent) 85%, transparent);
+}
+.impact-chart {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6%;
+  padding: 9% 9% 7%;
+}
+.impact-col {
+  display: flex;
+  height: 100%;
+  width: 13%;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1.2cqw;
+}
+.impact-bar {
+  border-radius: 1.2cqw;
+  transform-origin: bottom;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--primary) 82%, transparent),
+    color-mix(in oklab, var(--primary) 26%, transparent)
+  );
+  animation: impact-grow 7s cubic-bezier(0.2, 0.7, 0.3, 1) infinite both;
+}
+.impact-bar:nth-child(1) {
+  opacity: 0.5;
+}
+.impact-bar:nth-child(2) {
+  opacity: 0.75;
+}
+@keyframes impact-grow {
+  0%,
+  8% {
+    transform: scaleY(0.06);
+    opacity: 0;
+  }
+  46%,
+  84% {
+    transform: scaleY(1);
+  }
+  92%,
+  100% {
+    transform: scaleY(0.06);
+    opacity: 0;
+  }
+}
+.impact-chart-scan {
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  width: 17%;
+  border: 1px solid color-mix(in oklab, var(--primary) 24%, transparent);
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  animation: impact-scan 8s ease-in-out infinite;
+}
+@keyframes impact-scan {
+  0%,
+  100% {
+    left: 6%;
+  }
+  50% {
+    left: 74%;
+  }
+}
+@keyframes impact-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes impact-float {
+  50% {
+    translate: 0 -8%;
+  }
+}
+@keyframes impact-drift {
+  50% {
+    translate: -16% 22%;
+  }
+}
+@keyframes impact-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    scale: 0.8;
+  }
+  50% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes impact-lift {
+  0%,
+  100% {
+    translate: 0 6%;
+    opacity: 0.8;
+  }
+  50% {
+    translate: 0 -8%;
+    opacity: 1;
+  }
+}
+
+/* Approach cards (todesktop-style): a gridded stage, a floating glass panel
+   with one illustration per step, then the punchy title + description. */
+.approach-card {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  transition: border-color 0.35s ease, transform 0.35s ease;
+}
+.approach-card:hover,
+.approach-card:focus-within {
+  border-color: color-mix(in oklab, var(--primary) 38%, var(--border));
+  transform: translateY(-2px);
+}
+.approach-card-stage {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+.approach-rule {
+  height: 1px;
+  background: color-mix(in oklab, var(--foreground) 11%, transparent);
+  transition: background 0.4s ease;
+}
+.approach-card:hover .approach-rule,
+.approach-card:focus-within .approach-rule {
+  background: linear-gradient(90deg, var(--primary), color-mix(in oklab, var(--primary) 15%, transparent));
+}
+
+/* todesktop-style illustrations inside the glass panel */
+.approach-icon {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+.approach-doc {
+  fill: none;
+  stroke: color-mix(in oklab, var(--foreground) 14%, transparent);
+  stroke-width: 1.5;
+}
+.approach-line {
+  fill: color-mix(in oklab, var(--foreground) 16%, transparent);
+  opacity: 0;
+  animation: approach-line 5.5s ease-in-out infinite both;
+}
+@keyframes approach-line {
+  0%, 8% { transform: scaleX(0); transform-origin: left; opacity: 0; }
+  18%, 86% { transform: scaleX(1); opacity: 1; }
+  96%, 100% { transform: scaleX(1); opacity: 0; }
+}
+.approach-ring {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  animation: approach-ring 6s ease-in-out infinite both;
+}
+@keyframes approach-ring {
+  0%, 10% { stroke-dashoffset: 100; opacity: 0; }
+  20% { opacity: 1; }
+  60%, 84% { stroke-dashoffset: 0; opacity: 1; }
+  94%, 100% { stroke-dashoffset: 0; opacity: 0; }
+}
+.approach-handle {
+  fill: none;
+  stroke: color-mix(in oklab, var(--foreground) 20%, transparent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: approach-handle 5s ease-in-out infinite both;
+}
+@keyframes approach-handle {
+  0%, 30% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+.approach-path {
+  fill: none;
+  stroke: color-mix(in oklab, var(--primary) 70%, transparent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0.35;
+  animation: approach-path 9s ease-in-out infinite both;
+}
+@keyframes approach-path {
+  0%, 6% { stroke-dashoffset: 100; opacity: 0.35; }
+  30%, 74% { stroke-dashoffset: 0; opacity: 1; }
+  94%, 100% { stroke-dashoffset: 100; opacity: 0.35; }
+}
+.approach-dot {
+  fill: var(--primary);
+  opacity: 0.35;
+  animation: approach-dot 5s ease-in-out infinite both;
+}
+.approach-block {
+  fill: color-mix(in oklab, var(--primary) 55%, transparent);
+  stroke: var(--primary);
+  stroke-width: 1.4;
+  opacity: 0;
+  transform: scaleY(0.05);
+  transform-origin: bottom;
+  animation: approach-block 6.5s cubic-bezier(0.2, 0.7, 0.3, 1) infinite both;
+}
+@keyframes approach-block {
+  0%, 10% { transform: scaleY(0.05); opacity: 0; }
+  44%, 82% { transform: scaleY(1); opacity: 1; }
+  92%, 100% { transform: scaleY(0.05); opacity: 0; }
+}
+.approach-chart-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  animation: approach-chart 8s ease-in-out infinite both;
+}
+@keyframes approach-chart {
+  0%, 8% { stroke-dashoffset: 100; opacity: 0; }
+  22%, 80% { stroke-dashoffset: 0; opacity: 1; }
+  92%, 100% { stroke-dashoffset: 100; opacity: 0; }
+}
+
+/* Gate motion behind reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .approach-line,
+  .approach-ring,
+  .approach-handle,
+  .approach-path,
+  .approach-dot,
+  .approach-block,
+  .approach-chart-line,
+  .impact-skeleton-in,
+  .impact-wire-draw,
+  .impact-tile,
+  .impact-bar,
+  .impact-chart-scan,
+  .impact-sign-path,
+  .impact-sign-line,
+  .impact-ring,
+  .impact-badge,
+  .impact-tag,
+  .impact-lens,
+  .impact-node {
+    animation: none !important;
+  }
+  .approach-line { opacity: 0.5; }
+  .approach-ring { opacity: 0.6; stroke-dashoffset: 0; }
+  .approach-handle { opacity: 0.35; }
+  .approach-path { stroke-dashoffset: 0; opacity: 1; }
+  .approach-dot { opacity: 1; }
+  .approach-block { transform: scaleY(1); opacity: 0.5; }
+  .approach-chart-line { stroke-dashoffset: 0; opacity: 1; }
+}

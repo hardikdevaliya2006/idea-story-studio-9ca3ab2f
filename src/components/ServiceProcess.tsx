@@ -1,19 +1,13 @@
 
-import { ClientOnly } from "@/components/ClientOnly";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { Check, Compass, PenTool, Code2, Rocket } from "lucide-react";
-import discover from "@/assets/process/discover.json";
-import plan from "@/assets/process/plan.json";
-import build from "@/assets/process/build.json";
-import scale from "@/assets/process/scale.json";
-
-const AnimatedIcon = lazy(() => import("./ProcessLordIcon"));
+import { useEffect, useRef, useState } from "react";
+import { Check } from "lucide-react";
+import { ImpactScene } from "@/components/ImpactScenes";
 
 const steps = [
-  { icon: Compass, asset: discover, title: "Discover", line: "We learn your goals and find where AI helps most.", detail: "Understand the challenge", outcome: "Goals & opportunities" },
-  { icon: PenTool, asset: plan, title: "Plan", line: "A clear strategy mapped to real business problems.", detail: "Map the way forward", outcome: "A practical roadmap" },
-  { icon: Code2, asset: build, title: "Build", line: "Custom agents and automations fitted to your workflow.", detail: "Bring the system to life", outcome: "Connected & tested" },
-  { icon: Rocket, asset: scale, title: "Scale", line: "Track results, refine, and grow the system with you.", detail: "Keep getting better", outcome: "Measure & improve" },
+  { title: "Discover", line: "We learn your goals and find where AI helps most.", detail: "Understand the challenge", outcome: "Goals & opportunities" },
+  { title: "Plan", line: "A clear strategy mapped to real business problems.", detail: "Map the way forward", outcome: "A practical roadmap" },
+  { title: "Build", line: "Custom agents and automations fitted to your workflow.", detail: "Bring the system to life", outcome: "Connected & tested" },
+  { title: "Scale", line: "Track results, refine, and grow the system with you.", detail: "Keep getting better", outcome: "Measure & improve" },
 ];
 
 export function ServiceProcess() {
@@ -138,24 +132,24 @@ export function ServiceProcess() {
                     type="button"
                     onClick={() => focusStep(i)}
                     aria-pressed={active}
-                    className="flex h-full min-h-44 w-full flex-col items-center gap-3 p-6 text-foreground md:min-h-52 md:p-7"
+                    className="flex h-full w-full flex-col text-foreground"
                   >
-                    <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
-                      <span className="font-medium tracking-[0.08em]">0{i + 1}</span>
-                      {passed && <Check className="process-check size-3.5 text-primary" strokeWidth={2.5} />}
-                      {active && <span className="process-dot size-1.5 rounded-full bg-primary" />}
+                    <div className="process-card-stage">
+                      <ImpactScene index={i} />
                     </div>
-                    <span className="grid flex-1 place-items-center text-primary">
-                      <ClientOnly fallback={<s.icon className="size-9 md:size-10" strokeWidth={1.6} />}>
-                        <Suspense fallback={<s.icon className="size-9 md:size-10" strokeWidth={1.6} />}>
-                          <AnimatedIcon icon={s.asset} active={active && !reduced} />
-                        </Suspense>
-                      </ClientOnly>
-                    </span>
-                    <span className="font-display text-sm font-semibold md:text-[15px]">{s.title}</span>
-                    <span className="process-meter block h-0.5 w-full overflow-hidden rounded-full bg-border" aria-hidden="true">
-                      <span className="block h-full rounded-full bg-primary" style={{ width: active ? undefined : passed ? "100%" : "0%" }} data-current={active || undefined} />
-                    </span>
+                    <div className="flex flex-1 flex-col gap-3 p-4 md:p-5">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-baseline gap-2">
+                          <span className="font-display text-[11px] font-medium tabular-nums text-primary/60">0{i + 1}</span>
+                          <span className="process-title font-display text-sm font-semibold md:text-[15px]">{s.title}</span>
+                        </div>
+                        {passed && <Check className="process-check size-3.5 text-primary" strokeWidth={2.5} />}
+                        {active && <span className="process-dot size-1.5 rounded-full bg-primary" />}
+                      </div>
+                      <span className="process-meter mt-auto block h-0.5 w-full overflow-hidden rounded-full bg-border" aria-hidden="true">
+                        <span className="block h-full rounded-full bg-primary" style={{ width: active ? undefined : passed ? "100%" : "0%" }} data-current={active || undefined} />
+                      </span>
+                    </div>
                   </button>
                 </li>
               );
