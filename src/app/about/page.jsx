@@ -2,7 +2,7 @@ import { JsonLd } from "@/components/json-ld";
 import { breadcrumbSchema, createMetadata } from "@/lib/seo";
 import AboutView from "@/views/AboutView";
 export const metadata = createMetadata({
-  title: "About Us — AI, Automation & Technology",
+  title: "About Us - AI, Automation & Technology",
   description:
     "Meet Ideaboat: a team that turns ideas into intelligent solutions through AI, automation and technology. Our mission, values, approach and the people behind the work.",
   path: "/about",

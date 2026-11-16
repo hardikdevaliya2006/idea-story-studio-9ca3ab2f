@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-/** 4x4 Bayer matrix, normalised to 0..1 — gives the ordered-dither look. */
+/** 4x4 Bayer matrix, normalised to 0..1 - gives the ordered-dither look. */
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16);
 function smoothstep(a, b, v) {
   const t = Math.min(1, Math.max(0, (v - a) / (b - a)));
@@ -70,7 +70,7 @@ export default function AnimatedDotField({
           if (b <= 0.01) continue;
           const x = (c + 0.5) * cell;
           const y = (r + 0.5) * cell;
-          // Smooth flowing wave field (sum of slow sines) — coherent, not random.
+          // Smooth flowing wave field (sum of slow sines) - coherent, not random.
           const wave =
             Math.sin(x * 0.045 + t * 0.8) * 0.5 +
             Math.sin(y * 0.05 - t * 0.6) * 0.5 +

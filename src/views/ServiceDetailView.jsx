@@ -15,7 +15,7 @@ export default function ServiceDetailPage({ slug }) {
         className="mx-auto max-w-6xl space-y-14 px-6 pb-20 pt-28 md:space-y-20 md:pb-24 md:pt-36"
       >
         <div className="space-y-5">
-          {/* BREADCRUMB — visible, and mirrored in BreadcrumbList structured data */}
+          {/* BREADCRUMB - visible, and mirrored in BreadcrumbList structured data */}
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
             <ol className="flex flex-wrap items-center gap-1.5">
               <li>
@@ -55,8 +55,7 @@ export default function ServiceDetailPage({ slug }) {
               href="/book-a-discovery-call"
               className="group mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
             >
-              Book a discovery call{" "}
-              <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
+              Book a call <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
             </Link>
           </Reveal>
           <div>

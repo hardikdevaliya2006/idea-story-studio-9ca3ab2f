@@ -1,6 +1,6 @@
 # Ideaboat
 
-Marketing site for Ideaboat — AI automation, custom AI agents and growth systems.
+Marketing site for Ideaboat - AI automation, custom AI agents and growth systems.
 
 Built with **Next.js 16 (App Router)**, **React 19**, **JavaScript (JSX)** and **Tailwind CSS 4**.
 Every page is statically rendered at build time for speed and crawlability.
@@ -79,4 +79,4 @@ When you add a service to `src/data/services.js`, the detail page, sitemap, navi
 - Contact and enquiry forms are client-side only; they show a success state but do not post to a backend yet.
 - Deploy anywhere that supports Next.js (Vercel, a Node server, or a container).
 - The project is plain JavaScript (`.js`/`.jsx`, no TypeScript); the `@/*` alias is defined in `jsconfig.json`.
-- `npm run build` runs `next build --webpack`. Some shared hosts (e.g. Hostinger) ship a glibc older than the native SWC binary requires, which makes Turbopack unavailable; the webpack build works with the WASM SWC fallback. `next.config.mjs` is therefore kept as plain JavaScript — a TypeScript config cannot be loaded in that fallback path.
+- `npm run build` runs `next build --webpack`. Some shared hosts (e.g. Hostinger) ship a glibc older than the native SWC binary requires, which makes Turbopack unavailable; the webpack build works with the WASM SWC fallback. `next.config.mjs` is therefore kept as plain JavaScript - a TypeScript config cannot be loaded in that fallback path.

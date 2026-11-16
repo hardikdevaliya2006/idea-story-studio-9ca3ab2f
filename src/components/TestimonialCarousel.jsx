@@ -6,7 +6,7 @@ const testimonials = [
     stat: "+212% revenue",
   },
   {
-    q: "A pleasure to work with — fast, thoughtful and always on brand. They felt like part of our team.",
+    q: "A pleasure to work with - fast, thoughtful and always on brand. They felt like part of our team.",
     name: "Sara Kapoor",
     role: "CMO, Northwind",
     stat: "4.9★ rating",

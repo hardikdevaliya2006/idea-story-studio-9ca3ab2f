@@ -33,7 +33,7 @@ const values = [
   {
     icon: Lightbulb,
     title: "Innovation with Purpose",
-    desc: "We explore AI and emerging technologies with a clear purpose—solving real business challenges and creating smarter ways to work.",
+    desc: "We explore AI and emerging technologies with a clear purpose-solving real business challenges and creating smarter ways to work.",
   },
   {
     icon: Gem,
@@ -48,7 +48,7 @@ const values = [
   {
     icon: Target,
     title: "Results That Matter",
-    desc: "We measure success by meaningful outcomes—from reducing repetitive work to improving efficiency and supporting sustainable growth.",
+    desc: "We measure success by meaningful outcomes-from reducing repetitive work to improving efficiency and supporting sustainable growth.",
   },
 ];
 const steps = [

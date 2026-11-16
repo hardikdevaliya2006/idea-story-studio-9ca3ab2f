@@ -11,15 +11,12 @@ import {
   Layers,
 } from "lucide-react";
 import sailboatImage from "@/assets/sailboat-emblem.png";
-import { useTheme, useReveal, Reveal } from "@/components/site-chrome";
+import { useReveal, Reveal } from "@/components/site-chrome";
 import { SERVICES } from "@/data/services";
 import { CapabilityScene, ServiceScene, AutomationStackScene } from "@/components/ServicesVisuals";
 import { ServiceProcess } from "@/components/ServiceProcess";
+import { ServicesBanner } from "@/components/ServicesBanner";
 const sailboatAsset = sailboatImage.src;
-// Served as-is from /public: no next/image optimizer, so the browser gets the
-// original 2172px PNG instead of a downscaled/compressed variant.
-const bannerLight = "/banner/AI-Powered%20Solutions%20Banner%20White.png";
-const bannerDark = "/banner/AI-Powered%20Solutions%20Hero%20Banner%20Dark.png";
 const capabilities = [
   { title: "Workflow & Operations", detail: "Tasks, approvals and support." },
   { title: "Data & Integrations", detail: "Systems, reports and tools." },
@@ -34,68 +31,30 @@ const buildList = [
   { icon: BarChart3, label: "Automated reporting", hint: "Numbers without the busywork" },
   { icon: Layers, label: "Cross-platform processes", hint: "One flow across every tool" },
 ];
-/* ---------- bento: staggered 3-column grid, tall cards carry a description ---------- */
-// Desktop placement per service on an 8-row grid (each unit is a half-height row).
-const BENTO_LAYOUT = [
-  "lg:col-start-1 lg:row-start-1 lg:row-span-2",
-  "lg:col-start-2 lg:row-start-1 lg:row-span-4",
-  "lg:col-start-3 lg:row-start-1 lg:row-span-2",
-  "lg:col-start-1 lg:row-start-3 lg:row-span-4",
-  "lg:col-start-3 lg:row-start-3 lg:row-span-3",
-  "lg:col-start-2 lg:row-start-5 lg:row-span-2",
-  "lg:col-start-1 lg:row-start-7 lg:row-span-2",
-  "lg:col-start-2 lg:row-start-7 lg:row-span-2",
-  "lg:col-start-3 lg:row-start-6 lg:row-span-3",
-];
-const TALL = new Set([1, 3, 8]);
+/* ---------- services grid: nine equal bento tiles, artwork over copy ---------- */
 function BentoCard({ index }) {
   const s = SERVICES[index];
   if (!s) return null;
-  const tall = TALL.has(index);
-  const isAgent = index === 1;
-  // Automation card: a floating mock of an automated run, copy anchored bottom-left.
-  if (index === 0) {
-    return (
-      <Link href={`/services/${s.slug}`} className="group block h-full">
-        <div className="bento-card">
-          <ArrowUpRight className="bento-arrow" />
-          <div className="flex flex-1 items-center px-6 pb-1 pt-8">
-            <AutomationStackScene />
-          </div>
-          <div className="px-6 pb-6 pt-4">
-            <h3 className="font-display text-lg font-semibold leading-snug">{s.title}</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.tagline}</p>
-          </div>
-        </div>
-      </Link>
-    );
-  }
   return (
     <Link href={`/services/${s.slug}`} className="group block h-full">
-      <div className={`bento-card ${isAgent ? "min-h-[24rem] lg:min-h-0" : ""}`}>
-        {!isAgent && <ArrowUpRight className="bento-arrow" />}
-        {isAgent && (
-          <div className="absolute inset-0">
+      <div className="bento-card">
+        {/* Copy sits at the top of the tile; the artwork fills the base. Both
+            share the same card surface, so there is no second panel. */}
+        <div className="bento-copy">
+          <h3 className="font-display text-base font-semibold leading-snug">{s.title}</h3>
+          <p className="mt-1 text-balance text-sm leading-relaxed text-muted-foreground">
+            {s.tagline}
+          </p>
+        </div>
+        <div className="bento-visual" aria-hidden="true">
+          {index === 0 ? (
+            <div className="w-full max-w-[18rem]">
+              <AutomationStackScene />
+            </div>
+          ) : (
             <ServiceScene index={index} grid={false} className="size-full" />
-          </div>
-        )}
-        <div className="relative z-10 px-6 pt-7 text-center">
-          <h3 className="font-display text-lg font-semibold leading-snug">{s.title}</h3>
-          {!isAgent && (
-            <p
-              className={`mx-auto mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground ${tall || index === 4 ? "" : "lg:hidden"}`}
-            >
-              {s.short}
-            </p>
           )}
         </div>
-        {!isAgent && (
-          <ServiceScene
-            index={index}
-            grid={false}
-            className={tall ? "bento-scene lg:min-h-64" : "bento-scene"}
-          />
-        )}
       </div>
     </Link>
   );
@@ -103,38 +62,28 @@ function BentoCard({ index }) {
 /* ---------- page ---------- */
 export default function ServicesPage() {
   useReveal();
-  const { theme } = useTheme();
   return (
     <div className="overflow-x-clip">
       <main
         id="main-content"
-        className="mx-auto max-w-6xl space-y-12 px-6 pb-20 pt-28 md:space-y-16 md:pb-24 md:pt-32"
+        className="mx-auto max-w-6xl space-y-12 px-6 pb-20 pt-28 md:space-y-20 md:pb-24 md:pt-32"
       >
-        {/* BANNER — original PNG served unoptimised, at its native resolution */}
+        {/* BANNER - drawn in the DOM so it matches both themes */}
         <section>
           <Reveal>
-            <img
-              src={theme === "dark" ? bannerDark : bannerLight}
-              alt="AI-Powered Solutions for a smarter tomorrow"
-              width={2172}
-              height={theme === "dark" ? 363 : 353}
-              decoding="async"
-              className="h-auto w-full rounded-2xl border object-cover object-center max-sm:aspect-[2.4/1]"
-            />
+            <ServicesBanner />
           </Reveal>
-          <div className="mt-10 grid gap-10 md:grid-cols-3 md:gap-6">
+          <div className="mt-6 grid gap-4 md:mt-10 md:grid-cols-3 md:gap-6">
             {capabilities.map((c, i) => (
               <Reveal key={c.title} delay={i * 120} className="h-full">
-                <div className="flex h-full flex-col rounded-2xl border bg-card p-3 pt-0">
-                  <div className="mt-5 px-2">
-                    <h2 className="text-center font-display text-xl font-semibold leading-snug">
-                      {c.title}
-                    </h2>
-                  </div>
-                  <p className="mt-2 px-2 pb-2 text-sm text-muted-foreground text-center">
+                <div className="flex h-full flex-col rounded-2xl border bg-card p-4">
+                  <h2 className="text-center font-display text-lg font-semibold leading-snug tracking-tight md:text-xl">
+                    {c.title}
+                  </h2>
+                  <p className="mt-1.5 text-center text-sm leading-relaxed text-muted-foreground">
                     {c.detail}
                   </p>
-                  <div className="overflow-hidden rounded-xl border">
+                  <div className="mt-4 overflow-hidden rounded-xl border">
                     <CapabilityScene index={i} />
                   </div>
                 </div>
@@ -143,9 +92,9 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* SERVICES — every card has its own scene */}
+        {/* SERVICES - every card has its own scene */}
         <section id="services">
-          <Reveal className="mb-12 text-center">
+          <Reveal className="mb-10 text-center md:mb-14">
             <h1 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-5xl lg:text-6xl">
               Our{" "}
               <span className="heading-accent relative inline-block font-semibold text-primary">
@@ -167,8 +116,8 @@ export default function ServicesPage() {
                 </svg>
               </span>
             </h1>
-            <p className="mt-5 max-w-2xl mx-auto text-base text-muted-foreground leading-relaxed interactive-text">
-              We design and build AI-powered systems that slot into your existing workflow —
+            <p className="mx-auto mt-5 max-w-2xl text-balance text-[15px] leading-relaxed text-muted-foreground interactive-text md:text-base">
+              We design and build AI-powered systems that slot into your existing workflow —{" "}
               <span className="text-highlight relative cursor-default group">
                 no rip-and-replace
                 <span className="highlight-underline" aria-hidden="true"></span>
@@ -177,27 +126,23 @@ export default function ServicesPage() {
             </p>
             <Link
               href="/book-a-discovery-call"
-              className="mt-8 inline-flex group items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition hover:bg-foreground hover:text-background"
+              className="surface-sheen group relative mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition hover:brightness-105"
             >
-              Start a conversation{" "}
-              <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
+              Start a conversation
+              <ArrowUpRight className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Reveal>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-[repeat(8,minmax(7.5rem,auto))]">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {SERVICES.map((s, i) => (
-              <Reveal
-                key={s.slug}
-                delay={(i % 3) * 90}
-                className={`h-full ${BENTO_LAYOUT[i] ?? ""}`}
-              >
+              <Reveal key={s.slug} delay={(i % 3) * 80} className="h-full">
                 <BentoCard index={i} />
               </Reveal>
             ))}
           </div>
         </section>
 
-        {/* WHAT WE CAN BUILD — statement, capability list, workflow footer strip */}
-        <section className="relative grid gap-8 overflow-hidden rounded-[28px] border bg-card p-5 sm:p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:grid-rows-[auto_1fr] md:gap-x-12 md:gap-y-10 md:p-8 lg:gap-x-16">
+        {/* WHAT WE CAN BUILD - statement, capability list, workflow footer strip */}
+        <section className="relative grid gap-8 overflow-hidden rounded-3xl border bg-card p-6 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:grid-rows-[auto_1fr] md:gap-x-12 md:gap-y-10 lg:gap-x-16 lg:p-10">
           <div className="dots pointer-events-none absolute -bottom-16 -left-16 size-64" />
           <Reveal className="relative order-1 md:col-start-1 md:row-start-1">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
@@ -244,10 +189,10 @@ export default function ServicesPage() {
           </Reveal>
         </section>
 
-        {/* APPROACH — connected step cards, glanceable */}
+        {/* APPROACH - connected step cards, glanceable */}
         <section>
-          <Reveal className="mb-12">
-            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
+          <Reveal className="mb-10 md:mb-12">
+            <h2 className="font-display text-3xl font-medium leading-tight tracking-tight md:text-4xl">
               How we turn ideas into impact
             </h2>
           </Reveal>
@@ -255,10 +200,10 @@ export default function ServicesPage() {
         </section>
 
         {/* CTA */}
-        <Reveal className="relative overflow-hidden rounded-[28px] bg-primary p-7 text-primary-foreground sm:p-10 md:p-14">
-          <div className="texture-grain pointer-events-none absolute inset-0 opacity-50 mix-blend-overlay" />
-          <div className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-primary-foreground/10 blur-2xl" />
-          <div className="spin-slow absolute -right-20 -top-20 size-72 rounded-full border border-dashed border-primary-foreground/40" />
+        <Reveal className="relative overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground sm:p-12 lg:p-14">
+          <div className="texture-grain pointer-events-none absolute inset-0 opacity-40 mix-blend-overlay" />
+          <div className="pointer-events-none absolute -right-24 -top-28 size-80 rounded-full bg-primary-foreground/10 blur-2xl" />
+          <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full border border-primary-foreground/20" />
           <div className="relative z-10 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-md:grid-cols-1">
             <div className="min-w-0">
               <h2 className="max-w-xl font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
@@ -268,9 +213,9 @@ export default function ServicesPage() {
             </div>
             <Link
               href="/book-a-discovery-call"
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm text-background transition hover:bg-foreground/85 sm:w-auto"
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:bg-foreground/90 sm:w-auto"
             >
-              Book a discovery call <ArrowUpRight className="size-4" />
+              Book a call <ArrowUpRight className="size-4" />
             </Link>
           </div>
         </Reveal>

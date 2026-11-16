@@ -1,7 +1,7 @@
 /**
  * Approach visuals, modelled on todesktop.com's feature cards.
  * Each step is a gridded stage with a floating glass panel and one slow,
- * looped illustration — one per step, self-contained SVG (nothing is
+ * looped illustration - one per step, self-contained SVG (nothing is
  * hotlinked from todesktop). Geometry is in % of a 4:3 stage so it scales
  * with the card. Animations only run when prefers-reduced-motion: no-preference.
  */
@@ -25,7 +25,7 @@ function Window({ left, top, width, height, children }) {
     </div>
   );
 }
-/** Discover: insights surface — a document with a magnifying glass over it. */
+/** Discover: insights surface - a document with a magnifying glass over it. */
 function DiscoverScene() {
   return (
     <Stage>
@@ -75,7 +75,7 @@ function DiscoverScene() {
     </Stage>
   );
 }
-/** Plan: strategy mapped — a winding path with nodes connecting the way. */
+/** Plan: strategy mapped - a winding path with nodes connecting the way. */
 function PlanScene() {
   return (
     <Stage>
@@ -107,7 +107,7 @@ function PlanScene() {
     </Stage>
   );
 }
-/** Build: built to fit — blocks assembling into place. */
+/** Build: built to fit - blocks assembling into place. */
 function BuildScene() {
   return (
     <Stage>
@@ -149,7 +149,7 @@ function BuildScene() {
     </Stage>
   );
 }
-/** Scale: results measured — a line chart trending up. */
+/** Scale: results measured - a line chart trending up. */
 function ScaleScene() {
   return (
     <Stage>

@@ -38,7 +38,7 @@ export const SERVICES = [
       "Turn the repetitive work your team does every day into automated workflows that run reliably in the background.",
     tagline: "Less manual work, fewer dropped handoffs",
     overview:
-      "We map the manual steps your team repeats daily — approvals, data entry, handoffs, follow-ups — and rebuild them as automated workflows connected to the tools you already use. Every workflow is documented, monitored, and easy to adjust when your process changes.",
+      "We map the manual steps your team repeats daily - approvals, data entry, handoffs, follow-ups - and rebuild them as automated workflows connected to the tools you already use. Every workflow is documented, monitored, and easy to adjust when your process changes.",
     includes: [
       "Process mapping and workflow design",
       "Approval and handoff automation",
@@ -107,7 +107,7 @@ export const SERVICES = [
       "Bring AI into the platforms you already use, so everyday operations get smarter without new tools.",
     tagline: "Smarter work inside the tools you already pay for",
     overview:
-      "You don't need a new platform to benefit from AI. We look at where your team already works — CRM, helpdesk, store, spreadsheets — and add AI where it removes friction: writing, sorting, summarising, scoring, and connecting data that used to sit in separate places.",
+      "You don't need a new platform to benefit from AI. We look at where your team already works - CRM, helpdesk, store, spreadsheets - and add AI where it removes friction: writing, sorting, summarising, scoring, and connecting data that used to sit in separate places.",
     includes: [
       "AI opportunities ranked by impact and effort",
       "Integration into your existing platforms",
@@ -222,7 +222,7 @@ export const SERVICES = [
       "Brand identity and design systems that keep every touchpoint consistent and recognisable.",
     tagline: "Look as capable as you actually are",
     overview:
-      "We shape how your business looks and reads — logo, colours, type, and the rules that keep it all consistent — then hand over organised files your team and developers can use without guessing.",
+      "We shape how your business looks and reads - logo, colours, type, and the rules that keep it all consistent - then hand over organised files your team and developers can use without guessing.",
     includes: [
       "Logo and visual identity",
       "Colour, typography, and usage rules",
@@ -250,7 +250,7 @@ export const SERVICES = [
     intro: "Fast, modern websites built to turn visitors into enquiries, not just look nice.",
     tagline: "A site that loads fast and asks for the sale",
     overview:
-      "We design and build marketing sites that load quickly, read well on a phone, and guide visitors toward getting in touch — with clean structure, sensible copy layout, and analytics so you can see what's working.",
+      "We design and build marketing sites that load quickly, read well on a phone, and guide visitors toward getting in touch - with clean structure, sensible copy layout, and analytics so you can see what's working.",
     includes: [
       "Responsive design and build",
       "Clear page and content structure",
@@ -268,7 +268,7 @@ export const SERVICES = [
     ],
     ctaTitle: "Thinking about a new site?",
     ctaText:
-      "Tell us the goal of the page and who it's for — we'll suggest the simplest build that gets there.",
+      "Tell us the goal of the page and who it's for - we'll suggest the simplest build that gets there.",
   },
   {
     slug: "shopify-ecommerce",
@@ -279,7 +279,7 @@ export const SERVICES = [
       "Shopify stores set up to sell smoothly and run without constant manual work behind the scenes.",
     tagline: "A store that sells and runs itself",
     overview:
-      "We build and fine-tune Shopify stores — theme setup, product structure, checkout flow, and the automations behind them — so orders, inventory, and customer data stay connected as you grow.",
+      "We build and fine-tune Shopify stores - theme setup, product structure, checkout flow, and the automations behind them - so orders, inventory, and customer data stay connected as you grow.",
     includes: [
       "Store setup and theme customisation",
       "Product and collection structure",
@@ -305,7 +305,7 @@ export const SERVICES = [
     ],
     ctaTitle: "Let's get your store running smoothly",
     ctaText:
-      "Tell us what's slowing you down today — orders, inventory, or follow-ups — and we'll start there.",
+      "Tell us what's slowing you down today - orders, inventory, or follow-ups - and we'll start there.",
   },
   {
     slug: "social-media",
@@ -315,7 +315,7 @@ export const SERVICES = [
     intro: "Social content and posting systems that stay consistent without daily scrambling.",
     tagline: "A posting rhythm you can keep",
     overview:
-      "We set up the content engine behind your channels: what to post, how it looks, and how it gets published — with AI helping draft and repurpose, and your team approving what goes out.",
+      "We set up the content engine behind your channels: what to post, how it looks, and how it gets published - with AI helping draft and repurpose, and your team approving what goes out.",
     includes: [
       "Content pillars and monthly calendar",
       "Post designs and copy templates",

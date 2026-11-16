@@ -3,11 +3,20 @@ import logoImage from "@/assets/ideaboat-logo-white.png";
 import darkLogoImage from "@/assets/ideaboat-logo.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Sun, Moon, Menu, X, Plus } from "lucide-react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { ArrowUpRight, Sun, Moon, Menu, X, ChevronRight } from "lucide-react";
 import { SERVICES } from "@/data/services";
-import { ServicePreviewArt } from "@/components/ServicePreviewArt";
+import sailboatEmblem from "@/assets/sailboat-emblem.png";
 import wordmarkImage from "@/assets/ideaboat-logo-white.png";
+const sailboatAsset = sailboatEmblem.src;
 const logoAsset = logoImage;
 const darkLogoAsset = darkLogoImage;
 const wordmarkAsset = wordmarkImage;
@@ -104,12 +113,12 @@ export const NAV = [
   { label: "Industries", href: "/industries" },
   { label: "Contact", href: "/contact" },
 ];
-const serviceGroups = [
+export const serviceGroups = [
   { title: "AI Solutions", tag: "Intelligence", items: SERVICES.slice(0, 4) },
   { title: "Build & Grow", tag: "Craft", items: SERVICES.slice(4) },
 ];
-function ServicesDropdown({ active }) {
-  const [preview, setPreview] = useState(0);
+function ServicesDropdown({ index, itemRef, active, onHover }) {
+  const [preview, setPreview] = useState(null);
   const [open, setOpen] = useState(false);
   const closeTimer = useRef(null);
   const wrapper = useRef(null);
@@ -123,11 +132,12 @@ function ServicesDropdown({ active }) {
   const show = useCallback(() => {
     cancelClose();
     setOpen(true);
-  }, [cancelClose]);
+    onHover(index);
+  }, [cancelClose, index, onHover]);
   // Small delay so moving from the trigger into the panel never closes it
   // while the pointer crosses the gap.
   const hide = useCallback(
-    (delay = 140) => {
+    (delay = 120) => {
       cancelClose();
       closeTimer.current = setTimeout(() => setOpen(false), delay);
     },
@@ -155,8 +165,11 @@ function ServicesDropdown({ active }) {
   useEffect(() => () => cancelClose(), [cancelClose]);
   return (
     <div
-      ref={wrapper}
-      className="relative"
+      ref={(el) => {
+        wrapper.current = el;
+        itemRef(el);
+      }}
+      className="nav-item"
       onMouseEnter={show}
       onMouseLeave={() => hide()}
       onFocus={show}
@@ -167,52 +180,40 @@ function ServicesDropdown({ active }) {
       {/* The only navigable part of this menu: goes to the services listing. */}
       <Link
         href="/services"
-        className={`flex items-center gap-1 whitespace-nowrap rounded-full px-4 py-2 transition duration-300 hover:bg-foreground/[0.06] hover:text-foreground ${active ? "bg-foreground/[0.06] text-foreground" : ""}`}
+        aria-expanded={open}
+        aria-controls="services-menu"
+        className={`nav-link group ${active ? "is-active" : ""} ${open ? "is-open" : ""}`}
       >
-        Services{" "}
-        <Plus className={`size-3 transition duration-500 ${open ? "rotate-[135deg]" : ""}`} />
+        Services
+        <ChevronRight className="nav-chevron" strokeWidth={2} aria-hidden="true" />
       </Link>
 
-      <div
-        id="services-menu"
-        onPointerDown={show}
-        className={`absolute left-1/2 top-full z-20 w-[min(780px,calc(100vw-1.5rem))] -translate-x-1/2 pt-4 transition-all duration-300 ${open ? "visible opacity-100" : "invisible opacity-0"}`}
-      >
-        <div className="grid grid-cols-[1fr_1.15fr_200px] gap-2 overflow-hidden rounded-[28px] border bg-popover p-3 text-left">
-          {serviceGroups.map((g) => (
-            <div key={g.title} className="p-2">
-              <ul>
-                {g.items.map((s) => {
-                  const idx = SERVICES.indexOf(s);
-                  const isPreview = preview === idx;
-                  return (
-                    <li key={s.slug}>
-                      {/* Static preview row: intentionally not a link, so it
-                        never navigates. Only the "Services" nav item does. */}
-                      <div
-                        onMouseEnter={() => setPreview(idx)}
-                        className={`dd-item flex cursor-default items-center gap-3 rounded-xl px-2 py-2 text-[13px] transition ${
-                          isPreview
-                            ? "bg-foreground/[0.05] text-foreground"
-                            : "text-muted-foreground"
-                        }`}
-                      >
-                        <span className="font-mono text-[10px] text-muted-foreground/60">
-                          {String(idx + 1).padStart(2, "0")}
-                        </span>
-                        <span className="whitespace-nowrap">{s.title}</span>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-          <div className="dd-feature relative flex items-center justify-center overflow-hidden rounded-2xl bg-primary p-4 text-primary-foreground">
-            <div className="relative flex items-center justify-center" aria-hidden>
-              <ServicePreviewArt service={preview} />
-            </div>
-          </div>
+      <div id="services-menu" className={`nav-dropdown ${open ? "is-open" : ""}`}>
+        <div className="nav-dropdown-bridge" aria-hidden="true" />
+        <div className="nav-dropdown-surface">
+          <ul role="list" onMouseLeave={() => setPreview(null)}>
+            {SERVICES.map((s, idx) => {
+              const Icon = s.icon;
+              return (
+                <li key={s.slug}>
+                  {/* Static preview row: intentionally not a link, so it
+                      never navigates. Only the "Services" nav item does. */}
+                  <div
+                    onMouseEnter={() => setPreview(idx)}
+                    className={`nav-dd-row ${preview === idx ? "is-preview" : ""}`}
+                  >
+                    <span className="nav-dd-icon">
+                      <Icon strokeWidth={1.8} aria-hidden="true" />
+                    </span>
+                    <span className="nav-dd-copy">
+                      <span className="nav-dd-title">{s.title}</span>
+                      <span className="nav-dd-desc">{s.tagline}</span>
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </div>
@@ -222,7 +223,17 @@ export function SiteHeader() {
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [hovered, setHovered] = useState(null);
+  const navRef = useRef(null);
+  const itemRefs = useRef([]);
+  const pillRef = useRef(null);
   const pathname = usePathname() ?? "/";
+  const isActive = useCallback(
+    (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href)),
+    [pathname],
+  );
+  const activeIndex = NAV.findIndex((n) => isActive(n.href));
   useEffect(() => {
     const f = () => setScrolled(window.scrollY > 40);
     f();
@@ -232,104 +243,233 @@ export function SiteHeader() {
   // Close the mobile sheet whenever the route changes.
   useEffect(() => {
     setMenu(false);
+    setServicesOpen(false);
   }, [pathname]);
-  const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  // Lock the page while the full-screen sheet is open and close it on Escape.
+  useEffect(() => {
+    if (!menu) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (event) => {
+      if (event.key === "Escape") setMenu(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menu]);
+  // The inline nav only exists from lg up, so drop the sheet when it appears.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = (event) => {
+      if (event.matches) setMenu(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  // A single pill slides between nav items: it sits on the active page by
+  // default and follows the pointer (or keyboard focus) while it is inside.
+  const targetIndex = hovered ?? (activeIndex >= 0 ? activeIndex : null);
+  const placePill = useCallback(() => {
+    const pill = pillRef.current;
+    if (!pill) return;
+    const item = targetIndex === null ? null : itemRefs.current[targetIndex];
+    if (!item) {
+      pill.style.opacity = "0";
+      return;
+    }
+    pill.style.width = `${item.offsetWidth}px`;
+    pill.style.transform = `translateX(${item.offsetLeft}px)`;
+    pill.style.opacity = "1";
+  }, [targetIndex]);
+  useLayoutEffect(() => {
+    placePill();
+    // Keep following the items while the bar animates between its two states.
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now) => {
+      placePill();
+      if (now - start < 520) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [placePill, scrolled]);
+  useEffect(() => {
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => placePill());
+    if (navRef.current) observer.observe(navRef.current);
+    itemRefs.current.forEach((item) => item && observer.observe(item));
+    return () => observer.disconnect();
+  }, [placePill]);
+  useEffect(() => {
+    if (!document.fonts) return;
+    document.fonts.ready.then(() => placePill());
+  }, [placePill]);
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 px-3 transition-all duration-500 md:px-6 ${scrolled ? "py-3" : "py-4 md:py-6"}`}
+      className={`nav-header inset-x-0 top-0 z-50 md:top-6 ${scrolled ? "nav-header-scrolled fixed" : "absolute"} ${menu ? "nav-header-menu-open" : ""}`}
     >
-      <div className="glass nav-solid mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-full py-2 pl-4 pr-2 transition-all duration-500 sm:pl-5 md:pl-6">
-        <Link href="/" aria-label="Ideaboat home" className="shrink-0">
+      <div className={`nav-shell ${scrolled ? "nav-shell-scrolled" : ""}`}>
+        <Link href="/" aria-label="Ideaboat home" className="nav-logo">
           <img
-            src={theme === "light" ? darkLogoAsset.src : logoAsset.src}
+            src={menu ? logoAsset.src : theme === "light" ? darkLogoAsset.src : logoAsset.src}
             alt="Ideaboat"
-            className="h-4 w-auto md:h-[18px]"
+            className="nav-logo-wordmark"
           />
+          <img src={sailboatAsset} alt="" aria-hidden="true" className="nav-logo-mark" />
         </Link>
-        <nav className="hidden items-center gap-1 whitespace-nowrap text-[13px] font-medium text-muted-foreground lg:flex">
-          {NAV.map((n) =>
+
+        <nav
+          ref={navRef}
+          aria-label="Main"
+          className="nav-links"
+          onMouseLeave={() => setHovered(null)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setHovered(null);
+          }}
+        >
+          <span ref={pillRef} className="nav-pill" aria-hidden="true" />
+          {NAV.map((n, i) =>
             n.label === "Services" ? (
-              <ServicesDropdown key={n.label} active={isActive("/services")} />
+              <ServicesDropdown
+                key={n.label}
+                index={i}
+                itemRef={(el) => {
+                  itemRefs.current[i] = el;
+                }}
+                active={isActive(n.href)}
+                onHover={setHovered}
+              />
             ) : (
               <Link
                 key={n.label}
                 href={n.href}
-                className={`rounded-full px-4 py-2 transition duration-300 hover:bg-foreground/[0.06] hover:text-foreground ${isActive(n.href) ? "bg-foreground/[0.06] text-foreground" : ""}`}
+                ref={(el) => {
+                  itemRefs.current[i] = el;
+                }}
+                onMouseEnter={() => setHovered(i)}
+                onFocus={() => setHovered(i)}
+                className={`nav-link ${isActive(n.href) ? "is-active" : ""}`}
               >
                 {n.label}
               </Link>
             ),
           )}
         </nav>
-        <div className="flex items-center gap-1.5">
+
+        <div className="nav-actions">
           <button
             onClick={toggleTheme}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            className="grid size-10 place-items-center rounded-full text-muted-foreground transition hover:bg-foreground/[0.06] hover:text-foreground"
+            className="nav-icon-btn"
           >
-            {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            {theme === "dark" ? <Sun className="size-[17px]" /> : <Moon className="size-[17px]" />}
           </button>
           <button
-            onClick={() => setMenu(!menu)}
-            aria-label="Menu"
-            className="grid size-10 place-items-center rounded-full text-foreground transition hover:bg-foreground/[0.06] lg:hidden"
+            onClick={() => setMenu((value) => !value)}
+            aria-label={menu ? "Close menu" : "Open menu"}
+            aria-expanded={menu}
+            aria-controls="mobile-menu"
+            className="nav-icon-btn nav-menu-btn"
           >
             {menu ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
           <Link
             href="/book-a-discovery-call"
-            className="group hidden items-center gap-1.5 whitespace-nowrap rounded-full bg-foreground px-5 py-2.5 text-[13px] font-medium text-background transition hover:bg-primary hover:text-primary-foreground sm:flex"
+            className="nav-cta surface-sheen group hidden sm:inline-flex"
           >
-            Book a discovery call
-            <ArrowUpRight className="size-3.5 transition group-hover:rotate-45" />
+            Book a call
+            <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:rotate-45" />
           </Link>
         </div>
       </div>
-      <div
-        className={`glass nav-solid mx-auto mt-2 grid max-w-6xl overflow-hidden rounded-3xl transition-all duration-500 lg:hidden ${menu ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"}`}
-      >
-        <div className="min-h-0">
-          <nav className="flex flex-col p-3">
-            {NAV.map((n) => (
-              <div key={n.label}>
-                <Link
-                  href={n.href}
-                  onClick={() => setMenu(false)}
-                  className={`block rounded-2xl px-4 py-3 text-base font-medium transition hover:bg-foreground/[0.06] ${isActive(n.href) ? "text-primary" : "text-foreground"}`}
+
+      <div id="mobile-menu" className={`nav-mobile ${menu ? "is-open" : ""}`} aria-hidden={!menu}>
+        <div className="nav-mobile-list">
+          {NAV.map((n, i) =>
+            n.label === "Services" ? (
+              <div key={n.label} style={{ "--nav-i": i }}>
+                <div className="nav-mobile-row">
+                  <Link
+                    href={n.href}
+                    onClick={() => setMenu(false)}
+                    className={`nav-mobile-item nav-mobile-item-split ${isActive(n.href) ? "is-active" : ""}`}
+                  >
+                    {n.label}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setServicesOpen((value) => !value)}
+                    aria-label={servicesOpen ? "Hide services" : "Show services"}
+                    aria-expanded={servicesOpen}
+                    aria-controls="mobile-services"
+                    className="nav-mobile-expand"
+                  >
+                    <ChevronRight
+                      className={`size-5 transition-transform duration-300 ${servicesOpen ? "rotate-90" : ""}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
+                <div
+                  id="mobile-services"
+                  className={`nav-mobile-services ${servicesOpen ? "is-open" : ""}`}
                 >
-                  {n.label}
-                </Link>
-                {n.label === "Services" && (
-                  <div className="mb-2 ml-4 flex flex-wrap gap-1.5 border-l pl-3">
-                    {SERVICES.map((s) => (
-                      <Link
-                        key={s.slug}
-                        href={`/services/${s.slug}`}
-                        prefetch
-                        onClick={() => setMenu(false)}
-                        className="rounded-full border px-3 py-1.5 text-xs text-muted-foreground hover:border-primary hover:text-foreground"
-                      >
-                        {s.title}
-                      </Link>
-                    ))}
+                  <div className="nav-mobile-services-inner">
+                    <ul role="list">
+                      {SERVICES.map((s) => {
+                        const Icon = s.icon;
+                        return (
+                          <li key={s.slug}>
+                            <Link
+                              href={`/services/${s.slug}`}
+                              prefetch
+                              onClick={() => setMenu(false)}
+                              className="nav-mobile-service"
+                            >
+                              <span className="nav-dd-icon">
+                                <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
+                              </span>
+                              <span className="nav-mobile-service-title">{s.title}</span>
+                              <ChevronRight className="size-4 opacity-40" aria-hidden="true" />
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
-                )}
+                </div>
               </div>
-            ))}
-            <Link
-              href="/book-a-discovery-call"
-              onClick={() => setMenu(false)}
-              className="mt-2 flex items-center justify-center gap-1.5 rounded-full bg-foreground py-3 text-sm font-medium text-background"
-            >
-              Book a discovery call
-              <ArrowUpRight className="size-4" />
-            </Link>
-          </nav>
+            ) : (
+              <Link
+                key={n.label}
+                href={n.href}
+                onClick={() => setMenu(false)}
+                style={{ "--nav-i": i }}
+                className={`nav-mobile-item ${isActive(n.href) ? "is-active" : ""}`}
+              >
+                {n.label}
+                <ChevronRight className="nav-mobile-chevron" aria-hidden="true" />
+              </Link>
+            ),
+          )}
+        </div>
+        <div className="nav-mobile-footer">
+          <Link
+            href="/book-a-discovery-call"
+            onClick={() => setMenu(false)}
+            className="nav-cta surface-sheen group flex h-12 w-full items-center justify-center text-sm"
+          >
+            Book a call
+            <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:rotate-45" />
+          </Link>
         </div>
       </div>
     </header>
   );
 }
+
 export function FooterWordmark() {
   const followPointer = (event) => {
     if (event.pointerType === "touch") return;
@@ -448,7 +588,7 @@ export function CTASection({
           href="/book-a-discovery-call"
           className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm text-background transition hover:bg-foreground/85"
         >
-          Book a discovery call <ArrowUpRight className="size-4" />
+          Book a call <ArrowUpRight className="size-4" />
         </Link>
       </div>
     </Reveal>
@@ -473,7 +613,7 @@ export function EnquiryForm({ heading, subtext }) {
       {sent ? (
         <div className="relative mt-8 rounded-2xl border border-primary/40 bg-primary/10 p-6 text-center">
           <p className="font-display text-lg font-semibold text-primary">
-            Thanks — we've received your message.
+            Thanks - we've received your message.
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             We'll review your requirements and get back to you soon.

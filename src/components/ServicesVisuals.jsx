@@ -53,9 +53,9 @@ const Hub = ({ x, y, icon: I = Workflow }) => (
     <I className="size-7" strokeWidth={2.2} color="#fff" />
   </span>
 );
-const Pill = ({ x, y, icon: I, label, align = "center", branch, d = 0 }) => (
+const Pill = ({ x, y, icon: I, label, align = "center", branch, d = 0, wide = false }) => (
   <span
-    className={`cap-pill is-${align} ${branch ? "cap-branch" : ""}`}
+    className={`cap-pill is-${align} ${branch ? "cap-branch" : ""} ${wide ? "is-wide" : ""}`}
     style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${d}s` }}
   >
     {I && <I strokeWidth={1.5} />}
@@ -75,7 +75,8 @@ function TreeScene({ items }) {
       >
         {ys.map((y, i) => {
           const py = y * 2.4;
-          const p = `M70 120 C 100 120, 95 ${py}, 128 ${py}`;
+          const px = (i === 2 ? 52 : 48) * 3.2;
+          const p = `M70 120 C 100 120, ${px - 33} ${py}, ${px} ${py}`;
           return (
             <g key={i}>
               <path d={p} className="cap-line" />
@@ -93,12 +94,13 @@ function TreeScene({ items }) {
       {items.map((it, i) => (
         <Pill
           key={it.label}
-          x={40}
+          x={i === 2 ? 52 : 48}
           y={ys[i] ?? 50}
           icon={it.icon}
           label={it.label}
           align="left"
           branch
+          wide={i === 3}
           d={i}
         />
       ))}
@@ -196,31 +198,31 @@ function StackScene({ items }) {
 /** Layered product mock: a workflow run card floating over a second, offset card. */
 export function AutomationStackScene() {
   return (
-    <div className="relative flex h-[8.5rem] w-full items-center justify-center">
+    <div className="relative flex h-[9.75rem] w-full items-center justify-center">
       {/* Back layer: a second run card peeking out behind the front one. */}
       <div
         aria-hidden="true"
-        className="absolute left-1/2 top-1/2 h-[6.4rem] w-[74%] -translate-x-[44%] -translate-y-[40%] rotate-[8deg] rounded-2xl border bg-card p-3 shadow-[0_14px_30px_-22px_rgba(0,0,0,0.45)]"
+        className="absolute left-1/2 top-1/2 h-[7.2rem] w-[76%] -translate-x-[44%] -translate-y-[40%] rotate-[8deg] rounded-2xl border bg-card p-3"
       >
         <span className="block h-1.5 w-1/2 rounded-full bg-foreground/10" />
         <span className="mt-2 block h-1.5 w-3/4 rounded-full bg-foreground/[0.07]" />
         <span className="mt-2 block h-1.5 w-2/5 rounded-full bg-foreground/[0.07]" />
       </div>
 
-      {/* Front layer: the run itself — source, label, and its output. */}
-      <div className="relative w-full max-w-[15rem] -rotate-[4deg] rounded-2xl border bg-card p-3 shadow-[0_20px_40px_-26px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:-translate-y-1 group-hover:-rotate-[2deg]">
+      {/* Front layer: the run itself - source, label, and its output. */}
+      <div className="relative w-full max-w-[16.5rem] -rotate-[4deg] rounded-2xl border bg-card p-3.5 transition-transform duration-500 group-hover:-translate-y-1 group-hover:-rotate-[2deg]">
         <div className="flex items-center gap-2">
-          <span className="grid size-6 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground">
-            <Workflow className="size-3.5" strokeWidth={2.4} />
+          <span className="grid size-7 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground">
+            <Workflow className="size-4" strokeWidth={2.4} />
           </span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
             Workflow
           </span>
-          <span className="ml-auto shrink-0 rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+          <span className="ml-auto shrink-0 rounded-md bg-secondary px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground">
             # ops
           </span>
         </div>
-        <p className="mt-3 font-display text-[13px] font-semibold leading-snug">
+        <p className="mt-3 font-display text-[14px] font-semibold leading-snug">
           Invoice approved → synced
         </p>
         <div className="mt-3 space-y-1.5">
@@ -282,7 +284,7 @@ export function ServiceScene({ index, className = "h-48 shrink-0 bg-secondary/30
       {index === 1 && <span className="agent-halo" />}
       {index === 1 && <AgentFace />}
       {index === 2 && (
-        <svg viewBox="0 0 260 140" className="relative h-36 w-full max-w-64" fill="none">
+        <svg viewBox="0 0 260 140" className="relative h-44 w-full max-w-72" fill="none">
           <path d="M20 116H242" className="stroke-border" />
           <g className="fill-primary/15">
             {[34, 54, 72, 104].map((h, i) => (
@@ -318,54 +320,34 @@ export function ServiceScene({ index, className = "h-48 shrink-0 bg-secondary/30
         </svg>
       )}
       {index === 3 && (
-        <div className="relative w-full max-w-80 rounded-xl border bg-card p-5">
-          <div className="flex items-center gap-2.5 rounded-md border px-3 py-2.5 text-[12px] text-muted-foreground">
+        <div className="relative w-full max-w-[16rem] rounded-xl border bg-card p-4">
+          <div className="flex items-center gap-2 rounded-md border px-2.5 py-2 text-[11px] text-muted-foreground">
             <Search className="size-3.5" />
             Search, meet your business
           </div>
-          <div className="mt-4 flex items-center gap-2.5">
-            <Sparkles className="size-5" />
-            <span className="text-sm font-semibold">AI overview</span>
+          <div className="mt-3 flex items-center gap-2">
+            <Sparkles className="size-4" />
+            <span className="text-[13px] font-semibold">AI overview</span>
           </div>
-          <div className="mt-4 space-y-2.5">
-            <span className="block h-2 w-full rounded bg-primary/20" />
-            <span className="block h-2 w-4/5 rounded bg-primary/15" />
+          <div className="mt-3 space-y-2">
+            <span className="block h-1.5 w-full rounded bg-primary/20" />
+            <span className="block h-1.5 w-4/5 rounded bg-primary/15" />
           </div>
-          <span className="mt-4 inline-flex items-center gap-1.5 text-[11px]">
-            <Check className="size-3.5" />
+          <span className="mt-3 inline-flex items-center gap-1.5 text-[10.5px]">
+            <Check className="size-3" />
             Your brand, discovered
           </span>
-
-          {/* Additional content to fill the card */}
-          <div className="mt-6 pt-4 border-t">
-            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-              <Globe className="size-3.5" />
-              <span>Structured data & schema markup</span>
-            </div>
-            <div className="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
-              <FileText className="size-3.5" />
-              <span>Content optimized for Q&A retrieval</span>
-            </div>
-            <div className="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
-              <ChartColumn className="size-3.5" />
-              <span>Citation tracking across answer engines</span>
-            </div>
-            <div className="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
-              <RefreshCw className="size-3.5" />
-              <span>Ongoing updates as engines evolve</span>
-            </div>
-          </div>
         </div>
       )}
       {index === 4 && (
-        <div className="relative grid w-full max-w-80 grid-cols-3 gap-3 rounded-xl border bg-card p-4">
+        <div className="relative grid w-full max-w-[17rem] grid-cols-3 gap-2 rounded-xl border bg-card p-3.5">
           {["Leads", "In progress", "Won"].map((name, i) => (
             <div key={name}>
-              <span className="text-[10px] font-medium text-muted-foreground">{name}</span>
+              <span className="text-[9.5px] font-medium text-muted-foreground">{name}</span>
               {Array.from({ length: 3 - i }, (_, j) => (
-                <div key={j} className="mt-2.5 rounded-sm border bg-secondary/50 p-2.5">
+                <div key={j} className="mt-2 rounded-sm border bg-secondary/50 p-2">
                   <span className="block h-1.5 w-4/5 rounded bg-primary/30" />
-                  <span className="mt-2 block h-1.5 w-1/2 rounded bg-primary/15" />
+                  <span className="mt-1.5 block h-1.5 w-1/2 rounded bg-primary/15" />
                 </div>
               ))}
             </div>
@@ -374,35 +356,36 @@ export function ServiceScene({ index, className = "h-48 shrink-0 bg-secondary/30
       )}
       {index === 5 && <BrandIdentityScene />}
       {index === 6 && (
-        <div className="relative w-full max-w-80 overflow-hidden rounded-xl border bg-card">
-          <div className="flex gap-1.5 border-b px-4 py-2.5">
-            <span className="size-2 rounded-full bg-primary/50" />
-            <span className="size-2 rounded-full bg-primary/30" />
-            <span className="size-2 rounded-full bg-primary/15" />
+        <div className="web-scene relative w-full max-w-[21rem] overflow-hidden rounded-xl border bg-card">
+          <div className="flex gap-1.5 border-b px-5 py-3">
+            <span className="web-scene-dot size-2 rounded-full bg-primary/50" />
+            <span className="web-scene-dot size-2 rounded-full bg-primary/30" />
+            <span className="web-scene-dot size-2 rounded-full bg-primary/15" />
           </div>
-          <div className="grid grid-cols-[1fr_0.7fr] gap-4 p-5">
+          <div className="grid grid-cols-[1fr_0.7fr] gap-5 p-6">
             <div className="space-y-2.5">
-              <span className="block h-2.5 w-full rounded bg-foreground/60" />
-              <span className="block h-2.5 w-2/3 rounded bg-foreground/60" />
-              <span className="block h-1.5 w-full rounded bg-primary/20" />
-              <span className="mt-4 block h-5 w-14 rounded bg-primary" />
+              <span className="web-line web-line-1 block h-2.5 w-full rounded bg-foreground/60" />
+              <span className="web-line web-line-2 block h-2.5 w-2/3 rounded bg-foreground/60" />
+              <span className="web-line web-line-3 block h-1.5 w-full rounded bg-primary/20" />
+              <span className="web-cta relative mt-4 block h-5 w-14 overflow-hidden rounded bg-primary" />
             </div>
-            <div className="grid place-items-center rounded-lg border bg-secondary">
-              <Globe className="size-10" />
+            <div className="web-globe relative grid place-items-center overflow-hidden rounded-lg border bg-secondary">
+              <Globe className="web-globe-icon relative z-10 size-12" />
             </div>
           </div>
         </div>
       )}
       {index === 7 && (
-        <div className="relative flex items-center gap-5">
-          <div className="grid size-28 shrink-0 place-items-center rounded-xl border bg-card">
-            <ShoppingBag className="size-12" />
+        <div className="shop-scene relative flex items-center gap-6">
+          <div className="shop-bag relative grid size-32 shrink-0 place-items-center rounded-xl border bg-card">
+            <ShoppingBag className="shop-bag-icon size-14" />
+            <span className="shop-parcel" aria-hidden="true" />
           </div>
           <div className="space-y-3.5">
-            <span className="block h-2.5 w-28 rounded bg-foreground/50" />
-            <span className="block h-2 w-20 rounded bg-primary/25" />
-            <span className="flex items-center gap-2.5 rounded-lg bg-primary px-4 py-2.5 text-[11px] text-primary-foreground">
-              <Check className="size-3.5" />
+            <span className="shop-line shop-line-1 block h-2.5 w-32 rounded bg-foreground/50" />
+            <span className="shop-line shop-line-2 block h-2 w-24 rounded bg-primary/25" />
+            <span className="shop-confirm relative flex items-center gap-2.5 rounded-lg bg-primary px-5 py-3 text-[12px] text-primary-foreground">
+              <Check className="shop-check size-4" />
               Order confirmed
             </span>
           </div>

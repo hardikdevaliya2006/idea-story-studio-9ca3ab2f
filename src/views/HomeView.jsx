@@ -6,12 +6,13 @@ import svcWebDesignImage from "@/assets/svc-web-design.jpg";
 import svcAppImage from "@/assets/svc-app-dev.jpg";
 import svcWebDevImage from "@/assets/svc-web-dev.jpg";
 import svcMarketingImage from "@/assets/svc-marketing.jpg";
+import { SERVICES } from "@/data/services";
 import brand1Image from "@/assets/brand-1.png";
 import brand2Image from "@/assets/brand-2.png";
 import brand3Image from "@/assets/brand-3.png";
 import brand4Image from "@/assets/brand-4.png";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
-import { HeroCapsules } from "@/components/HeroCapsules";
+import { HeroTechIcons } from "@/components/HeroTechIcons";
 import { Reveal, SpotlightCard, Line, useReveal } from "@/components/site-chrome";
 import { HOME_FAQS } from "@/data/faqs";
 const svcWebDesign = svcWebDesignImage;
@@ -268,11 +269,17 @@ function Hero() {
     const t = setInterval(() => setI((x) => (x + 1) % words.length), 2200);
     return () => clearInterval(t);
   }, []);
+  // Three core offers, straight from the services data so the copy can't drift.
+  const features = [SERVICES[0], SERVICES[5], SERVICES[6]];
   return (
     <section className="hero-soft relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-16 pt-32 text-center sm:px-6 sm:pb-20 sm:pt-36">
-      <HeroCapsules />
+      {/* Architectural frame + ambient glows, borrowed from todesktop's hero. */}
+      <span className="hero-frame hero-frame-a" aria-hidden="true" />
+      <span className="hero-frame hero-frame-b" aria-hidden="true" />
+      <span className="hero-aura" aria-hidden="true" />
+      <HeroTechIcons />
 
-      <h1 className="relative max-w-6xl font-display text-4xl font-normal leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+      <h1 className="relative z-10 mt-6 max-w-6xl font-display text-4xl font-normal leading-[1.08] tracking-tight sm:text-5xl lg:text-7xl">
         <Line delay={150}>We Help</Line>
         <Line delay={320}>
           <span
@@ -312,14 +319,32 @@ function Hero() {
         </Line>
       </h1>
 
-      <Reveal delay={500} className="relative mt-8 max-w-2xl">
+      <Reveal delay={450} className="relative z-10 mt-7 max-w-2xl">
         <p className="text-base text-muted-foreground md:text-lg">
           Ideaboat is a digital marketing, design & development studio steering brands toward real
           growth.
         </p>
       </Reveal>
 
-      <Reveal delay={650} className="relative mt-8 flex items-center gap-3">
+      <Reveal
+        delay={560}
+        className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3"
+      >
+        <a
+          href="#contact"
+          className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+        >
+          Start a Project <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
+        </a>
+        <Link
+          href="/book-a-discovery-call"
+          className="inline-flex items-center gap-2 rounded-full border bg-card/60 px-7 py-3.5 text-sm font-medium backdrop-blur transition hover:border-primary/50 hover:text-primary"
+        >
+          Book a call
+        </Link>
+      </Reveal>
+
+      <Reveal delay={680} className="relative z-10 mt-6 flex items-center gap-3">
         <div className="flex -space-x-3">
           {[brand1.src, brand2.src, brand3.src, brand4.src].map((b, k) => (
             <img
@@ -327,7 +352,7 @@ function Hero() {
               src={b}
               alt=""
               loading="lazy"
-              className="size-10 rounded-full border-2 border-background object-cover"
+              className="size-9 rounded-full border-2 border-background object-cover"
             />
           ))}
         </div>
@@ -337,13 +362,35 @@ function Hero() {
         </p>
       </Reveal>
 
-      <Reveal delay={800} className="relative mt-10">
-        <a
-          href="#contact"
-          className="group inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-medium text-primary-foreground transition hover:bg-primary/90"
-        >
-          Start a Project <ArrowUpRight className="size-5 transition group-hover:rotate-45" />
-        </a>
+      {/* Three-up feature strip, ruled like todesktop's hero columns. */}
+      <Reveal delay={780} className="relative z-10 mt-10 w-full max-w-4xl sm:mt-14">
+        <div className="mx-auto grid w-full max-w-md gap-6 md:max-w-none md:grid-cols-3 md:gap-0">
+          {features.map((f, k) => {
+            const Icon = f.icon;
+            return (
+              <div
+                key={f.slug}
+                className="relative flex items-center gap-4 text-left md:flex-col md:gap-0 md:px-6 md:text-center"
+              >
+                {k > 0 && (
+                  <span
+                    className="absolute left-0 top-1/2 hidden h-24 w-px -translate-y-1/2 bg-border md:block"
+                    aria-hidden="true"
+                  />
+                )}
+                <span className="hero-feature-icon shrink-0">
+                  <Icon className="size-5" strokeWidth={1.8} aria-hidden="true" />
+                </span>
+                <div className="min-w-0 md:mt-4">
+                  <h2 className="font-display text-[15px] font-semibold leading-snug">{f.title}</h2>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground md:mt-1.5 md:max-w-[15.5rem]">
+                    {f.tagline}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </Reveal>
     </section>
   );
@@ -353,7 +400,7 @@ export default function Index() {
   const [open, setOpen] = useState(0);
   return (
     <div className="overflow-x-clip">
-      {/* HERO — Sheryians-style centered */}
+      {/* HERO - Sheryians-style centered */}
       <Hero />
 
       {/* BENTO STATS */}
@@ -565,7 +612,7 @@ export default function Index() {
           </div>
         </section>
 
-        {/* CONTACT + CTA — side by side */}
+        {/* CONTACT + CTA - side by side */}
         <section
           id="contact"
           className="grid scroll-mt-24 items-stretch gap-8 md:scroll-mt-28 lg:grid-cols-2"

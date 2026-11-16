@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/lib/site";
-export const alt = "Ideaboat — AI automation, AI agents and growth systems";
+export const alt = "Ideaboat - AI automation, AI agents and growth systems";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 /**
  * Default social card, used for Open Graph and Twitter previews on every page.
- * Generated at build time — no external image or font request needed.
+ * Generated at build time - no external image or font request needed.
  */
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -79,7 +79,7 @@ export default function OpengraphImage() {
             color: "#8fe3ab",
           }}
         >
-          Book a discovery call
+          Book a call
         </span>
       </div>
     </div>,

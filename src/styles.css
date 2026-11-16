@@ -79,14 +79,13 @@
   --input: oklch(0.3 0.012 165);
   --ring: oklch(0.74 0.17 150);
   --wire: oklch(0.26 0.01 165);
-  --shadow-soft: none;
   --agent-dither-back: #1a211e;
   --agent-dither-front: #47c86e;
   --agent-icon-back: var(--primary);
   --agent-icon-front: var(--primary-foreground);
 }
 
-/* Light theme — same green-to-teal brand on a bright surface. */
+/* Light theme - same green-to-teal brand on a bright surface. */
 html.light {
   --background: oklch(0.975 0 0);
   --hero-wash: color-mix(in oklab, var(--primary) 10%, transparent);
@@ -107,7 +106,6 @@ html.light {
   --input: oklch(0.88 0.012 165);
   --ring: oklch(0.54 0.14 152);
   --wire: oklch(0.94 0.012 165);
-  --shadow-soft: none;
   --agent-dither-back: #e1ebe6;
   --agent-dither-front: #078543;
 }
@@ -151,13 +149,208 @@ html.light .site-footer {
 @utility font-display {
   font-family: var(--font-display);
 }
-@utility shadow-soft {
-  box-shadow: var(--shadow-soft);
-}
-
 /* Hero: a soft green wash that fades away before the section edge. */
 @utility hero-soft {
   background: radial-gradient(ellipse 85% 65% at 50% 42%, var(--hero-wash), transparent 75%);
+}
+
+/* Services banner - code-drawn artwork (mirrors the old raster strip).
+   The dark palette is the default; `html.light` swaps surfaces, type and blobs. */
+.services-banner {
+  --banner-surface: linear-gradient(180deg, #092019 0%, #081b15 55%, #071712 100%);
+  --banner-title: #ffffff;
+  --banner-subtitle: #2bd977;
+  --banner-body: #d3e6f5;
+  --banner-ring: rgba(72, 219, 132, 0.42);
+
+  --banner-blob-1-left: -0.7%;
+  --banner-blob-1-top: 6.9%;
+  --banner-blob-1-size: 14.1%;
+  --banner-blob-1-fill: radial-gradient(
+    circle at 50% 50%,
+    #052b1c 0%,
+    #07522f 30%,
+    #0a8a4c 64%,
+    #0b9053 94%,
+    rgba(11, 144, 83, 0) 100%
+  );
+
+  --banner-blob-2-left: 8.1%;
+  --banner-blob-2-top: 39.1%;
+  --banner-blob-2-size: 3.9%;
+  --banner-blob-2-fill: radial-gradient(
+    circle at 50% 45%,
+    #06301f 20%,
+    #0a7a45 60%,
+    #12b365 92%,
+    #12b365 100%
+  );
+
+  --banner-blob-3-left: 100.6%;
+  --banner-blob-3-top: 22%;
+  --banner-blob-3-size: 10.1%;
+  --banner-blob-3-fill: radial-gradient(
+    circle at 50% 50%,
+    #052b1c 0%,
+    #07522f 30%,
+    #0a8a4c 64%,
+    #0b9053 94%,
+    rgba(11, 144, 83, 0) 100%
+  );
+
+  --banner-blob-4-left: 95.8%;
+  --banner-blob-4-top: 32.4%;
+  --banner-blob-4-size: 1.9%;
+  --banner-blob-4-fill: radial-gradient(
+    circle at 50% 45%,
+    #06301f 18%,
+    #0a8a4c 58%,
+    #16c473 92%,
+    #16c473 100%
+  );
+
+  --banner-blob-5-left: 97.4%;
+  --banner-blob-5-top: 96.4%;
+  --banner-blob-5-size: 11%;
+  --banner-blob-5-fill: radial-gradient(
+    circle at 50% 50%,
+    #052b1c 0%,
+    #07522f 30%,
+    #0a8a4c 64%,
+    #0b9053 94%,
+    rgba(11, 144, 83, 0) 100%
+  );
+
+  background: var(--banner-surface);
+  color: var(--banner-title);
+}
+
+html.light .services-banner {
+  --banner-surface: linear-gradient(180deg, #f5fef9 0%, #f1fdf7 50%, #effdf5 100%);
+  --banner-title: #041e17;
+  --banner-subtitle: #12b263;
+  --banner-body: #5c6c80;
+  --banner-ring: #adf3d0;
+
+  --banner-blob-1-left: -0.5%;
+  --banner-blob-1-top: 18.4%;
+  --banner-blob-1-size: 17.3%;
+  --banner-blob-1-fill: radial-gradient(circle at 18% 18%, #eafdf1 0%, #d7fbe5 42%, #c2f8d5 100%);
+
+  --banner-blob-2-left: 9.5%;
+  --banner-blob-2-top: 56.7%;
+  --banner-blob-2-size: 3.5%;
+  --banner-blob-2-fill: radial-gradient(circle at 35% 32%, #d9fbe6 0%, #c8f8da 100%);
+
+  --banner-blob-3-left: 101%;
+  --banner-blob-3-top: 42.5%;
+  --banner-blob-3-size: 10.1%;
+  --banner-blob-3-fill: linear-gradient(90deg, #cdf9de 0%, #d8fbe6 40%, #e8fdf0 100%);
+
+  --banner-blob-4-left: 94.3%;
+  --banner-blob-4-top: 46.2%;
+  --banner-blob-4-size: 1.84%;
+  --banner-blob-4-fill: radial-gradient(circle at 40% 35%, #c8f8da 0%, #b4f3cd 100%);
+
+  --banner-blob-5-left: 101.3%;
+  --banner-blob-5-top: 105.1%;
+  --banner-blob-5-size: 12%;
+  --banner-blob-5-fill: linear-gradient(90deg, #cdf9de 0%, #d4fae2 55%, #e5fdee 100%);
+}
+
+.services-banner-blob {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.services-banner-blob-1 {
+  left: var(--banner-blob-1-left);
+  top: var(--banner-blob-1-top);
+  width: var(--banner-blob-1-size);
+  background: var(--banner-blob-1-fill);
+}
+
+.services-banner-blob-2 {
+  left: var(--banner-blob-2-left);
+  top: var(--banner-blob-2-top);
+  width: var(--banner-blob-2-size);
+  background: var(--banner-blob-2-fill);
+}
+
+.services-banner-blob-3 {
+  left: var(--banner-blob-3-left);
+  top: var(--banner-blob-3-top);
+  width: var(--banner-blob-3-size);
+  background: var(--banner-blob-3-fill);
+}
+
+.services-banner-blob-4 {
+  left: var(--banner-blob-4-left);
+  top: var(--banner-blob-4-top);
+  width: var(--banner-blob-4-size);
+  background: var(--banner-blob-4-fill);
+}
+
+.services-banner-blob-5 {
+  left: var(--banner-blob-5-left);
+  top: var(--banner-blob-5-top);
+  width: var(--banner-blob-5-size);
+  background: var(--banner-blob-5-fill);
+}
+
+.services-banner-logo {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: clamp(34px, 4vw, 46px);
+  height: clamp(34px, 4vw, 46px);
+  aspect-ratio: 1;
+  border: 1px solid var(--banner-ring);
+  border-radius: 9999px;
+}
+
+/* Mobile logo slider: one row, two copies for a seamless loop. */
+.services-banner-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+
+.services-banner-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: clamp(9px, 1.55vw, 18px);
+  animation: marquee 26s linear infinite;
+  will-change: transform;
+}
+
+.services-banner-slider:hover .services-banner-track,
+.services-banner-slider:focus-within .services-banner-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-banner-slider {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .services-banner-slider::-webkit-scrollbar {
+    display: none;
+  }
+
+  .services-banner-track {
+    animation: none;
+  }
 }
 
 /* wireframe placeholder with soft hatch */
@@ -472,6 +665,575 @@ html.light .nav-solid {
   border-color: color-mix(in oklab, var(--foreground) 10%, transparent);
 }
 
+/* ---------- floating navigation (ToDesktop-style) ---------- */
+/* Transparent at rest, then a compact glass pill on scroll. Three tracks keep
+   the links optically centred between the logo and the actions. */
+.nav-shell {
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 18px;
+  width: 100%;
+  max-width: 1128px;
+  margin-inline: auto;
+  padding: 34px 16px 26px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition:
+    max-width 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    padding 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    column-gap 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+.nav-shell-scrolled {
+  /* ToDesktop uses 656px; ours needs a little more for the longer CTA. */
+  max-width: 680px;
+  grid-template-columns: max-content 1fr max-content;
+  column-gap: 10px;
+  padding: 12px 12px 12px 18px;
+  border-color: color-mix(in oklab, var(--foreground) 10%, transparent);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+/* Our nav has one more link and a longer CTA than the reference, so at the
+   narrow end of the inline-nav range the 656px pill needs a little more room
+   to keep every control inside it. */
+@media (min-width: 768px) and (max-width: 920px) {
+  .nav-shell-scrolled {
+    max-width: min(calc(100vw - 24px), 720px);
+    column-gap: 6px;
+    padding-inline: 14px 10px;
+  }
+  .nav-shell-scrolled .nav-link {
+    padding-inline: 9px;
+  }
+  .nav-shell-scrolled .nav-cta {
+    padding-inline: 10px;
+    font-size: 12px;
+  }
+}
+.nav-logo {
+  display: inline-flex;
+  grid-column: 1;
+  align-items: center;
+  justify-self: start;
+  flex-shrink: 0;
+}
+.nav-logo-wordmark {
+  display: block;
+  width: auto;
+  height: 20px;
+}
+.nav-logo-mark {
+  display: none;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+.nav-shell-scrolled .nav-logo-wordmark {
+  display: none;
+}
+.nav-shell-scrolled .nav-logo {
+  width: 54px;
+}
+.nav-shell-scrolled .nav-logo-mark {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+/* Inline links, with a single pill that slides between them. */
+.nav-links {
+  position: relative;
+  grid-column: 2;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+.nav-shell-scrolled .nav-links {
+  gap: 2px;
+  justify-self: center;
+}
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+}
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.nav-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 36px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--foreground) 9%, transparent),
+    color-mix(in oklab, var(--foreground) 4%, transparent)
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 0.2s cubic-bezier(0.6, 0.6, 0, 1),
+    width 0.2s cubic-bezier(0.6, 0.6, 0, 1),
+    opacity 0.18s ease,
+    height 0.45s cubic-bezier(0.6, 0.6, 0, 1);
+}
+.nav-shell-scrolled .nav-pill {
+  height: 32px;
+  border-color: transparent;
+  background: color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+.nav-link {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  transition: color 0.2s cubic-bezier(0.6, 0.6, 0, 1);
+}
+.nav-link:hover,
+.nav-link.is-open,
+.nav-link.is-active {
+  color: var(--foreground);
+}
+.nav-shell-scrolled .nav-link {
+  height: 32px;
+  color: var(--foreground);
+}
+.nav-chevron {
+  width: 16px;
+  height: 16px;
+  transform: rotate(90deg);
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+.nav-link:hover .nav-chevron,
+.nav-link.is-open .nav-chevron {
+  opacity: 1;
+}
+/* Services panel: a single column of generous icon-and-copy rows on a clean
+   floating card, in the spirit of the reference dropdown. */
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 40;
+  width: 440px;
+  max-width: calc(100vw - 2rem);
+  margin-top: 12px;
+  transform: translate(-50%, -6px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.22s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.22s;
+}
+.nav-dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+/* Keeps the panel open while the pointer crosses the gap from the trigger. */
+.nav-dropdown-bridge {
+  position: absolute;
+  top: -14px;
+  left: 0;
+  width: 100%;
+  height: 16px;
+}
+.nav-dropdown-surface {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  max-height: min(78vh, 660px);
+  padding: 12px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  border-radius: 20px;
+  background: var(--card);
+  /* The site bans shadows globally; this panel opts back into a soft, layered
+     shadow so it reads as a card floating above the page. */
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 1px 2px color-mix(in oklab, black 12%, transparent),
+    0 14px 38px -12px color-mix(in oklab, black 32%, transparent),
+    0 4px 8px -4px color-mix(in oklab, black 18%, transparent) !important;
+}
+.nav-dropdown-surface ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-dd-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  cursor: default;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+.nav-dd-row:hover,
+.nav-dd-row.is-preview {
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 7%, transparent);
+}
+.nav-dd-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border: 1px solid color-mix(in oklab, var(--foreground) 11%, var(--border));
+  border-radius: 16px;
+  background: var(--card);
+  color: color-mix(in oklab, var(--muted-foreground) 55%, var(--card));
+  box-shadow: 0 1px 2px color-mix(in oklab, black 6%, transparent) !important;
+  transition:
+    color 0.22s ease,
+    border-color 0.22s ease,
+    background-color 0.22s ease;
+}
+/* Icons rest in a neutral grey, then take the brand colour on hover. */
+.nav-dd-row:hover .nav-dd-icon,
+.nav-dd-row.is-preview .nav-dd-icon {
+  color: var(--primary);
+  border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
+  background: color-mix(in oklab, var(--primary) 6%, var(--card));
+}
+.nav-dd-icon svg {
+  width: 26px;
+  height: 26px;
+}
+.nav-dd-copy {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+.nav-dd-title {
+  display: block;
+  color: var(--foreground);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+.nav-dd-desc {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted-foreground);
+  font-size: 13.5px;
+  line-height: 19px;
+}
+@media (max-width: 520px) {
+  .nav-dropdown {
+    width: 380px;
+  }
+}
+/* Right-hand controls: soft circular icon buttons and the primary action. */
+.nav-actions {
+  display: flex;
+  grid-column: 3;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+}
+.nav-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  color: var(--muted-foreground);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    width 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    height 0.45s cubic-bezier(0.6, 0.6, 0, 1);
+}
+.nav-icon-btn:hover {
+  background: color-mix(in oklab, var(--foreground) 9%, transparent);
+  color: var(--foreground);
+}
+.nav-menu-btn {
+  display: grid;
+}
+@media (min-width: 768px) {
+  .nav-menu-btn {
+    display: none;
+  }
+}
+.nav-shell-scrolled .nav-icon-btn {
+  width: 32px;
+  height: 32px;
+}
+.nav-cta {
+  position: relative;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    height 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    padding 0.45s cubic-bezier(0.6, 0.6, 0, 1),
+    filter 0.2s ease;
+}
+.nav-cta:hover {
+  filter: brightness(1.06);
+}
+.nav-shell-scrolled .nav-cta {
+  height: 32px;
+  padding: 0 13px;
+}
+/* The mobile sheet is dark in both themes, so keep the header controls light. */
+.nav-header-menu-open .nav-icon-btn {
+  background: #ffffff1a;
+  color: #fff;
+}
+.nav-header-menu-open .nav-icon-btn:hover {
+  background: #ffffff2e;
+  color: #fff;
+}
+.nav-header-menu-open .nav-logo-wordmark {
+  filter: brightness(0) invert(1);
+}
+@media (max-width: 767px) {
+  .nav-shell {
+    max-width: none;
+    padding: 22px 24px;
+  }
+  .nav-shell-scrolled {
+    width: calc(100% - 24px);
+    margin: 10px 12px 0;
+    padding: 8px 10px 8px 16px;
+  }
+  .nav-logo-wordmark {
+    height: 18px;
+  }
+  .nav-logo-mark {
+    width: 26px;
+    height: 26px;
+  }
+}
+/* Full-screen sheet on tablet and phone. */
+.nav-mobile {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding: 104px 24px 24px;
+  background: linear-gradient(
+    0deg,
+    #070b6b -39.63%,
+    #13023a 13.87%,
+    #0f071d 46.15%
+  );
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.35s cubic-bezier(0.6, 0.6, 0, 1),
+    visibility 0.35s;
+}
+.nav-mobile.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+}
+@media (min-width: 768px) {
+  .nav-mobile {
+    padding-top: 122px;
+  }
+}
+@media (min-width: 768px) {
+  .nav-mobile {
+    display: none;
+  }
+}
+.nav-mobile-list {
+  flex: 1;
+  min-height: 0;
+  margin-inline: -8px;
+  padding: 0 8px 8px;
+  overflow-y: auto;
+}
+.nav-mobile-item,
+.nav-mobile > .nav-mobile-list > div {
+  transform: translateX(-32px);
+  filter: blur(2px);
+  opacity: 0;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    filter 0.2s ease,
+    opacity 0.2s ease;
+  transition-delay: calc(var(--nav-i, 0) * 50ms);
+}
+.nav-mobile.is-open .nav-mobile-item,
+.nav-mobile.is-open > .nav-mobile-list > div {
+  transform: none;
+  filter: none;
+  opacity: 1;
+}
+.nav-mobile-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 20px;
+  border-radius: 14px;
+  color: #ffffffb8;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 36px;
+}
+.nav-mobile-item:hover,
+.nav-mobile-item.is-active {
+  color: #fff;
+}
+.nav-mobile-chevron {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  opacity: 0.5;
+}
+.nav-mobile-row {
+  display: flex;
+  align-items: center;
+}
+.nav-mobile-item-split {
+  flex: 1;
+  min-width: 0;
+  padding-right: 0;
+}
+.nav-mobile-expand {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: #ffffff99;
+  transition: color 0.2s ease;
+}
+.nav-mobile-expand:hover {
+  color: #fff;
+}
+.nav-mobile-services {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.6, 0.6, 0, 1);
+}
+.nav-mobile-services.is-open {
+  grid-template-rows: 1fr;
+}
+.nav-mobile-services-inner {
+  overflow: hidden;
+}
+.nav-mobile-services ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-mobile-service {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: #ffffffb8;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+.nav-mobile-service:hover {
+  background: #ffffff0f;
+  color: #fff;
+}
+.nav-mobile-service .nav-dd-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+}
+.nav-mobile-service-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav-mobile-footer {
+  flex-shrink: 0;
+  padding-top: 16px;
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  transition-delay: 250ms;
+}
+.nav-mobile.is-open .nav-mobile-footer {
+  transform: none;
+  opacity: 1;
+}
+.nav-mobile-footer .nav-cta {
+  display: flex;
+  width: 100%;
+  height: 48px;
+  justify-content: center;
+  font-size: 14px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-shell,
+  .nav-pill,
+  .nav-link,
+  .nav-chevron,
+  .nav-icon-btn,
+  .nav-cta,
+  .nav-dropdown,
+  .nav-mobile,
+  .nav-mobile-item,
+  .nav-mobile > .nav-mobile-list > div,
+  .nav-mobile-footer,
+  .nav-mobile-services {
+    transition: none;
+  }
+}
+
 .spotlight-card::before {
   content: "";
   position: absolute;
@@ -532,6 +1294,111 @@ html.light .nav-solid {
 }
 .orbit-spin-slow {
   animation: spin 90s linear infinite;
+}
+
+/* Home hero frame: two faint inset outlines plus a soft top glow, so the
+   headline sits inside a lit room rather than on a flat wash. */
+.hero-frame {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+  border-radius: 2.75rem;
+}
+.hero-frame-a {
+  inset: 0.75rem;
+}
+.hero-frame-b {
+  inset: 2.25rem 2rem;
+  border-color: color-mix(in oklab, var(--foreground) 6%, transparent);
+  border-radius: 2rem;
+}
+.hero-aura {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      46rem 26rem at 50% 6%,
+      color-mix(in oklab, var(--primary) 18%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      26rem 18rem at 14% 0%,
+      color-mix(in oklab, var(--primary) 10%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      26rem 18rem at 86% 2%,
+      color-mix(in oklab, var(--primary) 10%, transparent),
+      transparent 72%
+    );
+  opacity: 0.9;
+}
+html.light .hero-aura {
+  opacity: 0.62;
+}
+/* Small technology marks either side of the centred column, in the spirit of
+   Pikaicons: nine only, quietly tinted, drifting on staggered timers. */
+.hero-tech {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  translate: -50% -50%;
+  border: 1px solid color-mix(in oklab, var(--foreground) 12%, transparent);
+  border-radius: 0.9rem;
+  background: color-mix(in oklab, var(--card) 52%, transparent);
+  color: var(--primary);
+  opacity: 0.65;
+  backdrop-filter: blur(8px);
+  animation: hero-tech-drift var(--tech-dur, 10s) ease-in-out infinite;
+  animation-delay: var(--tech-delay, 0s);
+}
+/* On the pale light wash the chips need more surface and a stronger mark to
+   stay legible, so they get a near-solid card fill and a green hairlines. */
+html.light .hero-tech {
+  border-color: color-mix(in oklab, var(--primary) 24%, var(--border));
+  background: color-mix(in oklab, var(--card) 94%, transparent);
+  color: color-mix(in oklab, var(--primary) 90%, var(--foreground));
+  opacity: 0.92;
+}
+.hero-tech svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+@keyframes hero-tech-drift {
+  0%,
+  100% {
+    transform: translate3d(0, -3px, 0);
+  }
+  50% {
+    transform: translate3d(0, 6px, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-tech {
+    animation: none;
+  }
+}
+.hero-feature-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid color-mix(in oklab, var(--primary) 38%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--primary) 12%, transparent);
+  color: var(--primary);
+}
+@media (max-width: 640px) {
+  .hero-frame-a {
+    inset: 0.5rem;
+    border-radius: 1.5rem;
+  }
+  .hero-frame-b {
+    display: none;
+  }
 }
 
 /* Services: crisp product scenes and a live four-stage process. */
@@ -604,7 +1471,6 @@ html.light .nav-solid {
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-dasharray: 18 82;
-  filter: drop-shadow(0 0 3px var(--primary));
   animation: flow-pulse 1.8s linear infinite;
 }
 @keyframes flow-pulse {
@@ -624,144 +1490,141 @@ html.light .nav-solid {
 .service-scene > :not(.scene-grid) {
   transition: transform 0.5s ease;
 }
-/* Scroll-driven process: pinned copy on the left, step cards light up one by one. */
-.process-stage {
-  --step-frac: 0;
-}
-.process-copy,
-.process-copy-in {
-  animation: process-copy 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-@keyframes process-copy {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.process-counter > span:first-child {
-  display: inline-block;
-  animation: process-count 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-@keyframes process-count {
-  from {
-    opacity: 0;
-    transform: translateY(45%);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.process-card {
+/* Process ("How we turn ideas into impact"): a square artwork panel that
+   blur-crossfades between steps, next to a step list whose active rail fills
+   as a timer. The fill is driven from JS through --process-progress. */
+.process-visual {
+  position: relative;
+  isolation: isolate;
   overflow: hidden;
+  aspect-ratio: 4 / 3;
   border: 1px solid var(--border);
-  border-radius: 18px;
-  background: color-mix(in oklab, var(--card) 75%, var(--background));
-  transition:
-    border-color 0.45s ease,
-    background-color 0.45s ease,
-    box-shadow 0.45s ease,
-    transform 0.45s ease;
+  border-radius: 26px;
+  background: var(--card);
 }
-/* Each step card carries its own feature vignette above the title. */
-.process-card-stage {
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
-}
-.process-card.is-active .process-card-stage {
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--primary) 42%, transparent);
-}
-.process-title {
-  transition: color 0.35s ease;
-}
-.process-card.is-active .process-title {
-  color: var(--primary);
-}
-.process-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in oklab, var(--primary) 30%, var(--border));
-  background: color-mix(in oklab, var(--primary) 5%, var(--card));
-}
-.process-card.is-active {
-  border-color: color-mix(in oklab, var(--primary) 45%, transparent);
-  background: color-mix(in oklab, var(--primary) 9%, var(--card));
-  box-shadow: 0 18px 44px -26px color-mix(in oklab, var(--primary) 60%, transparent);
-}
-.process-card > button {
-  border-radius: inherit;
-  background: none;
-}
-.process-card > button:focus-visible {
-  outline: 2px solid color-mix(in oklab, var(--primary) 60%, transparent);
-  outline-offset: 3px;
-}
-.process-dot {
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent);
-  animation: process-pop 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.process-check {
-  animation: process-pop 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-@keyframes process-pop {
-  from {
-    transform: scale(0);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-.process-seg {
-  position: relative;
-  flex: 1;
-  height: 3px;
-  border-radius: 999px;
-  background: color-mix(in oklab, var(--border) 75%, transparent);
-  overflow: hidden;
-}
-.process-seg > i {
+.process-visual-layer {
   position: absolute;
   inset: 0;
-  width: 0;
+  opacity: 0;
+  filter: blur(14px);
+  transform: scale(1.05);
+  transition:
+    opacity 0.5s ease,
+    filter 0.55s ease,
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.process-visual-layer.is-active {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+/* Park the hidden illustrations instead of animating four scenes at once. */
+.process-visual-layer:not(.is-active) .impact-stage * {
+  animation-play-state: paused;
+}
+.process-visual .impact-stage {
+  height: 100%;
+  aspect-ratio: auto;
+}
+.process-steps {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.process-step {
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  padding: 12px 0;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.process-step:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--primary) 60%, transparent);
+  outline-offset: 4px;
+}
+.process-rail {
+  position: relative;
+  flex: 0 0 3px;
+  width: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--foreground) 13%, transparent);
+}
+.process-rail-fill {
+  position: absolute;
+  inset: 0;
   border-radius: inherit;
-  background: var(--primary);
-  transition: width 0.4s ease;
+  background: var(--foreground);
+  transform: scaleY(var(--process-progress, 0));
+  transform-origin: top;
 }
-.process-seg.is-done > i {
-  width: 100%;
+/* Only the active rail reads the shared timer. */
+.process-step:not(.is-active) .process-rail-fill {
+  transform: scaleY(0);
 }
-.process-seg.is-current > i {
-  width: calc(var(--step-frac) * 100%);
-  transition: width 0.15s linear;
+.process-step-body {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
 }
-.process-meter > span {
-  transition: width 0.45s ease;
+.process-step-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: color-mix(in oklab, var(--foreground) 45%, transparent);
+  transition: color 0.35s ease;
 }
-.process-meter > [data-current] {
-  width: calc(var(--step-frac) * 100%) !important;
-  transition: width 0.12s linear;
+.process-step-line {
+  font-size: 14px;
+  line-height: 1.5;
+  color: color-mix(in oklab, var(--foreground) 34%, transparent);
+  transition: color 0.35s ease;
+}
+.process-step-outcome {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--primary);
+  opacity: 0;
+  transform: translateY(2px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+.process-step.is-active .process-step-title {
+  color: var(--foreground);
+}
+.process-step.is-active .process-step-line {
+  color: var(--muted-foreground);
+}
+.process-step.is-active .process-step-outcome {
+  opacity: 1;
+  transform: none;
+}
+.process-step:hover .process-step-title,
+.process-step:focus-visible .process-step-title {
+  color: color-mix(in oklab, var(--foreground) 74%, transparent);
+}
+.process-step.is-active:hover .process-step-title,
+.process-step.is-active:focus-visible .process-step-title {
+  color: var(--foreground);
 }
 @media (prefers-reduced-motion: reduce) {
-  .process-copy,
-  .process-copy-in,
-  .process-counter > span:first-child,
-  .process-dot,
-  .process-check {
-    animation: none;
-  }
-  .process-card,
-  .process-card:hover {
+  .process-visual-layer {
+    filter: none;
     transform: none;
     transition: none;
   }
 }
-
 /* Capability cards: hub + pills, live. */
 .cap-stage {
   position: relative;
@@ -779,16 +1642,6 @@ html.light .nav-solid {
   border-radius: 16px;
   z-index: 2;
 }
-@keyframes cap-hub {
-  50% {
-    box-shadow:
-      inset 0 0 0 1px color-mix(in oklab, white 35%, transparent),
-      inset 0 1px 0 color-mix(in oklab, white 55%, transparent),
-      inset 0 -2px 3px color-mix(in oklab, black 15%, transparent),
-      0 10px 32px -6px color-mix(in oklab, var(--primary) 85%, transparent),
-      0 2px 4px -1px color-mix(in oklab, black 20%, transparent);
-  }
-}
 .cap-pill {
   position: absolute;
   display: inline-flex;
@@ -804,7 +1657,6 @@ html.light .nav-solid {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--foreground);
-  box-shadow: 0 1px 0 color-mix(in oklab, var(--border) 60%, transparent);
   animation: cap-float 3.6s ease-in-out infinite;
   z-index: 1;
 }
@@ -831,6 +1683,10 @@ html.light .nav-solid {
   font-weight: 400;
   animation: cap-float 4s ease-in-out infinite;
   will-change: transform;
+}
+
+.cap-branch.is-wide {
+  min-width: 110px;
 }
 .cap-branch::after {
   content: "";
@@ -965,7 +1821,7 @@ html.light .nav-solid {
   border-radius: 12px;
 }
 
-/* "What we can build": numbered tiles. Calm at rest — a tinted disc with a hairline
+/* "What we can build": numbered tiles. Calm at rest - a tinted disc with a hairline
    ring; on hover the disc takes the primary button's glossy surface and a soft
    gradient wash fills the tile. Like the bento cards, nothing moves or scales. */
 .build-item {
@@ -1078,9 +1934,10 @@ html.light .nav-solid {
   opacity: 1;
 }
 
-/* Services bento: soft tiles, centered copy; on hover a soft diagonal gradient
-   washes in from the top-left and bottom-right corners and the edge picks up the
-   same gradient. Nothing moves or scales. */
+/* Services bento: nine equal tiles, copy along the top and the artwork filling
+   the base. Both sit on the same tile surface, so no second panel shows. On
+   hover a soft diagonal gradient washes in from the top-left and bottom-right
+   corners and the edge picks up the same gradient. Nothing moves or scales. */
 .bento-card {
   position: relative;
   isolation: isolate;
@@ -1089,7 +1946,7 @@ html.light .nav-solid {
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 16px;
   background: color-mix(in oklab, var(--secondary) 55%, var(--card));
 }
 .bento-card::before,
@@ -1132,11 +1989,27 @@ html.light .nav-solid {
 .group:focus-visible .bento-card::after {
   opacity: 1;
 }
-.bento-scene {
+.bento-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
   flex: 1 1 auto;
-  min-height: 11rem;
-  padding-bottom: 1rem;
-  background: transparent !important;
+  min-height: 13.5rem;
+  overflow: hidden;
+  /* The artwork sits on the tile surface itself, so no second panel shows
+     behind it and every card reads as one piece. */
+  background: transparent;
+}
+.bento-visual .service-scene,
+.bento-visual .agent-dither-field {
+  background: transparent;
+}
+.bento-copy {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+  padding: 1.25rem 1.25rem 0.5rem;
 }
 /* Branding & Designing: open box of brand assets on a 427x301 artboard.
    Tiles stay still; only a slow sheen crosses each one. */
@@ -1256,8 +2129,8 @@ html.light .nav-solid {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 9.5rem;
-  height: 9.5rem;
+  width: 10.75rem;
+  height: 10.75rem;
   translate: -50% -50%;
   border-radius: 50%;
   background: radial-gradient(
@@ -1270,44 +2143,11 @@ html.light .nav-solid {
 /* Agent mascot: three.js canvas, see AgentFace3D. */
 .agent-face {
   position: relative;
-  width: 9.5rem;
-  height: 9.5rem;
+  width: 10.75rem;
+  height: 10.75rem;
 }
 .agent-face canvas {
   display: block;
-}
-.agent-face::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
-  width: 64%;
-  height: 12px;
-  translate: -50% 0;
-  border-radius: 50%;
-  background: radial-gradient(
-    closest-side,
-    color-mix(in oklab, var(--agent-icon-back) 35%, transparent),
-    transparent
-  );
-  filter: blur(5px);
-  opacity: 0.75;
-  pointer-events: none;
-}
-.bento-arrow {
-  position: absolute;
-  right: 18px;
-  top: 18px;
-  z-index: 10;
-  width: 18px;
-  height: 18px;
-  color: var(--primary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.group:hover .bento-arrow,
-.group:focus-visible .bento-arrow {
-  opacity: 1;
 }
 
 /* Workflow arrows nudge forward; growth chart draws itself on a loop; social cards float. */
@@ -1401,6 +2241,305 @@ html.light .nav-solid {
   }
 }
 
+/* Website Development: the browser chrome wakes up - loading dots pulse, the
+   copy wipes in, the CTA catches a sheen, and the globe keeps turning. */
+.web-scene {
+  animation: web-float 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes web-float {
+  50% {
+    translate: 0 -3px;
+  }
+}
+.web-scene-dot {
+  animation: web-dot 2.8s ease-in-out infinite;
+}
+.web-scene-dot:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.web-scene-dot:nth-child(3) {
+  animation-delay: 0.36s;
+}
+@keyframes web-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+.web-line {
+  transform-origin: left;
+  animation: web-line 5.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.web-line-2 {
+  animation-delay: 0.12s;
+}
+.web-line-3 {
+  animation-delay: 0.24s;
+}
+@keyframes web-line {
+  0%,
+  6% {
+    transform: scaleX(0);
+    opacity: 0.2;
+  }
+  28%,
+  82% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  94%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.25;
+  }
+}
+.web-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 25%,
+    color-mix(in oklab, white 65%, transparent) 50%,
+    transparent 75%
+  );
+  transform: translateX(-150%);
+  animation: web-shine 5.2s ease-in-out infinite;
+}
+@keyframes web-shine {
+  0%,
+  58% {
+    transform: translateX(-150%);
+  }
+  72%,
+  100% {
+    transform: translateX(150%);
+  }
+}
+.web-globe::before {
+  content: "";
+  position: absolute;
+  width: 64%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--primary) 24%, transparent),
+    transparent 68%
+  );
+  opacity: 0.55;
+  animation: web-glow 3.8s ease-in-out infinite;
+}
+.web-globe::after {
+  content: "";
+  position: absolute;
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in oklab, var(--primary) 42%, transparent);
+  animation: spin 24s linear infinite reverse;
+}
+.web-globe-icon {
+  transform-origin: center;
+  animation: spin 18s linear infinite;
+}
+@keyframes web-glow {
+  50% {
+    opacity: 0.95;
+    transform: scale(1.12);
+  }
+}
+
+/* Shopify: a parcel drops into the bag, the order lines fill, and the
+   confirmation pill lands with a check pop and a soft ring. */
+.shop-scene {
+  animation: shop-float 4.8s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes shop-float {
+  50% {
+    translate: 0 -3px;
+  }
+}
+.shop-bag {
+  animation: shop-bob 4.8s ease-in-out infinite;
+}
+@keyframes shop-bob {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.shop-bag-icon {
+  transform-origin: center;
+  animation: shop-catch 4.8s ease-in-out infinite;
+}
+@keyframes shop-catch {
+  0%,
+  50% {
+    transform: scale(1);
+  }
+  56% {
+    transform: scale(1.12);
+  }
+  64%,
+  100% {
+    transform: scale(1);
+  }
+}
+.shop-parcel {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: 10px;
+  height: 10px;
+  translate: -50% 0;
+  border: 1.5px solid var(--card);
+  border-radius: 3px;
+  background: var(--primary);
+  opacity: 0;
+  animation: shop-drop 4.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes shop-drop {
+  0%,
+  18% {
+    transform: translateY(-10px) rotate(-10deg) scale(0.7);
+    opacity: 0;
+  }
+  26% {
+    opacity: 1;
+  }
+  48% {
+    transform: translateY(34px) rotate(6deg) scale(1);
+    opacity: 1;
+  }
+  56% {
+    transform: translateY(38px) rotate(0) scale(0.4);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(38px) scale(0.4);
+    opacity: 0;
+  }
+}
+.shop-line {
+  transform-origin: left;
+  animation: shop-line 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.shop-line-2 {
+  animation-delay: 0.18s;
+}
+@keyframes shop-line {
+  0%,
+  8% {
+    transform: scaleX(0.25);
+    opacity: 0.4;
+  }
+  38%,
+  84% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  96%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.35;
+  }
+}
+.shop-confirm {
+  transform-origin: center;
+  animation: shop-confirm 4.8s ease-in-out infinite;
+}
+@keyframes shop-confirm {
+  0%,
+  50% {
+    transform: scale(1);
+  }
+  58% {
+    transform: scale(1.04);
+  }
+  66%,
+  100% {
+    transform: scale(1);
+  }
+}
+.shop-confirm::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid color-mix(in oklab, var(--primary-foreground) 65%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: shop-ping 4.8s ease-out infinite;
+}
+@keyframes shop-ping {
+  0%,
+  52% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  56% {
+    opacity: 0.7;
+  }
+  78%,
+  100% {
+    transform: scale(1.16);
+    opacity: 0;
+  }
+}
+.shop-check {
+  transform-origin: center;
+  animation: shop-check 4.8s ease-in-out infinite;
+}
+@keyframes shop-check {
+  0%,
+  50% {
+    transform: scale(0.5);
+    opacity: 0.35;
+  }
+  58% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  70%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .web-scene,
+  .web-scene-dot,
+  .web-line,
+  .web-cta::after,
+  .web-globe::before,
+  .web-globe::after,
+  .web-globe-icon,
+  .shop-scene,
+  .shop-bag,
+  .shop-bag-icon,
+  .shop-parcel,
+  .shop-line,
+  .shop-confirm,
+  .shop-confirm::after,
+  .shop-check {
+    animation: none;
+  }
+  .shop-parcel {
+    opacity: 0;
+  }
+  .web-cta::after {
+    transform: translateX(-150%);
+  }
+}
+
 /* "Our services" heading: hand-drawn underline draws itself, then rests. */
 .heading-swash path {
   stroke-dasharray: 100;
@@ -1443,30 +2582,89 @@ html.light .nav-solid {
   }
 }
 
-/* Approach steps ("How we turn ideas into impact"): four feature vignettes in
-   the spirit of todesktop.com's cards — a gridded stage, a glassy panel on it,
-   and one slow looped detail per step. */
+/* Approach steps ("How we turn ideas into impact"): ToDesktop-style feature
+   cards - a tinted, clipped illustration stage, centred label, short rule and
+   supporting copy. One column on phones, two from md; nothing can overflow. */
+.impact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+}
+@media (min-width: 768px) {
+  .impact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
 .impact-card {
   display: flex;
   height: 100%;
+  min-width: 0;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--card);
-  transition: border-color 0.35s ease;
+  border-radius: 24px;
+  background: var(--muted);
+  transition: background-color 0.35s ease;
 }
 .impact-card:hover,
 .impact-card:focus-within {
-  border-color: color-mix(in oklab, var(--primary) 38%, var(--border));
+  background: color-mix(in oklab, var(--muted) 82%, var(--card));
 }
 .impact-card-stage {
   position: relative;
+  height: 168px;
   overflow: hidden;
-  border-bottom: 1px solid color-mix(in oklab, var(--foreground) 9%, transparent);
+}
+@media (min-width: 640px) {
+  .impact-card-stage {
+    height: 196px;
+  }
+}
+@media (min-width: 768px) {
+  .impact-card-stage {
+    height: 208px;
+  }
+}
+.impact-card-stage .impact-stage {
+  height: 100%;
+  aspect-ratio: auto;
+  /* One continuous card surface: the illustration borrows the card's fill. */
+  background: transparent;
+  transition: transform 0.5s cubic-bezier(0.6, 0.6, 0, 1);
+}
+.impact-card:hover .impact-stage,
+.impact-card:focus-within .impact-stage {
+  transform: scale(1.035);
+}
+.impact-card-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 24px 28px;
+  text-align: center;
+}
+@media (min-width: 640px) {
+  .impact-card-copy {
+    padding-inline: 40px;
+  }
+}
+.impact-card-title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
 }
 .impact-rule {
+  width: 100%;
+  max-width: 272px;
   height: 1px;
+  margin-block: 20px;
   background: color-mix(in oklab, var(--foreground) 11%, transparent);
   transition: background 0.4s ease;
 }
@@ -1477,6 +2675,32 @@ html.light .nav-solid {
     var(--primary),
     color-mix(in oklab, var(--primary) 15%, transparent)
   );
+}
+.impact-card-line {
+  max-width: 34ch;
+  font-size: 13.5px;
+  line-height: 21px;
+  color: var(--muted-foreground);
+}
+.impact-card-outcome {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .impact-card,
+  .impact-card-stage .impact-stage {
+    transition: none;
+  }
+  .impact-card:hover .impact-stage,
+  .impact-card:focus-within .impact-stage {
+    transform: none;
+  }
 }
 .impact-stage {
   position: relative;

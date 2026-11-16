@@ -27,7 +27,7 @@ export const FAQS = [
   {
     question: "What do you need from me to get started?",
     answer:
-      "Just a short call to understand your business and goals. If you have a logo, brand colours, photos or examples you like, great — if not, we can create them for you.",
+      "Just a short call to understand your business and goals. If you have a logo, brand colours, photos or examples you like, great - if not, we can create them for you.",
   },
   {
     question: "Will I be able to update the website myself?",
@@ -42,7 +42,7 @@ export const FAQS = [
   {
     question: "Can you redesign my existing website?",
     answer:
-      "Yes. We review your current site, keep what works, and rebuild the rest with a fresh design, faster loading and better structure — without losing your search ranking.",
+      "Yes. We review your current site, keep what works, and rebuild the rest with a fresh design, faster loading and better structure - without losing your search ranking.",
   },
   {
     question: "How do payments work?",

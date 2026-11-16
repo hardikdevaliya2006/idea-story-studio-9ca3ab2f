@@ -18,7 +18,7 @@ export const siteConfig = {
   locale: "en_US",
   language: "en",
   twitter: "@ideaboat",
-  title: "Ideaboat — AI Automation, AI Agents & Growth Systems",
+  title: "Ideaboat - AI Automation, AI Agents & Growth Systems",
   description:
     "Ideaboat designs AI workflow automation, custom AI agents, CRM systems and conversion-focused websites that remove manual work and help teams grow.",
   keywords: [

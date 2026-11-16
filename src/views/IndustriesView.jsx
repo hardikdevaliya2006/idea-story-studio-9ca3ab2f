@@ -30,7 +30,7 @@ const industries = [
   {
     icon: HeartPulse,
     title: "Healthcare",
-    desc: "Reduce admin load by automating scheduling, intake routing, and internal handoffs—without touching sensitive clinical workflows.",
+    desc: "Reduce admin load by automating scheduling, intake routing, and internal handoffs-without touching sensitive clinical workflows.",
   },
   {
     icon: Landmark,
@@ -109,7 +109,7 @@ export default function IndustriesPage() {
 
         <CTASection
           title="Don't see your industry?"
-          text="Tell us about your workflows — if there's manual work, there's usually an automation opportunity."
+          text="Tell us about your workflows - if there's manual work, there's usually an automation opportunity."
         />
       </main>
     </div>
