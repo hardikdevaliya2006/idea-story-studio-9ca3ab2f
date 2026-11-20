@@ -7,6 +7,8 @@ const STATIC_ROUTES = [
   { path: "/industries", priority: 0.8, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.7, changeFrequency: "monthly" },
   { path: "/book-a-discovery-call", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/privacy-policy", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/terms-of-service", priority: 0.3, changeFrequency: "yearly" },
 ];
 export default function sitemap() {
   const lastModified = new Date();

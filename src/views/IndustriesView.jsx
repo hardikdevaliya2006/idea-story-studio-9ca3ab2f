@@ -10,7 +10,7 @@ import {
   GraduationCap,
   Plus,
 } from "lucide-react";
-import { CTASection, Reveal, SpotlightCard, useReveal } from "@/components/site-chrome";
+import { Reveal, SpotlightCard, useReveal } from "@/components/site-chrome";
 const industries = [
   {
     icon: Cloud,
@@ -107,10 +107,6 @@ export default function IndustriesPage() {
           </div>
         </section>
 
-        <CTASection
-          title="Don't see your industry?"
-          text="Tell us about your workflows - if there's manual work, there's usually an automation opportunity."
-        />
       </main>
     </div>
   );

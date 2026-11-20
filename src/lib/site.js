@@ -34,8 +34,26 @@ export const siteConfig = {
     "Ideaboat",
   ],
   email: "hello@ideaboat.com",
-  phoneDisplay: "1-800-356-8933",
-  phoneHref: "tel:18003568933",
+  phoneDisplay: "096629 08849",
+  phoneHref: "tel:+919662908849",
+  address: ["Capstone Building, Parimal Garden, 706", "Ahmedabad, Gujarat 380006"],
+  socials: [
+    {
+      platform: "LinkedIn",
+      label: "Ideaboat on LinkedIn",
+      href: "https://www.linkedin.com/company/idea-boat?originalSubdomain=in",
+    },
+    {
+      platform: "Facebook",
+      label: "Ideaboat on Facebook",
+      href: "https://www.facebook.com/people/IdeaBoat/100066347627038/",
+    },
+    {
+      platform: "Instagram",
+      label: "Ideaboat on Instagram",
+      href: "https://www.instagram.com/ideaboat.in/",
+    },
+  ],
 };
 export function absoluteUrl(path = "/") {
   return `${siteConfig.url}${path.startsWith("/") ? path : `/${path}`}`;

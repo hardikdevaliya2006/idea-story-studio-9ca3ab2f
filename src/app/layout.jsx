@@ -1,5 +1,6 @@
 import { DM_Sans, Sora } from "next/font/google";
 import "@/styles.css";
+import CallToAction from "@/components/CallToAction";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter, SiteHeader, ThemeProvider } from "@/components/site-chrome";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
@@ -92,6 +93,8 @@ export default function RootLayout({ children }) {
           </a>
           <SiteHeader />
           {children}
+          {/* One shared closing CTA for every route - same copy, same artwork. */}
+          <CallToAction />
           <SiteFooter />
         </ThemeProvider>
         <JsonLd data={organizationSchema()} />

@@ -20,7 +20,7 @@ const CHIPS = [
 export function BrandIdentityScene() {
   return (
     <div className="relative grid h-full w-full place-items-center">
-      <div className="relative aspect-[427/301] h-full max-h-[13.5rem] w-auto max-w-full">
+      <div className="relative aspect-[427/301] w-full max-w-[20rem]">
         <span className="brand-glow" aria-hidden="true" />
 
         <svg

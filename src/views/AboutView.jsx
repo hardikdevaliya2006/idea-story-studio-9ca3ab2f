@@ -1,7 +1,20 @@
 "use client";
-import { Compass, Gem, Users, Target, Lightbulb, Layers, Rocket, Quote } from "lucide-react";
-import { CTASection, Reveal, SpotlightCard, useReveal } from "@/components/site-chrome";
-import { ImpactScene } from "@/components/ImpactScenes";
+import {
+  ArrowUpRight,
+  Compass,
+  Gem,
+  Users,
+  Target,
+  Lightbulb,
+  Layers,
+  Rocket,
+  Quote,
+} from "lucide-react";
+import { Reveal, useReveal } from "@/components/site-chrome";
+import AboutApproach from "@/components/AboutApproach";
+import AboutControlPlane from "@/components/AboutControlPlane";
+import AboutStudio from "@/components/AboutStudio";
+
 const pillars = [
   {
     icon: Lightbulb,
@@ -101,6 +114,7 @@ const testimonials = [
       "They quickly grasped our complicated integration needs and delivered a solution that works flawlessly. Absolutely worth the investment.",
   },
 ];
+
 export default function AboutPage() {
   useReveal();
   return (
@@ -109,167 +123,166 @@ export default function AboutPage() {
         id="main-content"
         className="mx-auto max-w-6xl space-y-16 px-6 pb-20 pt-28 md:space-y-24 md:pb-24 md:pt-36"
       >
-        {/* PILLARS */}
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((p, i) => (
-            <Reveal key={p.title} delay={i * 100} className="h-full">
-              <SpotlightCard className="flex h-full flex-col p-6">
-                <span className="relative grid size-11 place-items-center rounded-xl border border-primary/30 bg-primary/10 text-primary transition duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
-                  <p.icon className="size-5" />
-                </span>
-                <h3 className="relative mt-6 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                  {p.title}
-                </h3>
-                <p className="relative mt-2 text-sm font-medium leading-snug">{p.desc}</p>
-              </SpotlightCard>
-            </Reveal>
-          ))}
-        </section>
-
-        {/* MISSION */}
-        <section className="grid items-start gap-10 md:grid-cols-2">
-          <Reveal>
-            <h1 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
+        {/* MISSION + CONTROL PLANE SCENE */}
+        <section className="about-hero" aria-labelledby="about-title">
+          <Reveal className="about-hero-copy">
+            <p className="about-eyebrow">About Ideaboat</p>
+            <h1 id="about-title" className="about-title">
               AI that makes business simpler, not more complicated
             </h1>
-            <p className="mt-5 text-sm text-muted-foreground md:text-base">
+            <p className="about-lead">
               To empower businesses with AI solutions that simplify work, spark innovation, and
               create lasting impact. IdeaBoat combines intelligent automation with practical
               technology to solve real business challenges and help teams work smarter.
             </p>
-            <p className="mt-4 text-sm text-muted-foreground md:text-base">
+            <p className="about-lead">
               Our focus is on building intelligent solutions that reduce repetitive work and improve
               everyday operations. From custom AI agents to workflow automation, we help businesses
               turn new opportunities into practical systems designed for efficiency and sustainable
               growth.
             </p>
+            <div className="about-jump">
+              <a href="#approach">
+                How we work
+                <ArrowUpRight />
+              </a>
+              <a href="#crew">
+                Meet the crew
+                <ArrowUpRight />
+              </a>
+            </div>
           </Reveal>
-          <div className="grid gap-4">
-            {stats.map(([v, l], i) => (
-              <Reveal key={l} delay={i * 120}>
-                <SpotlightCard className="flex items-center gap-6 p-6">
-                  <span className="relative font-display text-4xl font-semibold text-primary md:text-5xl">
-                    {v}
-                  </span>
-                  <span className="relative text-sm text-muted-foreground">{l}</span>
-                </SpotlightCard>
+          <Reveal delay={120}>
+            <AboutControlPlane />
+          </Reveal>
+        </section>
+
+        {/* BY THE NUMBERS */}
+        <section aria-labelledby="about-numbers">
+          <Reveal className="about-section-head">
+            <p id="about-numbers" className="about-eyebrow">
+              By the numbers
+            </p>
+          </Reveal>
+          <div className="about-band">
+            {stats.map(([value, label]) => (
+              <Reveal key={label} className="about-stat">
+                <span className="about-stat-value">{value}</span>
+                <span className="about-stat-label">{label}</span>
               </Reveal>
             ))}
           </div>
         </section>
 
-        {/* VALUES */}
-        <section>
-          <Reveal className="mb-12">
-            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
-              What drives IdeaBoat forward
+        {/* IN BRIEF */}
+        <section aria-label="Ideaboat in brief">
+          <Reveal className="about-section-head">
+            <p className="about-eyebrow">In brief</p>
+          </Reveal>
+          <div className="about-principles">
+            {pillars.map((pillar, i) => (
+              <Reveal key={pillar.title} delay={i * 80} className="about-principle">
+                <span className="about-index">0{i + 1}</span>
+                <span className="about-principle-icon">
+                  <pillar.icon size={16} strokeWidth={1.9} />
+                </span>
+                <h3 className="about-principle-title">{pillar.title}</h3>
+                <p className="about-principle-desc">{pillar.desc}</p>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* WHAT WE CARE ABOUT */}
+        <section className="about-values" aria-labelledby="about-values-title">
+          <Reveal className="about-values-head">
+            <p className="about-eyebrow">Our values</p>
+            <h2 id="about-values-title" className="about-section-title">
+              What we care about
             </h2>
           </Reveal>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((v, i) => (
-              <Reveal key={v.title} delay={i * 100} className="h-full">
-                <SpotlightCard className="flex h-full flex-col p-6">
-                  <span className="relative grid size-11 place-items-center rounded-xl border border-primary/30 bg-primary/10 text-primary transition duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
-                    <v.icon className="size-5" />
-                  </span>
-                  <h3 className="relative mt-8 font-display text-lg font-semibold leading-snug">
-                    {v.title}
-                  </h3>
-                  <p className="relative mt-2 text-sm text-muted-foreground">{v.desc}</p>
-                </SpotlightCard>
+          <div>
+            {values.map((value, i) => (
+              <Reveal key={value.title} delay={i * 80} className="about-value">
+                <span className="about-index">0{i + 1}</span>
+                <span className="about-value-icon">
+                  <value.icon size={16} strokeWidth={1.9} />
+                </span>
+                <div>
+                  <h3 className="about-value-title">{value.title}</h3>
+                  <p className="about-value-desc">{value.desc}</p>
+                </div>
               </Reveal>
             ))}
           </div>
         </section>
 
-        {/* APPROACH */}
-        <section>
-          <Reveal className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        {/* HOW WE WORK + RAIL SCENE */}
+        <section id="approach" aria-labelledby="about-approach-title">
+          <Reveal className="about-section-head about-section-row">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-primary">
-                Our approach
-              </p>
-              <h2 className="mt-4 max-w-lg font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
-                How we turn ideas into impact
+              <p className="about-eyebrow">How we work</p>
+              <h2 id="about-approach-title" className="about-section-title">
+                How an idea becomes a product
               </h2>
             </div>
-            <p className="max-w-sm text-sm text-muted-foreground md:text-base">
+            <p className="about-section-note">
               From understanding your goals to building and scaling AI solutions, IdeaBoat follows a
               clear approach focused on real business results.
             </p>
           </Reveal>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map(([t, d], i) => (
-              <Reveal key={t} delay={i * 110} className="h-full">
-                <article className="approach-card">
-                  <div className="approach-card-stage">
-                    <ImpactScene index={i} />
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="flex items-baseline justify-between gap-3">
-                      <h3 className="font-display text-[18px] font-semibold leading-snug tracking-tight">
-                        {t}
-                      </h3>
-                      <span className="font-display text-xs font-medium text-primary/70">
-                        0{i + 1}
-                      </span>
-                    </div>
-                    <div className="approach-rule my-3" />
-                    <p className="text-sm leading-relaxed text-muted-foreground">{d}</p>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+          <AboutApproach steps={steps} />
         </section>
 
-        {/* TEAM */}
-        <section>
-          <Reveal className="mb-12">
-            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
-              Meet the visionaries
+        {/* MEET THE CREW + PRESENCE SCENE */}
+        <section id="crew" className="about-team" aria-labelledby="about-team-title">
+          <Reveal className="about-team-head">
+            <p className="about-eyebrow">The people</p>
+            <h2 id="about-team-title" className="about-section-title">
+              Meet the crew
             </h2>
           </Reveal>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((m, i) => (
-              <Reveal key={m.name} delay={i * 100} className="h-full">
-                <SpotlightCard className="flex h-full flex-col p-6">
-                  <span className="relative grid size-14 place-items-center rounded-full border border-primary/30 bg-primary/10 text-primary transition duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
-                    <m.icon className="size-6" />
+          <Reveal>
+            <AboutStudio />
+            <div className="about-roster mt-7">
+              {team.map((member, i) => (
+                <div className="about-roster-row" key={member.name}>
+                  <span className="about-index">0{i + 1}</span>
+                  <span className="about-roster-avatar">
+                    <member.icon size={18} strokeWidth={1.9} />
                   </span>
-                  <h3 className="relative mt-6 font-display text-lg font-semibold">{m.name}</h3>
-                  <p className="relative mt-1 text-sm text-muted-foreground">{m.role}</p>
-                </SpotlightCard>
-              </Reveal>
-            ))}
-          </div>
+                  <span className="about-roster-name">{member.name}</span>
+                  <span className="about-roster-role">{member.role}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </section>
 
-        {/* TESTIMONIALS */}
-        <section>
-          <Reveal className="mb-12">
-            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
-              Human + machine, working for you
+        {/* IN THEIR WORDS */}
+        <section aria-labelledby="about-voices-title">
+          <Reveal className="about-section-head">
+            <p className="about-eyebrow">In their words</p>
+            <h2 id="about-voices-title" className="about-section-title">
+              The humans in the loop
             </h2>
           </Reveal>
-          <div className="grid gap-4 md:grid-cols-2">
-            {testimonials.map((t, i) => (
-              <Reveal key={t.name} delay={(i % 2) * 120} className="h-full">
-                <SpotlightCard className="flex h-full flex-col p-6">
-                  <Quote className="relative size-6 text-primary" />
-                  <p className="relative mt-4 text-sm leading-relaxed md:text-base">"{t.quote}"</p>
-                  <div className="flex-1" />
-                  <div className="relative mt-6 border-t pt-4">
-                    <p className="font-display text-sm font-semibold">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
-                  </div>
-                </SpotlightCard>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal>
+            <div className="about-quotes">
+              {testimonials.map((item) => (
+                <figure className="about-quote" key={item.name}>
+                  <Quote className="about-quote-mark" strokeWidth={1.9} />
+                  <blockquote>&ldquo;{item.quote}&rdquo;</blockquote>
+                  <figcaption>
+                    <span>{item.name}</span>
+                    <span>{item.role}</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </Reveal>
         </section>
 
-        <CTASection />
       </main>
     </div>
   );

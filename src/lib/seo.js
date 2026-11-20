@@ -68,7 +68,10 @@ export function organizationSchema() {
     description: siteConfig.description,
     email: siteConfig.email,
     telephone: siteConfig.phoneDisplay,
-    sameAs: [`https://twitter.com/${siteConfig.twitter.replace("@", "")}`],
+    sameAs: [
+      ...siteConfig.socials.map((social) => social.href),
+      `https://twitter.com/${siteConfig.twitter.replace("@", "")}`,
+    ],
     contactPoint: [
       {
         "@type": "ContactPoint",

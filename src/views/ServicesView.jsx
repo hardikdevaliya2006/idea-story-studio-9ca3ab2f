@@ -4,6 +4,7 @@ import {
   Mail,
   ArrowLeftRight,
   ArrowUpRight,
+  ChevronRight,
   Workflow,
   Bot,
   FileText,
@@ -24,12 +25,42 @@ const capabilities = [
 ];
 /* ---------- what we can build: six icon rows ---------- */
 const buildList = [
-  { icon: Workflow, label: "Workflow automation", hint: "Rules, approvals and handoffs" },
-  { icon: Bot, label: "Custom AI agents", hint: "Assistants built around your tasks" },
-  { icon: ArrowLeftRight, label: "CRM integrations", hint: "Your tools talking to each other" },
-  { icon: FileText, label: "Document intelligence", hint: "Read, extract and organize" },
-  { icon: BarChart3, label: "Automated reporting", hint: "Numbers without the busywork" },
-  { icon: Layers, label: "Cross-platform processes", hint: "One flow across every tool" },
+  {
+    icon: Workflow,
+    label: "Workflow automation",
+    hint: "Rules, approvals and handoffs",
+    href: "/services/ai-workflow-automation",
+  },
+  {
+    icon: Bot,
+    label: "Custom AI agents",
+    hint: "Assistants built around your tasks",
+    href: "/services/custom-ai-agents",
+  },
+  {
+    icon: ArrowLeftRight,
+    label: "CRM integrations",
+    hint: "Your tools talking to each other",
+    href: "/services/custom-solutions-crm",
+  },
+  {
+    icon: FileText,
+    label: "Document intelligence",
+    hint: "Read, extract and organize",
+    href: "/services/custom-ai-agents",
+  },
+  {
+    icon: BarChart3,
+    label: "Automated reporting",
+    hint: "Numbers without the busywork",
+    href: "/services/ai-for-business-growth",
+  },
+  {
+    icon: Layers,
+    label: "Cross-platform processes",
+    hint: "One flow across every tool",
+    href: "/services/ai-workflow-automation",
+  },
 ];
 /* ---------- services grid: nine equal bento tiles, artwork over copy ---------- */
 function BentoCard({ index }) {
@@ -66,7 +97,7 @@ export default function ServicesPage() {
     <div className="overflow-x-clip">
       <main
         id="main-content"
-        className="mx-auto max-w-6xl space-y-12 px-6 pb-20 pt-28 md:space-y-20 md:pb-24 md:pt-32"
+        className="page-container space-y-16 pb-20 pt-28 md:space-y-24 md:pb-24 md:pt-36"
       >
         {/* BANNER - drawn in the DOM so it matches both themes */}
         <section>
@@ -95,34 +126,13 @@ export default function ServicesPage() {
         {/* SERVICES - every card has its own scene */}
         <section id="services">
           <Reveal className="mb-10 text-center md:mb-14">
-            <h1 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-5xl lg:text-6xl">
-              Our{" "}
-              <span className="heading-accent relative inline-block font-semibold text-primary">
-                Services
-                <svg
-                  className="heading-swash pointer-events-none absolute -bottom-2.5 left-1/2 -translate-x-1/2 h-3 w-full max-w-[200px] overflow-visible"
-                  viewBox="0 0 200 12"
-                  fill="none"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    pathLength={100}
-                    d="M4 9 C 55 3.5, 135 2.5, 196 7"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
+            <h1 className="mt-5 font-display text-3xl font-semibold leading-[1.1] tracking-[-0.035em] md:text-5xl lg:text-6xl">
+              Our <span className="text-primary">Services</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-balance text-[15px] leading-relaxed text-muted-foreground interactive-text md:text-base">
-              We design and build AI-powered systems that slot into your existing workflow —{" "}
-              <span className="text-highlight relative cursor-default group">
-                no rip-and-replace
-                <span className="highlight-underline" aria-hidden="true"></span>
-              </span>
-              , just measurable automation from day one.
+            <p className="mx-auto mt-5 max-w-xl text-balance text-base leading-relaxed text-muted-foreground">
+              We design AI-powered systems that fit the tools you already use - measurable
+              automation from day one, with{" "}
+              <strong className="font-medium text-foreground">no rip-and-replace</strong>.
             </p>
             <Link
               href="/book-a-discovery-call"
@@ -132,7 +142,7 @@ export default function ServicesPage() {
               <ArrowUpRight className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </Reveal>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((s, i) => (
               <Reveal key={s.slug} delay={(i % 3) * 80} className="h-full">
                 <BentoCard index={i} />
@@ -142,83 +152,69 @@ export default function ServicesPage() {
         </section>
 
         {/* WHAT WE CAN BUILD - statement, capability list, workflow footer strip */}
-        <section className="relative grid gap-8 overflow-hidden rounded-3xl border bg-card p-6 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:grid-rows-[auto_1fr] md:gap-x-12 md:gap-y-10 lg:gap-x-16 lg:p-10">
+        <section className="relative grid gap-10 overflow-hidden rounded-3xl border bg-card p-6 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] md:items-center md:gap-x-12 lg:gap-x-16 lg:p-10">
           <div className="dots pointer-events-none absolute -bottom-16 -left-16 size-64" />
-          <Reveal className="relative order-1 md:col-start-1 md:row-start-1">
+          <Reveal className="relative">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               <Mail className="size-3.5" strokeWidth={2} /> Built around your workflow
             </span>
-            <h2 className="mt-5 max-w-md font-display text-2xl font-semibold leading-[1.1] tracking-tight md:text-4xl">
+            <h2 className="mt-5 max-w-md text-balance font-display text-2xl font-semibold leading-[1.15] tracking-tight md:text-4xl">
               What we can build for you?
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
               Six building blocks that connect the tools you already use, so work keeps moving
               without the manual handoffs.
             </p>
+            {/* Kept with the copy so the left column reads as one block instead of
+                leaving a large void between the paragraph and this flow strip. */}
+            <div className="mt-9 flex items-center gap-3">
+              <span className="surface-icon surface-sheen flex size-12 shrink-0 items-center justify-center">
+                <Mail className="size-5" strokeWidth={2} color="#fff" />
+              </span>
+              <ArrowLeftRight
+                className="size-5 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <span className="surface-icon flex size-12 shrink-0 items-center justify-center rounded-xl border bg-background p-1.5">
+                <img src={sailboatAsset} alt="Ideaboat emblem" className="size-full" />
+              </span>
+            </div>
           </Reveal>
 
-          <ul className="relative order-2 grid content-center gap-3 md:col-start-2 md:row-span-2 md:row-start-1 lg:grid-cols-2">
+          <ul className="relative grid content-center gap-2.5 lg:grid-cols-2 lg:gap-x-3 lg:gap-y-2.5">
             {buildList.map((b, i) => (
               <Reveal key={b.label} delay={i * 70} className="h-full">
-                <li className="build-item">
-                  <span className="build-icon" aria-hidden="true">
-                    <b.icon className="size-5" strokeWidth={2} />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[15px] font-medium leading-snug">{b.label}</span>
-                    <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
-                      {b.hint}
+                <li className="h-full">
+                  <Link href={b.href} className="build-item h-full">
+                    <span className="build-icon" aria-hidden="true">
+                      <b.icon className="size-[18px]" strokeWidth={2} />
                     </span>
-                  </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="build-title block text-sm font-medium leading-tight">
+                        {b.label}
+                      </span>
+                      <span className="mt-0.5 block text-[11px] leading-snug text-muted-foreground">
+                        {b.hint}
+                      </span>
+                    </span>
+                    <ChevronRight className="build-arrow size-4 shrink-0" aria-hidden="true" />
+                  </Link>
                 </li>
               </Reveal>
             ))}
           </ul>
-
-          <Reveal
-            delay={120}
-            className="relative order-3 flex items-center gap-3 md:col-start-1 md:row-start-2 md:self-end"
-          >
-            <span className="surface-icon surface-sheen flex size-12 shrink-0 items-center justify-center">
-              <Mail className="size-5" strokeWidth={2} color="#fff" />
-            </span>
-            <ArrowLeftRight className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
-            <span className="surface-icon flex size-12 shrink-0 items-center justify-center rounded-xl border bg-background p-1.5">
-              <img src={sailboatAsset} alt="Ideaboat emblem" className="size-full" />
-            </span>
-          </Reveal>
         </section>
 
         {/* APPROACH - connected step cards, glanceable */}
         <section>
-          <Reveal className="mb-10 md:mb-12">
-            <h2 className="font-display text-3xl font-medium leading-tight tracking-tight md:text-4xl">
+          <Reveal className="mb-8 md:mb-12">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
               How we turn ideas into impact
             </h2>
           </Reveal>
           <ServiceProcess />
         </section>
 
-        {/* CTA */}
-        <Reveal className="relative overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground sm:p-12 lg:p-14">
-          <div className="texture-grain pointer-events-none absolute inset-0 opacity-40 mix-blend-overlay" />
-          <div className="pointer-events-none absolute -right-24 -top-28 size-80 rounded-full bg-primary-foreground/10 blur-2xl" />
-          <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full border border-primary-foreground/20" />
-          <div className="relative z-10 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-md:grid-cols-1">
-            <div className="min-w-0">
-              <h2 className="max-w-xl font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
-                Have an idea in mind?
-              </h2>
-              <p className="mt-4 max-w-md text-sm opacity-80 md:text-base">Let's talk.</p>
-            </div>
-            <Link
-              href="/book-a-discovery-call"
-              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:bg-foreground/90 sm:w-auto"
-            >
-              Book a call <ArrowUpRight className="size-4" />
-            </Link>
-          </div>
-        </Reveal>
       </main>
     </div>
   );

@@ -8,6 +8,7 @@ import {
   Globe,
   ShoppingBag,
   Megaphone,
+  Sparkles,
 } from "lucide-react";
 export const APPROACH = [
   [
@@ -274,6 +275,7 @@ export const SERVICES = [
     slug: "shopify-ecommerce",
     icon: ShoppingBag,
     title: "Shopify & Ecommerce Websites",
+    navTitle: "Shopify & Ecommerce",
     short: "Shopify stores set up to sell smoothly and run without constant manual work.",
     intro:
       "Shopify stores set up to sell smoothly and run without constant manual work behind the scenes.",
@@ -306,6 +308,45 @@ export const SERVICES = [
     ctaTitle: "Let's get your store running smoothly",
     ctaText:
       "Tell us what's slowing you down today - orders, inventory, or follow-ups - and we'll start there.",
+  },
+  {
+    slug: "ai-seo-generation",
+    icon: Sparkles,
+    title: "AI SEO Generation",
+    short:
+      "Build search visibility for Google and AI answer engines with content, structure, and authority signals designed to be discovered.",
+    intro:
+      "Own your presence across traditional search and AI answers with an SEO strategy built for how people discover businesses now.",
+    tagline: "Be the answer people and AI search for",
+    overview:
+      "AI SEO Generation brings technical SEO, helpful content, entity signals, and generative engine optimisation together. We build a practical system that helps search engines understand your expertise and gives AI answer engines clear, trustworthy information to reference.",
+    includes: [
+      "Search and AI visibility audit",
+      "Keyword and search-intent mapping",
+      "Helpful, answer-focused content",
+      "Technical SEO and schema foundations",
+      "Entity and authority signal development",
+      "Performance tracking and iteration",
+    ],
+    tools: [
+      "Google Search Console",
+      "Google Analytics",
+      "ChatGPT",
+      "Gemini",
+      "Perplexity",
+      "Schema.org",
+      "Ahrefs",
+      "Semrush",
+    ],
+    outcomes: [
+      "A stronger presence across search journeys",
+      "Content structured for answer engines",
+      "Clearer topical authority and entity signals",
+      "A measurable roadmap for ongoing growth",
+    ],
+    ctaTitle: "Ready to own your AI search presence?",
+    ctaText:
+      "Let's review how your brand appears in search and AI answers, then map the opportunities worth acting on first.",
   },
   {
     slug: "social-media",

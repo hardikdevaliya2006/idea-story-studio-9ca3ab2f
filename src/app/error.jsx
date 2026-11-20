@@ -8,7 +8,7 @@ export default function ErrorBoundary({ error, reset }) {
   return (
     <main
       id="main-content"
-      className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 py-32 text-center"
+      className="page-container flex min-h-screen max-w-3xl flex-col items-center justify-center py-32 text-center"
     >
       <h1 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
         This page didn't load

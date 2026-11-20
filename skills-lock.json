@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "apple-web-design-science": {
+      "source": "oye-rahul/Apple-Design-Skill",
+      "commit": "488d1075f8d2e2409cb64f953cd16d9f73955dc7",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "4ca520b6b57c997d8a1782033ac222375282e7d69e2ce37564b7687991618f05"
+    }
+  }
+}

@@ -2,6 +2,8 @@
 import logoImage from "@/assets/ideaboat-logo-white.png";
 import darkLogoImage from "@/assets/ideaboat-logo.png";
 import Link from "next/link";
+import CallToAction from "@/components/CallToAction";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import {
   createContext,
@@ -12,8 +14,21 @@ import {
   useRef,
   useState,
 } from "react";
-import { ArrowUpRight, Sun, Moon, Menu, X, ChevronRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  ChevronRight,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Mail,
+  Phone,
+} from "lucide-react";
 import { SERVICES } from "@/data/services";
+import { siteConfig } from "@/lib/site";
 import sailboatEmblem from "@/assets/sailboat-emblem.png";
 import wordmarkImage from "@/assets/ideaboat-logo-white.png";
 const sailboatAsset = sailboatEmblem.src;
@@ -61,7 +76,7 @@ export function SpotlightCard({ children, className = "" }) {
   return (
     <div
       onPointerMove={move}
-      className={`spotlight-card group relative rounded-xl border bg-card ${className}`}
+      className={`spotlight-card group relative rounded-2xl border bg-card ${className}`}
     >
       {children}
     </div>
@@ -113,15 +128,20 @@ export const NAV = [
   { label: "Industries", href: "/industries" },
   { label: "Contact", href: "/contact" },
 ];
+// AEO & GEO is retired from navigation (its page stays reachable directly).
+// The remaining eight services split evenly: four per column.
+export const NAV_SERVICES = SERVICES.filter((s) => s.slug !== "aeo-geo");
 export const serviceGroups = [
-  { title: "AI Solutions", tag: "Intelligence", items: SERVICES.slice(0, 4) },
-  { title: "Build & Grow", tag: "Craft", items: SERVICES.slice(4) },
+  { title: "AI Solutions", tag: "Intelligence", items: NAV_SERVICES.slice(0, 4) },
+  { title: "Build & Grow", tag: "Craft", items: NAV_SERVICES.slice(4) },
 ];
 function ServicesDropdown({ index, itemRef, active, onHover }) {
   const [preview, setPreview] = useState(null);
   const [open, setOpen] = useState(false);
   const closeTimer = useRef(null);
   const wrapper = useRef(null);
+  const panelRef = useRef(null);
+  const [pos, setPos] = useState(null);
   const pathname = usePathname();
   const cancelClose = useCallback(() => {
     if (closeTimer.current) {
@@ -139,6 +159,7 @@ function ServicesDropdown({ index, itemRef, active, onHover }) {
   const hide = useCallback(
     (delay = 120) => {
       cancelClose();
+      setPreview(null);
       closeTimer.current = setTimeout(() => setOpen(false), delay);
     },
     [cancelClose],
@@ -153,7 +174,10 @@ function ServicesDropdown({ index, itemRef, active, onHover }) {
       if (event.key === "Escape") setOpen(false);
     };
     const onOutsidePointer = (event) => {
-      if (!wrapper.current?.contains(event.target)) setOpen(false);
+      if (
+        !wrapper.current?.contains(event.target) &&
+        !panelRef.current?.contains(event.target)
+      ) setOpen(false);
     };
     document.addEventListener("keydown", onKey);
     document.addEventListener("pointerdown", onOutsidePointer);
@@ -163,21 +187,89 @@ function ServicesDropdown({ index, itemRef, active, onHover }) {
     };
   }, [open]);
   useEffect(() => () => cancelClose(), [cancelClose]);
+
+  // The panel is portaled to <body> and positioned from live rects so it stays
+  // aligned with the navbar in both header states and throughout scrolling.
+  // The scrolled shell morphs over 0.45s, so we track it every animation frame
+  // instead of relying on scroll events alone (which stop before the morph does).
+  useEffect(() => {
+    if (!open) return;
+    let frame;
+    let last = null;
+    const update = () => {
+      const trigger = wrapper.current?.getBoundingClientRect();
+      const shellEl = wrapper.current?.closest(".nav-shell");
+      if (!trigger || !shellEl) return;
+      const shell = shellEl.getBoundingClientRect();
+      const scrolled = shellEl.classList.contains("nav-shell-scrolled");
+      // Scrolled: align to the compact pill. At rest: sit under the trigger.
+      const anchor = scrolled ? shell : trigger;
+      const top = scrolled ? shell.bottom + 4 : trigger.bottom;
+      const left = anchor.left + anchor.width / 2;
+      if (!last || last.top !== top || last.left !== left) {
+        last = { top, left };
+        setPos(last);
+      }
+      frame = requestAnimationFrame(update);
+    };
+    frame = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
+
+  // Two balanced columns mirror the reference: a raised, "primary" card and a
+  // quieter secondary card. Each row links to its service detail page.
+  const renderGroup = (items, offset, variant) => (
+    <div className={`nav-dd-panel nav-dd-panel-${variant}`}>
+      <p className="nav-dd-section">
+        {variant === "primary" ? "AI & Automation" : "Design & Growth"}
+      </p>
+      <ul role="list" onMouseLeave={() => setPreview(null)}>
+        {items.map((s, i) => {
+          const idx = offset + i;
+          const Icon = s.icon;
+          return (
+            <li key={s.slug}>
+              <Link
+                href={`/services/${s.slug}`}
+                prefetch
+                onClick={() => setOpen(false)}
+                onMouseEnter={() => setPreview(idx)}
+                onFocus={() => setPreview(idx)}
+                className={`nav-dd-row ${preview === idx ? "is-preview" : ""}`}
+              >
+                <span className="nav-dd-icon">
+                  {Icon ? <Icon size={18} strokeWidth={1.8} aria-hidden="true" /> : null}
+                </span>
+                <span className="nav-dd-copy">
+                  <span className="nav-dd-title">{s.navTitle ?? s.title}</span>
+                  <span className="nav-dd-desc">{s.tagline}</span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+
   return (
     <div
       ref={(el) => {
         wrapper.current = el;
         itemRef(el);
       }}
-      className="nav-item"
+      className="nav-item nav-item-services"
       onMouseEnter={show}
       onMouseLeave={() => hide()}
       onFocus={show}
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) hide(0);
+        if (
+          !event.currentTarget.contains(event.relatedTarget) &&
+          !panelRef.current?.contains(event.relatedTarget)
+        ) hide(0);
       }}
     >
-      {/* The only navigable part of this menu: goes to the services listing. */}
+      {/* Goes to the full services listing; the rows below link to details. */}
       <Link
         href="/services"
         aria-expanded={open}
@@ -188,34 +280,27 @@ function ServicesDropdown({ index, itemRef, active, onHover }) {
         <ChevronRight className="nav-chevron" strokeWidth={2} aria-hidden="true" />
       </Link>
 
-      <div id="services-menu" className={`nav-dropdown ${open ? "is-open" : ""}`}>
-        <div className="nav-dropdown-bridge" aria-hidden="true" />
-        <div className="nav-dropdown-surface">
-          <ul role="list" onMouseLeave={() => setPreview(null)}>
-            {SERVICES.map((s, idx) => {
-              const Icon = s.icon;
-              return (
-                <li key={s.slug}>
-                  {/* Static preview row: intentionally not a link, so it
-                      never navigates. Only the "Services" nav item does. */}
-                  <div
-                    onMouseEnter={() => setPreview(idx)}
-                    className={`nav-dd-row ${preview === idx ? "is-preview" : ""}`}
-                  >
-                    <span className="nav-dd-icon">
-                      <Icon strokeWidth={1.8} aria-hidden="true" />
-                    </span>
-                    <span className="nav-dd-copy">
-                      <span className="nav-dd-title">{s.title}</span>
-                      <span className="nav-dd-desc">{s.tagline}</span>
-                    </span>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+      {open &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={panelRef}
+            id="services-menu"
+            className="nav-dropdown nav-dropdown-portal is-open"
+            style={{ top: pos?.top ?? 0, left: pos?.left ?? 0 }}
+            onMouseEnter={cancelClose}
+            onMouseLeave={() => hide()}
+          >
+            <div className="nav-dropdown-bridge" aria-hidden="true" />
+            <div className="nav-dropdown-panel">
+              <div className="nav-dropdown-grid">
+                {renderGroup(NAV_SERVICES.slice(0, 4), 0, "primary")}
+                {renderGroup(NAV_SERVICES.slice(4), 4, "secondary")}
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
@@ -261,7 +346,7 @@ export function SiteHeader() {
   }, [menu]);
   // The inline nav only exists from lg up, so drop the sheet when it appears.
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
+    const mq = window.matchMedia("(min-width: 1024px)");
     const onChange = (event) => {
       if (event.matches) setMenu(false);
     };
@@ -308,7 +393,7 @@ export function SiteHeader() {
   }, [placePill]);
   return (
     <header
-      className={`nav-header inset-x-0 top-0 z-50 md:top-6 ${scrolled ? "nav-header-scrolled fixed" : "absolute"} ${menu ? "nav-header-menu-open" : ""}`}
+      className={`nav-header inset-x-0 top-0 z-50 lg:top-6 ${scrolled ? "nav-header-scrolled fixed" : "absolute"} ${menu ? "nav-header-menu-open" : ""}`}
     >
       <div className={`nav-shell ${scrolled ? "nav-shell-scrolled" : ""}`}>
         <Link href="/" aria-label="Ideaboat home" className="nav-logo">
@@ -417,27 +502,32 @@ export function SiteHeader() {
                   className={`nav-mobile-services ${servicesOpen ? "is-open" : ""}`}
                 >
                   <div className="nav-mobile-services-inner">
-                    <ul role="list">
-                      {SERVICES.map((s) => {
-                        const Icon = s.icon;
-                        return (
-                          <li key={s.slug}>
-                            <Link
-                              href={`/services/${s.slug}`}
-                              prefetch
-                              onClick={() => setMenu(false)}
-                              className="nav-mobile-service"
-                            >
-                              <span className="nav-dd-icon">
-                                <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
-                              </span>
-                              <span className="nav-mobile-service-title">{s.title}</span>
-                              <ChevronRight className="size-4 opacity-40" aria-hidden="true" />
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                    {serviceGroups.map((group) => (
+                      <div className="nav-mobile-service-group" key={group.title}>
+                        <p className="nav-mobile-service-label">{group.title}</p>
+                        <ul role="list">
+                          {group.items.map((s) => {
+                            const Icon = s.icon;
+                            return (
+                            <li key={s.slug}>
+                              <Link
+                                href={`/services/${s.slug}`}
+                                prefetch
+                                onClick={() => setMenu(false)}
+                                className="nav-mobile-service"
+                              >
+                                <span className="nav-dd-icon">
+                                  {Icon ? <Icon size={18} strokeWidth={1.8} aria-hidden="true" /> : null}
+                                </span>
+                                <span className="nav-mobile-service-title">{s.navTitle ?? s.title}</span>
+                                <ChevronRight className="size-4 opacity-40" aria-hidden="true" />
+                              </Link>
+                            </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -474,13 +564,12 @@ export function FooterWordmark() {
   const followPointer = (event) => {
     if (event.pointerType === "touch") return;
     const bounds = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty(
-      "--glow-x",
-      `${((event.clientX - bounds.left) / bounds.width) * 100}%`,
-    );
+    const art = event.currentTarget;
+    art.style.setProperty("--glow-x", `${((event.clientX - bounds.left) / bounds.width) * 100}%`);
+    art.style.setProperty("--glow-y", `${((event.clientY - bounds.top) / bounds.height) * 100}%`);
   };
   return (
-    <div className="footer-wordmark mx-auto w-full max-w-6xl px-3 pb-4 pt-16 md:px-6 md:pt-24">
+    <div className="footer-wordmark page-container pb-4 pt-16 md:pt-24">
       <svg className="absolute h-0 w-0" aria-hidden="true" focusable="false">
         <filter
           id="footer-wordmark-stroke"
@@ -522,18 +611,27 @@ export function FooterWordmark() {
     </div>
   );
 }
+const SOCIAL_ICONS = { LinkedIn: Linkedin, Facebook, Instagram };
 export function SiteFooter() {
   const linkCls = "font-medium text-foreground transition hover:text-primary";
-  const headCls = "text-xs uppercase tracking-[0.12em] text-muted-foreground";
+  const headCls = "footer-head text-xs uppercase tracking-[0.12em] text-muted-foreground";
   return (
     <footer className="site-footer overflow-hidden border-t bg-card">
       <FooterWordmark />
-      <div className="mx-auto grid max-w-[1240px] gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.3fr_1.3fr]">
+      <div className="page-container grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.3fr_1.3fr]">
         <div>
           <img src={logoAsset.src} alt="Ideaboat" className="h-5 w-auto" />
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
             Ideas that sail brands forward.
           </p>
+          <address className="footer-address mt-6 not-italic text-sm leading-relaxed text-muted-foreground">
+            <span className="footer-address-label block">Studio</span>
+            {siteConfig.address.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </address>
         </div>
         <div>
           <p className={headCls}>Company</p>
@@ -562,37 +660,70 @@ export function SiteFooter() {
           </div>
         ))}
       </div>
-      <p className="border-t py-7 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Ideaboat. All rights reserved.
-      </p>
+
+      {/* Connect strip: real contact routes and socials, on one hairline. */}
+      <div className="page-container footer-connect">
+        <div className="footer-connect-group">
+          <p className={headCls}>Get in touch</p>
+          <div className="footer-contact-list">
+            <a href={`mailto:${siteConfig.email}`} className="footer-contact">
+              <Mail size={15} strokeWidth={1.8} aria-hidden="true" />
+              <span>{siteConfig.email}</span>
+            </a>
+            <a href={siteConfig.phoneHref} className="footer-contact">
+              <Phone size={15} strokeWidth={1.8} aria-hidden="true" />
+              <span>{siteConfig.phoneDisplay}</span>
+            </a>
+          </div>
+        </div>
+        <div className="footer-connect-group footer-connect-group-right">
+          <p className={headCls}>Follow along</p>
+          <div className="footer-socials">
+            {siteConfig.socials.map((social) => {
+              const Icon = SOCIAL_ICONS[social.platform];
+              return (
+                <a
+                  key={social.platform}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="footer-social"
+                >
+                  {Icon ? <Icon size={16} strokeWidth={1.8} aria-hidden="true" /> : null}
+                </a>
+              );
+            })}
+            <Link
+              href="/book-a-discovery-call"
+              className="footer-book surface-sheen group inline-flex items-center gap-2"
+            >
+              Book a call
+              <ArrowUpRight
+                className="size-3.5 transition-transform duration-200 group-hover:rotate-45"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="page-container footer-legal">
+        <p>© {new Date().getFullYear()} Ideaboat. All rights reserved.</p>
+        <nav aria-label="Legal" className="footer-legal-links">
+          <Link href="/privacy-policy">Privacy Policy</Link>
+          <Link href="/terms-of-service">Terms of Service</Link>
+        </nav>
+      </div>
     </footer>
   );
 }
-export function CTASection({
-  title = "Have an idea in mind?",
-  text = "Let's talk about where AI and automation can create real value for your business.",
-}) {
-  return (
-    <Reveal className="relative overflow-hidden rounded-[28px] bg-primary p-10 text-primary-foreground md:p-14">
-      <div className="texture-grain pointer-events-none absolute inset-0 opacity-50 mix-blend-overlay" />
-      <div className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-primary-foreground/10 blur-2xl" />
-      <div className="spin-slow absolute -right-20 -top-20 size-72 rounded-full border border-dashed border-primary-foreground/40" />
-      <div className="relative z-10 flex flex-wrap items-end justify-between gap-8">
-        <div>
-          <h2 className="max-w-xl font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
-            {title}
-          </h2>
-          <p className="mt-4 max-w-md text-sm opacity-80 md:text-base">{text}</p>
-        </div>
-        <Link
-          href="/book-a-discovery-call"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm text-background transition hover:bg-foreground/85"
-        >
-          Book a call <ArrowUpRight className="size-4" />
-        </Link>
-      </div>
-    </Reveal>
-  );
+/**
+ * Backwards-compatible name for the shared closing CTA. Existing callers can
+ * keep passing `title` and `text`; the local copy now lives in one component.
+ */
+export function CTASection({ title, text, ...rest }) {
+  return <CallToAction title={title} text={text} {...rest} />;
 }
 /* ---------- shared enquiry form (contact / discovery call) ---------- */
 export const SUBJECTS = [
@@ -603,7 +734,7 @@ export const SUBJECTS = [
   "Support & Monitoring",
 ];
 const inputCls =
-  "w-full rounded-xl border bg-card px-4 py-3 text-sm outline-none transition placeholder:text-muted-foreground/60 focus:border-primary";
+  "w-full rounded-2xl border bg-card px-4 py-3.5 text-sm outline-none transition placeholder:text-muted-foreground/60 focus:border-primary";
 export function EnquiryForm({ heading, subtext }) {
   const [sent, setSent] = useState(false);
   return (
@@ -659,7 +790,7 @@ export function EnquiryForm({ heading, subtext }) {
           </p>
           <button
             type="submit"
-            className="group inline-flex w-fit items-center gap-2 rounded-xl bg-primary px-8 py-3.5 font-medium text-primary-foreground transition hover:bg-primary/90 sm:col-span-2"
+            className="group inline-flex w-fit items-center gap-2 rounded-full bg-primary px-8 py-3.5 font-medium text-primary-foreground transition hover:bg-primary/90 sm:col-span-2"
           >
             Send message <ArrowUpRight className="size-5 transition group-hover:rotate-45" />
           </button>

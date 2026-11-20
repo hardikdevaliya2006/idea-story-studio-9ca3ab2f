@@ -1,3 +1,7 @@
+"use client";
+import { useState } from "react";
+import { Pause, Play } from "lucide-react";
+
 const testimonials = [
   {
     q: "Ideaboat turned our business around in just three months. Leads doubled and our brand finally feels premium.",
@@ -36,28 +40,75 @@ const testimonials = [
     stat: "-46% cost per lead",
   },
 ];
+
+const TONES = testimonials.map((_, i) => `tm-tone-${i}`);
+const initials = (name) =>
+  name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .slice(0, 2);
+
+/**
+ * The original testimonial marquee, polished in place: same loop, same copy,
+ * same hover-to-focus. The card now has a clear reading order - quote mark and
+ * result on one line, the words in the middle, a named author at the foot - and
+ * the edges fade with a mask instead of two opaque slabs. A small control
+ * gives the loop a real pause state.
+ */
 export function TestimonialCarousel() {
+  const [paused, setPaused] = useState(false);
+  const [hovering, setHovering] = useState(false);
   const items = [...testimonials, ...testimonials];
+  const isPaused = paused || hovering;
+
   return (
-    <div className="group/mq relative overflow-hidden py-4">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
-      <div className="marquee group/row group-hover/mq:[animation-play-state:paused]">
-        {items.map((t, i) => (
-          <article
-            key={i}
-            className="mr-4 flex w-[82vw] max-w-[380px] shrink-0 flex-col justify-between rounded-2xl border border-foreground/10 bg-card p-6 transition duration-500 group-hover/row:opacity-50 group-hover/row:blur-[4px] hover:!opacity-100 hover:!blur-none hover:border-foreground/25 sm:mr-5 sm:w-[380px]"
-          >
-            <span className="font-display text-4xl leading-none text-primary">“</span>
-            <p className="mt-2 font-display text-lg leading-snug text-foreground">{t.q}</p>
-            <div className="mt-8">
-              <h3 className="font-display text-base font-semibold">{t.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t.role} <span className="mx-1">•</span> {t.stat}
-              </p>
-            </div>
-          </article>
-        ))}
+    <div className="tm-wrap">
+      <div className="tm-toolbar">
+        <button
+          type="button"
+          className="tm-toggle"
+          aria-pressed={paused}
+          aria-label={paused ? "Resume testimonials" : "Pause testimonials"}
+          onClick={() => setPaused((value) => !value)}
+        >
+          {paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+          <span>{paused ? "Play" : "Pause"}</span>
+        </button>
+      </div>
+
+      <div
+        className="tm-viewport"
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
+      >
+        <div
+          className="marquee tm-marquee"
+          style={{ animationPlayState: isPaused ? "paused" : "running" }}
+        >
+          {items.map((t, i) => (
+            <article key={i} className="tm-card" aria-hidden={i >= testimonials.length}>
+              <div className="tm-card-top">
+                <span className="tm-quote-mark" aria-hidden="true">
+                  “
+                </span>
+                <span className="tm-stat">{t.stat}</span>
+              </div>
+
+              <p className="tm-quote">{t.q}</p>
+
+              <div className="tm-author">
+                <span className={`tm-avatar ${TONES[i % testimonials.length]}`} aria-hidden="true">
+                  {initials(t.name)}
+                </span>
+                <div className="tm-author-copy">
+                  <h3 className="tm-name">{t.name}</h3>
+                  <p className="tm-role">{t.role}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </div>
   );

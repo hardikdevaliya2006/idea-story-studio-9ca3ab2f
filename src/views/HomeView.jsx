@@ -1,11 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Plus, Mail, Cpu, Trophy, HeartHandshake, Users } from "lucide-react";
-import svcWebDesignImage from "@/assets/svc-web-design.jpg";
-import svcAppImage from "@/assets/svc-app-dev.jpg";
-import svcWebDevImage from "@/assets/svc-web-dev.jpg";
-import svcMarketingImage from "@/assets/svc-marketing.jpg";
 import { SERVICES } from "@/data/services";
 import brand1Image from "@/assets/brand-1.png";
 import brand2Image from "@/assets/brand-2.png";
@@ -13,30 +9,47 @@ import brand3Image from "@/assets/brand-3.png";
 import brand4Image from "@/assets/brand-4.png";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 import { HeroTechIcons } from "@/components/HeroTechIcons";
-import { Reveal, SpotlightCard, Line, useReveal } from "@/components/site-chrome";
+import ContactVoyageScene from "@/components/ContactVoyageScene";
+import { Reveal, Line, useReveal, useTheme } from "@/components/site-chrome";
 import { HOME_FAQS } from "@/data/faqs";
-const svcWebDesign = svcWebDesignImage;
-const svcApp = svcAppImage;
-const svcWebDev = svcWebDevImage;
-const svcMarketing = svcMarketingImage;
+// Service artwork lives in /public/services with a light and dark rendering
+// of each discipline. The paths are percent-encoded because the supplied
+// filenames contain spaces (and a couple of typos we keep for fidelity).
+const SERVICE_IMAGES = {
+  app: {
+    light: "/services/app%20development%20ligth%20.png",
+    dark: "/services/app%20develoment%20dark.png",
+  },
+  web: {
+    light: "/services/Web%20desing%20Light%20.png",
+    dark: "/services/webdesing%20dark.png",
+  },
+  branding: {
+    light: "/services/branding%20and%20desing%20light%20.png",
+    dark: "/services/branding%20and%20desing%20dark.png",
+  },
+  marketing: {
+    light: "/services/digital%20marketing%20light%20.png",
+    dark: "/services/digital%20marketing%20dark.png",
+  },
+};
 const brand1 = brand1Image;
 const brand2 = brand2Image;
 const brand3 = brand3Image;
 const brand4 = brand4Image;
-function SectionTitle({ title, action, actionHref }) {
+function SectionTitle({ eyebrow, title, action, actionHref }) {
   return (
-    <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-6 md:mb-12">
-      <div>
-        <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
-          {title}
-        </h2>
+    <Reveal className="section-head">
+      <div className="section-head-copy">
+        {eyebrow && <p className="section-eyebrow">{eyebrow}</p>}
+        <h2 className="section-title">{title}</h2>
       </div>
       {action && (
-        <Link
-          href={actionHref ?? "/services"}
-          className="group inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition hover:bg-foreground hover:text-background"
-        >
-          {action} <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
+        <Link href={actionHref ?? "/services"} className="section-action">
+          <span>{action}</span>
+          <span className="section-action-icon" aria-hidden="true">
+            <ArrowUpRight className="size-4" />
+          </span>
         </Link>
       )}
     </Reveal>
@@ -72,66 +85,217 @@ const services = [
   ["03", "Web Development", "₹40,000", "/services/website-development"],
   ["04", "Digital Marketing", "₹15,000/mo", "/services/social-media"],
 ];
-const serviceImages = [svcWebDesign.src, svcApp.src, svcWebDev.src, svcMarketing.src];
+const serviceImages = [
+  SERVICE_IMAGES.web,
+  SERVICE_IMAGES.app,
+  SERVICE_IMAGES.web,
+  SERVICE_IMAGES.marketing,
+];
 const works = [
   [
     "Zenith Fitness App",
     "Mobile App Development",
     "6 months",
     ["React Native", "Firebase", "Redux"],
-    svcApp.src,
+    SERVICE_IMAGES.app,
   ],
   [
     "Aura E-commerce",
     "Web Design & Development",
     "3 months",
     ["WordPress", "PHP", "CSS3"],
-    svcWebDesign.src,
+    SERVICE_IMAGES.branding,
   ],
   [
     "Nova SaaS Platform",
     "Web Development",
     "4 months",
     ["Next.js", "Node", "Postgres"],
-    svcWebDev.src,
+    SERVICE_IMAGES.web,
   ],
   [
     "Pulse Growth Campaign",
     "Digital Marketing",
     "Ongoing",
     ["Meta Ads", "Google Ads", "SEO"],
-    svcMarketing.src,
+    SERVICE_IMAGES.marketing,
   ],
 ];
 function ServicesList() {
+  const { theme } = useTheme();
   const [active, setActive] = useState(-1);
   const boxRef = useRef(null);
-  const previewRef = useRef(null);
+  const posRef = useRef(null);
+  const cardRef = useRef(null);
+  const prevActive = useRef(-1);
+  const pointer = useRef({ x: 0, y: 0, t: 0 });
+  const motion = useRef({
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    tx: 0,
+    ty: 0,
+    tiltX: 0,
+    tiltY: 0,
+    targetTiltX: 0,
+    targetTiltY: 0,
+    scale: 0.82,
+    targetScale: 0.82,
+    lastMove: 0,
+    running: false,
+    raf: 0,
+  });
+
+  // One rAF loop eases the card's position, tilt and scale together. A fast
+  // pointer glide reads as one continuous motion instead of a series of
+  // restarted CSS transitions, and the loop parks itself once it has settled.
+  const tick = useCallback(() => {
+    const s = motion.current;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ease = reduce ? 1 : 0.16;
+    // Tilt is driven by pointer speed and returns to flat once the pointer
+    // stops, so it reads as momentum rather than a permanent skew.
+    if (performance.now() - s.lastMove > 90) {
+      s.targetTiltX = 0;
+      s.targetTiltY = 0;
+    }
+    const stiffness = reduce ? 1 : 0.13;
+    const damping = reduce ? 0 : 0.74;
+    s.vx = (s.vx + (s.tx - s.x) * stiffness) * damping;
+    s.vy = (s.vy + (s.ty - s.y) * stiffness) * damping;
+    s.x += s.vx;
+    s.y += s.vy;
+    s.tiltX += (s.targetTiltX - s.tiltX) * ease;
+    s.tiltY += (s.targetTiltY - s.tiltY) * ease;
+    s.scale += (s.targetScale - s.scale) * ease;
+    if (posRef.current) {
+      posRef.current.style.transform = `translate3d(${s.x.toFixed(2)}px, ${s.y.toFixed(2)}px, 0)`;
+    }
+    if (cardRef.current) {
+      cardRef.current.style.transform =
+        `perspective(1000px) rotateX(${s.tiltX.toFixed(2)}deg) ` +
+        `rotateY(${s.tiltY.toFixed(2)}deg) rotateZ(-4deg) scale(${s.scale.toFixed(3)})`;
+    }
+    const settled =
+      Math.abs(s.tx - s.x) < 0.15 &&
+      Math.abs(s.ty - s.y) < 0.15 &&
+      Math.abs(s.vx) < 0.05 &&
+      Math.abs(s.vy) < 0.05 &&
+      Math.abs(s.targetTiltX - s.tiltX) < 0.1 &&
+      Math.abs(s.targetTiltY - s.tiltY) < 0.1 &&
+      Math.abs(s.targetScale - s.scale) < 0.002;
+    if (settled) {
+      s.running = false;
+      return;
+    }
+    s.raf = requestAnimationFrame(tick);
+  }, []);
+
+  const wake = useCallback(() => {
+    const s = motion.current;
+    if (s.running) return;
+    s.running = true;
+    s.raf = requestAnimationFrame(tick);
+  }, [tick]);
+
+  useEffect(() => {
+    const s = motion.current;
+    return () => {
+      cancelAnimationFrame(s.raf);
+      // StrictMode replays effects in dev: clear the flag too, or wake()
+      // believes the loop is still alive and never schedules another frame.
+      s.running = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const s = motion.current;
+    s.targetScale = active >= 0 ? 1.03 : 0.82;
+    // Appear at the cursor instead of gliding in from the list's top-left.
+    if (active >= 0 && prevActive.current < 0) {
+      s.x = s.tx;
+      s.y = s.ty;
+      s.vx = 0;
+      s.vy = 0;
+      s.tiltX = 0;
+      s.tiltY = 0;
+    }
+    if (active < 0) {
+      s.targetTiltX = 0;
+      s.targetTiltY = 0;
+    }
+    prevActive.current = active;
+    wake();
+  }, [active, wake]);
+
   const move = (e) => {
-    const r = boxRef.current?.getBoundingClientRect();
-    if (!r || !previewRef.current) return;
-    previewRef.current.style.transform = `translate(${e.clientX - r.left - 160}px, ${e.clientY - r.top - 120}px)`;
+    const box = boxRef.current;
+    const card = cardRef.current;
+    if (!box || !card) return;
+    const r = box.getBoundingClientRect();
+    const w = card.offsetWidth || 256;
+    const h = card.offsetHeight || 192;
+    const s = motion.current;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // The row under the pointer is the magnet: pull the card's vertical
+    // target mostly to that row's centre, with the cursor adding a small
+    // offset, so it snaps row to row instead of merely trailing.
+    const link = e.target instanceof Element ? e.target.closest("a[href^='/services/']") : null;
+    let targetY = e.clientY - r.top - h / 2;
+    if (link) {
+      const row = link.getBoundingClientRect();
+      targetY = targetY * 0.35 + (row.top + row.height / 2 - r.top - h / 2) * 0.65;
+      if (!reduce) {
+        const rel = (e.clientX - row.left) / row.width - 0.5;
+        const title = link.querySelector(".service-mag-title");
+        if (title) title.style.setProperty("--mag-x", `${(rel * 16).toFixed(1)}px`);
+      }
+    }
+    // A gentle pull toward the list's centre makes the card feel drawn in.
+    const centrePull = (r.width / 2 - (e.clientX - r.left)) * 0.12;
+    s.tx = Math.max(0, Math.min(e.clientX - r.left - w / 2 + centrePull, r.width - w));
+    s.ty = Math.max(0, Math.min(targetY, r.height - h));
+    const now = performance.now();
+    const prev = pointer.current;
+    const dt = Math.max(now - prev.t, 8);
+    const vx = (e.clientX - prev.x) / dt;
+    const vy = (e.clientY - prev.y) / dt;
+    pointer.current = { x: e.clientX, y: e.clientY, t: now };
+    s.lastMove = now;
+    if (!reduce) {
+      s.targetTiltY = Math.max(-10, Math.min(10, vx * 5.5));
+      s.targetTiltX = Math.max(-8, Math.min(8, -vy * 5.5));
+    }
+    wake();
   };
+
   return (
     <div
       ref={boxRef}
       className="relative divide-y border-y"
       onPointerMove={move}
-      onPointerLeave={() => setActive(-1)}
+      onPointerLeave={() => {
+        setActive(-1);
+        boxRef.current?.querySelectorAll(".service-mag-title").forEach((title) => {
+          title.style.setProperty("--mag-x", "0px");
+        });
+      }}
     >
       <div
-        ref={previewRef}
+        ref={posRef}
         className="pointer-events-none absolute left-0 top-0 z-10 hidden md:block"
-        style={{ transition: "transform 0.25s cubic-bezier(.2,.8,.2,1)" }}
+        style={{ willChange: "transform" }}
       >
         <div
-          className={`relative h-60 w-80 overflow-hidden rounded-xl border border-primary/30 transition-all duration-500 ${active >= 0 ? "scale-100 opacity-100" : "scale-75 opacity-0"}`}
-          style={{ rotate: active >= 0 ? "-4deg" : "0deg" }}
+          ref={cardRef}
+          className={`relative h-48 w-64 overflow-hidden rounded-2xl border border-primary/30 transition-opacity duration-500 lg:h-60 lg:w-80 ${active >= 0 ? "opacity-100" : "opacity-0"}`}
+          style={{ willChange: "transform" }}
         >
-          {serviceImages.map((src, k) => (
+          {serviceImages.map((pair, k) => (
             <img
               key={k}
-              src={src}
+              src={theme === "light" ? pair.light : pair.dark}
               alt=""
               width={944}
               height={704}
@@ -146,12 +310,26 @@ function ServicesList() {
           <Link
             href={href}
             onPointerEnter={() => setActive(i)}
-            className="flex items-center justify-between gap-6 py-7"
+            className="group flex items-center justify-between gap-6 py-6"
           >
-            <span className="text-sm text-muted-foreground">{n}</span>
-            <span className="flex-1 font-display text-xl font-semibold md:text-3xl">{t}</span>
-            <span className="hidden text-sm text-muted-foreground md:block">Starts from {p}</span>
-            <ArrowUpRight className="size-6" />
+            <span
+              className={`font-mono text-xs tabular-nums transition-colors duration-300 ${active === i ? "text-primary" : "text-muted-foreground"}`}
+            >
+              {n}
+            </span>
+            <span
+              className={`service-mag-title flex-1 font-display text-xl font-semibold tracking-tight transition-all duration-500 md:text-3xl ${active === i ? "text-primary" : active >= 0 ? "text-foreground/60" : "text-foreground"}`}
+            >
+              {t}
+            </span>
+            <span
+              className={`hidden whitespace-nowrap text-sm transition-colors duration-300 md:block ${active === i ? "text-foreground" : "text-muted-foreground"}`}
+            >
+              Starts from {p}
+            </span>
+            <ArrowUpRight
+              className={`size-6 shrink-0 transition-all duration-300 ${active === i ? "-translate-y-0.5 translate-x-0.5 text-primary" : "text-muted-foreground"}`}
+            />
           </Link>
         </Reveal>
       ))}
@@ -159,88 +337,106 @@ function ServicesList() {
   );
 }
 function WorksStack() {
+  const { theme } = useTheme();
   const refs = useRef([]);
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 1024px)");
-    const onScroll = () => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       refs.current.forEach((el, i) => {
         if (!el) return;
-        if (!desktop.matches) {
-          el.style.transform = "";
-          el.style.filter = "";
+        if (!desktop.matches || reduce.matches) {
+          el.style.removeProperty("--stack");
           return;
         }
         const next = refs.current[i + 1];
-        let p = 0;
-        if (next) {
-          const a = el.getBoundingClientRect().top;
-          const b = next.getBoundingClientRect().top;
-          p = Math.min(Math.max(1 - (b - a) / window.innerHeight, 0), 1);
+        if (!next) {
+          el.style.setProperty("--stack", "0");
+          return;
         }
-        el.style.transform = `scale(${1 - p * 0.08})`;
-        el.style.filter = `brightness(${1 - p * 0.45})`;
+        const a = el.getBoundingClientRect().top;
+        const b = next.getBoundingClientRect().top;
+        const height = el.offsetHeight || 1;
+        // 0 while the next card is still fully below, 1 once it has covered
+        // this one. The old viewport-based measure dimmed a card at rest.
+        const p = Math.min(Math.max((a + height - b) / height, 0), 1);
+        el.style.setProperty("--stack", p.toFixed(3));
       });
     };
-    onScroll();
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
     };
   }, []);
   return (
     <div className="relative">
-      {works.map(([t, c, d, tech, img], i) => (
-        <div key={t} className="pb-6 lg:sticky lg:pb-8" style={{ top: `${96 + i * 24}px` }}>
+      {works.map(([t, c, d, tech, palette], i) => (
+        <div key={t} className="pb-6 lg:sticky lg:pb-8" style={{ top: `${96 + i * 40}px` }}>
           <div
             ref={(el) => {
               refs.current[i] = el;
             }}
-            className="grid origin-top gap-4 rounded-xl border bg-card p-4 will-change-transform lg:grid-cols-[1fr_1.4fr_1fr]"
+            className="work-card grid gap-4 rounded-2xl border bg-card p-4 sm:gap-6 sm:p-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.5fr)_minmax(0,0.9fr)]"
           >
-            <div className="flex flex-col justify-between p-4">
+            <div className="flex min-w-0 flex-col justify-between gap-6 p-1 sm:p-2">
               <div>
-                <span className="font-display text-xs tracking-widest text-primary">
+                <span className="font-mono text-[11px] tracking-widest text-primary tabular-nums">
                   0{i + 1} / 0{works.length}
                 </span>
-                <h3 className="mt-3 font-display text-xl font-semibold">{t}</h3>
-                <p className="mt-3 text-sm text-muted-foreground">Category — {c}</p>
-                <p className="text-sm text-muted-foreground">Time taken — {d}</p>
+                <h3 className="mt-3 font-display text-xl font-semibold tracking-tight sm:text-2xl">
+                  {t}
+                </h3>
+                <div className="mt-4 space-y-1.5 text-[13px] leading-relaxed text-muted-foreground">
+                  <p>Category - {c}</p>
+                  <p>Time taken - {d}</p>
+                </div>
               </div>
-              <span className="mt-6 inline-flex items-center gap-2 text-sm">
-                Details <ArrowUpRight className="size-4" />
-              </span>
+              <div className="work-foot">
+                <span className="work-details inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary">
+                  Details <ArrowUpRight className="size-4" />
+                </span>
+              </div>
             </div>
-            <div className="group overflow-hidden rounded-xl">
+            <div className="group/media min-w-0 overflow-hidden rounded-xl">
               <img
-                src={img}
+                src={theme === "light" ? palette.light : palette.dark}
                 alt={t}
                 width={944}
                 height={704}
                 loading="lazy"
-                className="aspect-video size-full object-cover transition duration-700"
+                className="aspect-[16/10] size-full object-cover transition duration-700 group-hover/media:scale-[1.04]"
               />
             </div>
-            <div className="flex flex-col justify-between gap-6 p-4">
+            <div className="flex min-w-0 flex-col justify-between gap-6 p-1 sm:p-2">
               <div>
-                <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
                   Technologies
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {tech.map((x) => (
-                    <span key={x} className="rounded-full border px-3 py-1 text-xs">
+                    <span key={x} className="rounded-full border px-3 py-1 text-xs text-muted-foreground">
                       {x}
                     </span>
                   ))}
                 </div>
               </div>
-              <a
-                href="#contact"
-                className="rounded-full bg-primary py-3 text-center text-sm text-primary-foreground transition hover:opacity-90"
-              >
-                Book a call
-              </a>
+              <div className="work-foot">
+                <a
+                  href="#contact"
+                  className="work-cta inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition"
+                >
+                  Book a call <ArrowUpRight className="size-4" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -263,7 +459,14 @@ function Hero() {
   const measureRef = useRef(null);
   const [boxW, setBoxW] = useState(null);
   useEffect(() => {
-    if (measureRef.current) setBoxW(measureRef.current.offsetWidth);
+    const measure = () => {
+      if (measureRef.current) setBoxW(measureRef.current.offsetWidth);
+    };
+    measure();
+    // The box width depends on the font size, which jumps at the sm/lg
+    // breakpoints, so re-measure on resize instead of waiting for the next word.
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, [i]);
   useEffect(() => {
     const t = setInterval(() => setI((x) => (x + 1) % words.length), 2200);
@@ -272,14 +475,14 @@ function Hero() {
   // Three core offers, straight from the services data so the copy can't drift.
   const features = [SERVICES[0], SERVICES[5], SERVICES[6]];
   return (
-    <section className="hero-soft relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 pb-16 pt-32 text-center sm:px-6 sm:pb-20 sm:pt-36">
+    <section className="hero-soft relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-[var(--site-gutter)] pb-16 pt-32 text-center sm:pb-20 sm:pt-36">
       {/* Architectural frame + ambient glows, borrowed from todesktop's hero. */}
       <span className="hero-frame hero-frame-a" aria-hidden="true" />
       <span className="hero-frame hero-frame-b" aria-hidden="true" />
       <span className="hero-aura" aria-hidden="true" />
       <HeroTechIcons />
 
-      <h1 className="relative z-10 mt-6 max-w-6xl font-display text-4xl font-normal leading-[1.08] tracking-tight sm:text-5xl lg:text-7xl">
+      <h1 className="relative z-10 mt-6 max-w-[var(--site-max)] font-display text-4xl font-normal leading-[1.08] tracking-tight sm:text-5xl lg:text-7xl">
         <Line delay={150}>We Help</Line>
         <Line delay={320}>
           <span
@@ -403,125 +606,96 @@ export default function Index() {
       {/* HERO - Sheryians-style centered */}
       <Hero />
 
-      {/* BENTO STATS */}
-      <section className="mx-auto max-w-6xl px-6">
-        <Reveal className="glass grid grid-cols-2 overflow-hidden rounded-[28px] md:grid-cols-[1fr_1fr_1.6fr]">
-          {[
-            ["743k", "Followers across socials", "+18% this year"],
-            ["280+", "Projects delivered", "Across 12 industries"],
-          ].map(([v, l, s], i) => (
-            <div
-              key={l}
-              className={`group relative flex flex-col justify-between gap-6 border-b border-r p-5 sm:p-8 md:gap-10 transition-colors duration-500 hover:bg-foreground/5 border-foreground/10 md:border-b-0 md:border-r ${i === 1 ? "border-r-0 md:border-r" : ""}`}
-            >
-              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                {l}
-              </p>
-              <div>
-                <p className="glass-text font-display text-3xl font-semibold tracking-tight transition-colors sm:text-5xl duration-500 group-hover:text-primary">
-                  {v}
-                </p>
-                <p className="mt-2 text-xs text-muted-foreground">{s}</p>
+      {/* PROOF BAND — the headline metrics, the service ticker and the next
+          step share one ruled surface instead of three floating strips. */}
+      <section className="page-container pt-10 md:pt-14" aria-label="Ideaboat at a glance">
+        <Reveal className="proof-band">
+          <div className="proof-lead">
+            {[
+              ["743k", "Followers across socials", "+18% this year"],
+              ["280+", "Projects delivered", "Across 12 industries"],
+            ].map(([v, l, s]) => (
+              <div className="proof-metric group" key={l}>
+                <p className="proof-label">{l}</p>
+                <div className="proof-metric-foot">
+                  <p className="glass-text font-display text-3xl font-semibold tracking-tight sm:text-[2.75rem]">
+                    {v}
+                  </p>
+                  <p className="proof-sub">{s}</p>
+                </div>
+                <span className="proof-sweep" aria-hidden="true" />
               </div>
-              <span className="absolute inset-x-8 bottom-0 h-px origin-left scale-x-0 bg-primary transition-transform duration-700 group-hover:scale-x-100" />
-            </div>
-          ))}
-          <a
-            href="#contact"
-            className="group relative col-span-2 flex min-h-56 flex-col justify-between overflow-hidden p-6 sm:p-8 md:col-span-1"
-          >
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-accent/20 transition-opacity duration-700 group-hover:opacity-0" />
-            <div className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-primary transition-transform duration-700 ease-[cubic-bezier(.7,0,.2,1)] group-hover:scale-y-100" />
-            <div className="relative flex items-end justify-between gap-6 transition-colors duration-500 group-hover:text-primary-foreground">
-              <div>
-                <p className="font-display text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl">
-                  Start your
-                  <br />
-                  project
-                </p>
-                <p className="mt-3 text-sm opacity-70">Reply within 24 hours.</p>
-              </div>
-              <span className="grid size-14 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition duration-500 group-hover:rotate-45 group-hover:bg-primary-foreground group-hover:text-primary">
-                <ArrowUpRight className="size-6" />
+            ))}
+            <a href="#contact" className="proof-cta group">
+              <span className="proof-cta-wash" aria-hidden="true" />
+              <span className="proof-cta-fill" aria-hidden="true" />
+              <span className="proof-cta-body">
+                <span>
+                  <span className="proof-cta-title">Start your project</span>
+                  <span className="proof-cta-sub">Reply within 24 hours.</span>
+                </span>
+                <span className="proof-cta-icon">
+                  <ArrowUpRight className="size-5 sm:size-6" />
+                </span>
               </span>
+            </a>
+          </div>
+
+          <div className="proof-ticker group/mq">
+            <div className="proof-marquee marquee group-hover/mq:[animation-play-state:paused]">
+              {[...marqueeItems, ...marqueeItems].map((m, i) => (
+                <span key={i} className="flex items-center">
+                  <span className="cursor-default select-none whitespace-nowrap px-6 font-display text-lg font-light tracking-tight text-muted-foreground transition-colors duration-300 hover:text-foreground sm:px-9 sm:text-xl">
+                    {m}
+                  </span>
+                  <span className="size-1 shrink-0 rounded-full bg-primary/70" />
+                </span>
+              ))}
             </div>
-          </a>
+          </div>
+
+          <div className="proof-facts">
+            {stats.map(([v, l], i) => (
+              <Reveal key={l} delay={i * 80} className="proof-fact group">
+                <p className="font-display text-xl font-semibold tracking-tight sm:text-2xl">{v}</p>
+                <p className="proof-label mt-1.5">{l}</p>
+                <span className="proof-sweep" aria-hidden="true" />
+              </Reveal>
+            ))}
+          </div>
         </Reveal>
       </section>
 
-      {/* MARQUEE */}
-      <div className="group/mq relative mt-20 overflow-hidden py-6 md:mt-28">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-gradient-to-r from-background to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-gradient-to-l from-background to-transparent" />
-        <div className="marquee group-hover/mq:[animation-play-state:paused]">
-          {[...marqueeItems, ...marqueeItems].map((m, i) => (
-            <span key={i} className="flex items-center">
-              <span className="cursor-default px-8 font-display text-xl font-light tracking-tight text-muted-foreground/80 transition duration-300 hover:text-foreground md:px-12 md:text-3xl">
-                {m}
-              </span>
-              <span className="size-1.5 rounded-full bg-primary/60" />
-            </span>
-          ))}
-        </div>
-      </div>
-
       <main
         id="main-content"
-        className="mx-auto max-w-6xl space-y-16 px-6 py-16 md:space-y-24 md:py-24"
+        className="page-container space-y-16 pb-16 pt-12 md:space-y-24 md:pb-24 md:pt-20"
       >
-        {/* STATS */}
-        <section className="glass grid grid-cols-2 overflow-hidden rounded-[28px] md:grid-cols-5">
-          {stats.map(([v, l], i) => (
-            <Reveal
-              key={l}
-              delay={i * 100}
-              className={`group relative border-b border-r p-5 transition-colors duration-500 border-foreground/10 last:border-r-0 hover:bg-foreground/5 sm:p-6 md:border-b-0 lg:p-8 ${i === stats.length - 1 ? "col-span-2 md:col-span-1" : ""}`}
-            >
-              <p className="glass-text font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-                {v}
-              </p>
-              <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                {l}
-              </p>
-              <span className="absolute left-0 top-0 h-px w-0 bg-primary transition-all duration-700 group-hover:w-full" />
-            </Reveal>
-          ))}
-        </section>
 
         {/* WHY */}
         <section>
-          <SectionTitle eyebrow="Why Ideaboat" title="Reasons to come aboard" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionTitle eyebrow="Why Ideaboat" title="What we bring to the table" />
+          <div className="reasons-band">
             {reasons.map(([t, d], i) => {
               const Icon = reasonIcons[i] ?? Cpu;
               return (
-                <Reveal key={t} delay={i * 120} className="h-full">
-                  <SpotlightCard className="flex h-full flex-col p-6">
-                    <div className="relative flex items-center justify-between">
-                      <span className="grid size-11 place-items-center rounded-xl border border-primary/30 bg-primary/10 text-primary transition duration-500 group-hover:bg-primary group-hover:text-primary-foreground">
-                        <Icon className="size-5" />
+                <Reveal key={t} delay={i * 120} className="reason">
+                  <div className="reason-head">
+                    <span className="reason-icon">
+                      <Icon className="size-5" strokeWidth={1.8} />
+                    </span>
+                    <span className="reason-index">0{i + 1}</span>
+                  </div>
+                  <h3 className="reason-title">{t}</h3>
+                  <p className="reason-copy">{d}</p>
+                  <div className="reason-foot">
+                    <span className="reason-rule" aria-hidden="true" />
+                    <Link href="/about" className="reason-link">
+                      Learn more
+                      <span className="reason-arrow">
+                        <ArrowUpRight className="size-3.5" />
                       </span>
-                      <span className="font-display text-xs tracking-widest text-muted-foreground">
-                        0{i + 1}
-                      </span>
-                    </div>
-                    <h3 className="relative mt-8 font-display text-lg font-semibold leading-snug">
-                      {t}
-                    </h3>
-                    <p className="relative mt-2 text-sm text-muted-foreground">{d}</p>
-                    <div className="flex-1" />
-                    <div className="relative mt-6 h-px w-full bg-border">
-                      <span className="absolute inset-y-0 left-0 w-0 bg-primary transition-all duration-700 group-hover:w-full" />
-                    </div>
-                    <Link
-                      href="/about"
-                      className="relative mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground"
-                    >
-                      Learn more <ArrowUpRight className="size-4" />
                     </Link>
-                  </SpotlightCard>
+                  </div>
                 </Reveal>
               );
             })}
@@ -531,8 +705,8 @@ export default function Index() {
         {/* SERVICES */}
         <section>
           <SectionTitle
-            eyebrow="What we do"
-            title="Our services"
+            eyebrow="Services"
+            title="What we're good at"
             action="Book a call"
             actionHref="/book-a-discovery-call"
           />
@@ -542,8 +716,8 @@ export default function Index() {
         {/* WORKS */}
         <section>
           <SectionTitle
-            eyebrow="Selected projects"
-            title="Our works"
+            eyebrow="Recent work"
+            title="Work we're proud of"
             action="All services"
             actionHref="/services"
           />
@@ -552,34 +726,34 @@ export default function Index() {
 
         {/* TESTIMONIALS */}
         <section>
-          <SectionTitle eyebrow="Kind words" title="Testimonials" />
+          <SectionTitle eyebrow="From our clients" title="Don't take our word for it" />
           <TestimonialCarousel />
         </section>
 
         {/* FAQ */}
         <section className="grid gap-10 md:grid-cols-[1fr_1.5fr] md:gap-16">
           <Reveal className="md:sticky md:top-28 md:self-start">
-            <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
-              Questions.
+            <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+              Questions we get a lot
             </h2>
-            <p className="mt-5 max-w-xs text-muted-foreground">
+            <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
               Everything you might want to know before starting your project.
             </p>
-            <div className="mt-8 max-w-sm rounded-2xl bg-muted p-5">
+            <div className="mt-7 max-w-sm rounded-2xl bg-muted p-5">
               <p className="text-sm font-semibold">Still have a question?</p>
               <p className="mt-2 text-xs text-muted-foreground">
                 Write to us and we will help you get started.
               </p>
               <Link
                 href="/contact"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <Mail className="size-3.5" />
                 Email us
               </Link>
             </div>
           </Reveal>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {HOME_FAQS.map(({ question, answer }, i) => {
               const isOpen = open === i;
               return (
@@ -587,13 +761,13 @@ export default function Index() {
                   <button
                     onClick={() => setOpen(isOpen ? -1 : i)}
                     aria-expanded={isOpen}
-                    className={`w-full rounded-2xl border px-5 py-4 text-left transition-all duration-300 ${isOpen ? "border-border bg-card" : "border-transparent bg-muted hover:bg-muted/70"}`}
+                    className={`w-full rounded-2xl border px-5 py-4 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isOpen ? "border-border bg-card" : "border-transparent bg-muted hover:bg-muted/70"}`}
                   >
                     <div className="flex items-center gap-4">
-                      <span className="font-mono text-xs text-muted-foreground">0{i + 1}</span>
-                      <span className="flex-1 font-medium">{question}</span>
+                      <span className="font-mono text-xs tabular-nums text-muted-foreground">0{i + 1}</span>
+                      <span className="flex-1 font-medium leading-snug">{question}</span>
                       <span
-                        className={`grid size-7 shrink-0 place-items-center rounded-full transition-all duration-300 ${isOpen ? "rotate-45 bg-foreground text-background" : "bg-background text-foreground"}`}
+                        className={`grid size-8 shrink-0 place-items-center rounded-full transition-all duration-300 ${isOpen ? "rotate-45 bg-foreground text-background" : "bg-background text-foreground"}`}
                       >
                         <Plus className="size-4" />
                       </span>
@@ -620,19 +794,13 @@ export default function Index() {
           <Reveal className="h-full">
             <ContactForm />
           </Reveal>
-          <Reveal className="relative h-full overflow-hidden rounded-[28px] bg-primary p-8 text-primary-foreground md:p-10">
-            <div className="texture-grain pointer-events-none absolute inset-0 opacity-50 mix-blend-overlay" />
-            <div className="pointer-events-none absolute -right-24 -top-24 size-80 rounded-full bg-primary-foreground/10 blur-2xl" />
-            <div className="pointer-events-none absolute -bottom-32 -left-24 size-80 rounded-full bg-primary-foreground/10 blur-2xl" />
-            <div className="spin-slow absolute -right-20 -top-20 size-72 rounded-full border border-dashed border-primary-foreground/40" />
-            <div className="relative z-10 flex h-full flex-col justify-center">
-              <h2 className="max-w-md font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
-                Ready to set sail on your digital journey?
-              </h2>
-            </div>
+          <Reveal className="h-full">
+            <h2 className="sr-only">Ready to set sail on your digital journey?</h2>
+            <ContactVoyageScene />
           </Reveal>
         </section>
       </main>
+
     </div>
   );
 }
@@ -658,7 +826,7 @@ function ContactForm() {
   );
   if (sent)
     return (
-      <div className="glass flex h-full min-h-[420px] flex-col items-center justify-center rounded-[28px] p-8 text-center">
+      <div className="glass flex h-full min-h-[420px] flex-col items-center justify-center rounded-3xl p-8 text-center">
         <div className="grid size-16 place-items-center rounded-full bg-primary text-2xl text-primary-foreground letter-swap">
           ✓
         </div>
@@ -679,7 +847,7 @@ function ContactForm() {
       </div>
     );
   return (
-    <div className="glass flex h-full flex-col rounded-[28px] p-8">
+    <div className="glass flex h-full flex-col rounded-3xl p-8">
       <h3 className="font-display text-2xl font-semibold">Ask your question</h3>
       <form
         className="mt-5 space-y-4"
@@ -694,7 +862,7 @@ function ContactForm() {
               type="button"
               key={t}
               onClick={() => setTopic(t)}
-              className={`rounded-full border px-3.5 py-1.5 text-xs transition duration-300 ${topic === t ? "border-primary bg-primary text-primary-foreground" : "text-muted-foreground hover:border-primary/60 hover:text-foreground"}`}
+              className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${topic === t ? "border-primary bg-primary font-medium text-primary-foreground" : "text-muted-foreground hover:border-primary/60 hover:text-foreground"}`}
             >
               {t}
             </button>
@@ -712,11 +880,11 @@ function ContactForm() {
             placeholder="Tell us about your idea..."
             className="w-full resize-none rounded-2xl border bg-background/60 px-4 py-3 text-sm outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15"
           />
-          <span className="absolute bottom-3 right-4 text-[11px] text-muted-foreground">
+          <span className="absolute bottom-3 right-4 text-[11px] tabular-nums text-muted-foreground">
             {vals.msg.length}/300
           </span>
         </label>
-        <button className="group flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 active:scale-[0.98]">
+        <button className="group flex w-full items-center justify-center gap-2 rounded-full bg-primary py-3.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]">
           Send message <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
         </button>
       </form>

@@ -1,18 +1,20 @@
 "use client";
 import Link from "next/link";
 import { ArrowUpRight, Check, ChevronRight } from "lucide-react";
-import { CTASection, Reveal, SpotlightCard, useReveal } from "@/components/site-chrome";
+import { Reveal, SpotlightCard, useReveal } from "@/components/site-chrome";
 import { SERVICES, APPROACH, findService } from "@/data/services";
+import AISEOGenerationView from "@/views/AISEOGenerationView";
 export default function ServiceDetailPage({ slug }) {
   const s = findService(slug);
   useReveal();
   if (!s) return null;
+  if (slug === "ai-seo-generation") return <AISEOGenerationView />;
   const others = SERVICES.filter((o) => o.slug !== s.slug);
   return (
     <div className="overflow-x-clip">
       <main
         id="main-content"
-        className="mx-auto max-w-6xl space-y-14 px-6 pb-20 pt-28 md:space-y-20 md:pb-24 md:pt-36"
+        className="page-container space-y-16 pb-20 pt-28 md:space-y-24 md:pb-24 md:pt-36"
       >
         <div className="space-y-5">
           {/* BREADCRUMB - visible, and mirrored in BreadcrumbList structured data */}
@@ -38,22 +40,22 @@ export default function ServiceDetailPage({ slug }) {
 
           {/* COMPACT SERVICE IDENTIFIER */}
           <Reveal className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h1 className="font-display text-xl font-semibold sm:text-2xl">{s.title}</h1>
+            <h1 className="font-display text-2xl font-semibold sm:text-3xl">{s.title}</h1>
             <span className="text-sm text-muted-foreground">{s.tagline}</span>
           </Reveal>
         </div>
 
         {/* OVERVIEW + WHAT'S INCLUDED */}
-        <section className="glass grid gap-10 rounded-[28px] p-6 sm:p-8 md:grid-cols-[1fr_1.2fr] lg:p-12">
+        <section className="glass grid gap-10 rounded-3xl p-6 sm:p-8 md:grid-cols-[1fr_1.2fr] lg:p-12">
           <Reveal>
-            <h2 className="font-display text-2xl font-semibold leading-snug md:text-3xl">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
               How we approach it
             </h2>
 
             <p className="mt-5 text-sm text-muted-foreground md:text-base">{s.overview}</p>
             <Link
               href="/book-a-discovery-call"
-              className="group mt-8 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
             >
               Book a call <ArrowUpRight className="size-4 transition group-hover:rotate-45" />
             </Link>
@@ -76,8 +78,8 @@ export default function ServiceDetailPage({ slug }) {
 
         {/* OUTCOMES */}
         <section>
-          <Reveal className="mb-8">
-            <h2 className="font-display text-2xl font-semibold md:text-3xl">
+          <Reveal className="mb-8 md:mb-12">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
               What changes once it's live
             </h2>
           </Reveal>
@@ -85,7 +87,7 @@ export default function ServiceDetailPage({ slug }) {
             {s.outcomes.map((o, i) => (
               <Reveal key={o} delay={i * 100} className="h-full">
                 <SpotlightCard className="flex h-full flex-col p-6">
-                  <span className="relative font-display text-3xl font-semibold text-primary/40 transition duration-500 group-hover:text-primary">
+                  <span className="relative font-display text-4xl font-semibold text-primary/40 transition duration-500 group-hover:text-primary">
                     0{i + 1}
                   </span>
                   <p className="relative mt-5 text-sm leading-snug">{o}</p>
@@ -97,8 +99,10 @@ export default function ServiceDetailPage({ slug }) {
 
         {/* TOOLS */}
         <section>
-          <Reveal className="mb-6">
-            <h2 className="font-display text-2xl font-semibold md:text-3xl">What we work with</h2>
+          <Reveal className="mb-8 md:mb-12">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
+              What we work with
+            </h2>
           </Reveal>
           <div className="flex flex-wrap gap-2">
             {s.tools.map((t, i) => (
@@ -113,16 +117,16 @@ export default function ServiceDetailPage({ slug }) {
 
         {/* APPROACH */}
         <section>
-          <Reveal className="mb-8">
-            <h2 className="font-display text-2xl font-semibold md:text-3xl">
+          <Reveal className="mb-8 md:mb-12">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
               Discover, plan, build, scale
             </h2>
           </Reveal>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {APPROACH.map(([t, d], i) => (
               <Reveal key={t} delay={i * 110} className="h-full">
                 <SpotlightCard className="flex h-full flex-col p-6">
-                  <span className="relative font-display text-3xl font-semibold text-primary/40 transition duration-500 group-hover:text-primary">
+                  <span className="relative font-display text-4xl font-semibold text-primary/40 transition duration-500 group-hover:text-primary">
                     0{i + 1}
                   </span>
                   <h3 className="relative mt-5 font-display text-lg font-semibold">{t}</h3>
@@ -135,8 +139,8 @@ export default function ServiceDetailPage({ slug }) {
 
         {/* OTHER SERVICES */}
         <section>
-          <Reveal className="mb-6">
-            <h2 className="font-display text-2xl font-semibold md:text-3xl">
+          <Reveal className="mb-8 md:mb-12">
+            <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
               Other things we build
             </h2>
           </Reveal>
@@ -155,7 +159,6 @@ export default function ServiceDetailPage({ slug }) {
           </div>
         </section>
 
-        <CTASection title={s.ctaTitle} text={s.ctaText} />
       </main>
     </div>
   );

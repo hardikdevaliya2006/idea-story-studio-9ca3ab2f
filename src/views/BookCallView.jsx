@@ -13,12 +13,12 @@ export default function BookCallPage() {
     <div className="overflow-x-clip">
       <main
         id="main-content"
-        className="mx-auto max-w-6xl space-y-16 px-6 pb-20 pt-28 md:space-y-24 md:pb-24 md:pt-36"
+        className="page-container space-y-16 pb-20 pt-28 md:space-y-24 md:pb-24 md:pt-36"
       >
         <section className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
           <div className="space-y-6">
             <Reveal>
-              <h1 className="font-display text-2xl font-semibold leading-snug md:text-3xl">
+              <h1 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
                 Tell us about your goals, and we'll tailor our expertise to fit your needs.
               </h1>
               <p className="mt-4 text-sm text-muted-foreground md:text-base">
@@ -53,15 +53,15 @@ export default function BookCallPage() {
         </section>
 
         <section>
-          <Reveal className="mb-12">
+          <Reveal className="mb-8 md:mb-12">
             <h2 className="font-display text-3xl font-normal leading-tight tracking-tight md:text-4xl">
               What happens next
             </h2>
           </Reveal>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {nextSteps.map(([t, d], i) => (
               <Reveal key={t} delay={i * 120} className="h-full">
-                <div className="group relative flex h-full flex-col rounded-xl border bg-card p-6">
+                <div className="group relative flex h-full flex-col rounded-2xl border bg-card p-6">
                   <span className="font-display text-4xl font-semibold text-primary/40 transition duration-500 group-hover:text-primary">
                     0{i + 1}
                   </span>
